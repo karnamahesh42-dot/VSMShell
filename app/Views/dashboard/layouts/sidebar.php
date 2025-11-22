@@ -12,7 +12,8 @@
             /> -->
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light"></span>
+        
+            <span class="brand-text fw-light">Smart VMS Portal</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -37,9 +38,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-info"></i>
-                  <p>Informational</p>
+                <a href="<?= base_url('visitorequestlist') ?>" class="nav-link">
+                  <i class="nav-icon bi bi-file"></i>
+                  <p>Visitor request</p>
                 </a>
               </li>
             </ul>

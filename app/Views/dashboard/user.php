@@ -30,9 +30,9 @@
 
               <!-- /.col-md-6 -->
                 <div class="col-md-6">
-                    <div class="card card-info">
+                    <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">User Form</h3>
+                        <h3 class="card-title">User</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -93,8 +93,9 @@
 
                     <!-- Submit / Cancel Buttons -->
                     <div class="card-footer">
-                    <button type="submit" class="btn btn-info">Save User</button>
-                    <button type="reset" class="btn btn-default float-right">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save User</button>
+                    <a href="<?= base_url('home')?>" class="btn btn-danger float-right" style="float:right" >Back</a>
+                    <!-- <button type="reset" class="btn btn-default float-right">Back</button> -->
                     </div>
                     </form>
 
