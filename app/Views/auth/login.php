@@ -41,7 +41,7 @@
         /* Project Title */
         .project-title {
             font-weight: 800;
-            font-size: 28px;
+            font-size: 25px;
             text-align: center;
             color: #2c3e50;
             margin-bottom: 8px;
@@ -51,7 +51,7 @@
             text-align: center;
             font-size: 16px;
             color: #7f8c8d;
-            margin-bottom: 25px;
+            margin-bottom: 0px;
         }
 
         .btn-custom {
@@ -64,13 +64,27 @@
         .btn-custom:hover {
             background: linear-gradient(to right, #3b67d0, #5e8be5);
         }
+
+        .login-logo {
+        text-align: center;
+        margin-bottom: 0px;
+        }
+
+        .login-logo img {
+        width: 150px;     /* Adjust size */
+        height: auto;
+        }
     </style>
 </head>
 <body>
 
 <div class="login-card">
     
-    <div class="project-title">VMS Portal</div>
+    <div class="login-logo">
+        <img src="<?= base_url('public/dist/ramoji-logo.png') ?>" alt="Logo">
+    </div>
+    
+    <div class="project-title">Secure Entry</div>
     <hr>
     <div class="login-title">Access Your Account</div>
 

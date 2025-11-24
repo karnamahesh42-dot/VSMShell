@@ -36,4 +36,22 @@ class User extends BaseController
             return redirect()->back()->with('error', 'Something went wrong!');
         }
     }
+
+
+      public function userListData()
+    {
+        $userModel = new UserModel();
+
+        // Read form input
+        $data['users'] = $userModel
+        ->select('users.*, departments.department_name, roles.role_name')
+        ->join('departments', 'departments.id = users.department_id')
+        ->join('roles', 'roles.id = users.role_id')
+        ->findAll();
+
+    return view('dashboard/userlist', $data);
+      
+    }
+  
+
 }

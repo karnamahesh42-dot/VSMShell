@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 23, 2025 at 07:00 PM
+-- Generation Time: Nov 24, 2025 at 12:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -86,10 +86,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `company_name`, `department_id`, `username`, `password`, `role_id`, `hash_key`, `created_at`, `created_by`) VALUES
-(1, 'UKMPL', 1, 'superadmin', 'df151ee318beb897bc7fa8d067b25d76', 1, 'HASHKEY123', '2025-11-20 09:28:43', NULL),
-(5, 'UKMPL', 1, 'admin', 'e27f4a867eaceaa81eca368d175a7716', 2, 'HASHKEY123', '2025-11-21 05:54:24', 1),
+(1, 'UKMPL', 1, 'superadmin', '274d015c638f62ba24b19ca23c9c9503', 1, 'HASHKEY123', '2025-11-20 09:28:43', NULL),
+(5, 'UKMPL', 1, 'admin', '457b2f73cbdf3cc57b92efc0aa80cb99', 2, 'HASHKEY123', '2025-11-21 05:54:24', 1),
 (6, 'UKMPL', 3, 'user2', 'e27f4a867eaceaa81eca368d175a7716', 3, 'HASHKEY123', '2025-11-21 22:15:08', 1),
-(7, 'UKMPL', 3, 'admin2', 'bde72de2ac7798197faa307a4df2db69', 2, 'HASHKEY123', '2025-11-22 05:56:17', 1);
+(7, 'UKMPL', 3, 'admin2', 'bde72de2ac7798197faa307a4df2db69', 2, 'HASHKEY123', '2025-11-22 05:56:17', 1),
+(8, 'UKML', 1, 'user', 'd8847b1ec55e603141803c54ac610489', 3, 'HASHKEY123', '2025-11-24 00:22:13', 1),
+(9, 'UKML', 2, 'userlog', 'df15e08a109a1ca36c6129c4033dff9a', 3, 'HASHKEY123', '2025-11-24 03:40:59', 1);
 
 -- --------------------------------------------------------
 
@@ -126,25 +128,19 @@ CREATE TABLE `visitors` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `proof_id_type` varchar(100) DEFAULT NULL,
-  `proof_id_number` varchar(100) DEFAULT NULL
+  `proof_id_number` varchar(100) DEFAULT NULL,
+  `qr_code` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `visitors`
 --
 
-INSERT INTO `visitors` (`id`, `visitor_name`, `visitor_email`, `visitor_phone`, `purpose`, `visit_date`, `description`, `expected_from`, `expected_to`, `host_user_id`, `status`, `created_by`, `created_at`, `updated_at`, `proof_id_type`, `proof_id_number`) VALUES
-(4, 'mahesh', 'maheshkarna@gmail.com', '7894561234', 'test', '2025-11-22', NULL, '10:23:00', '11:23:00', 6, 'rejected', NULL, '2025-11-22 10:24:05', '2025-11-23 20:50:33', NULL, NULL),
-(5, 'ravi', 'ravi@gmail.com', '1593574568', 'General Visit', '2025-11-29', NULL, '10:56:00', '00:00:00', 6, 'approved', NULL, '2025-11-22 10:56:47', '2025-11-23 20:50:07', 'PAN Card', '1111111'),
-(6, 'ravi', 'ravi@gmail.com', '1593574568', 'General Visit', '2025-11-29', NULL, '10:56:00', '00:00:00', 6, 'approved', NULL, '2025-11-22 10:57:01', '2025-11-23 20:47:06', 'PAN Card', '1111111'),
-(7, 'praveen', 'praveen@gmail.com', '7894561236', 'General Visit', '2025-11-29', NULL, '00:00:00', '00:00:00', 6, 'rejected', NULL, '2025-11-22 11:01:36', '2025-11-23 20:47:03', 'Aadhar Card', '1234856'),
-(8, 'praveen', 'praveen@gmail.com', '7894561236', 'General Visit', '2025-11-29', NULL, '00:00:00', '00:00:00', 6, 'rejected', NULL, '2025-11-22 11:01:50', '2025-11-23 20:44:23', 'Aadhar Card', '1234856'),
-(9, 'ravi', 'ravi@gmail.com', '7894561236', 'Document Submission', '0000-00-00', NULL, NULL, NULL, 6, 'approved', 6, '2025-11-22 11:16:55', '2025-11-23 20:41:55', 'PAN Card', '1234856'),
-(10, 'mahesh', 'maheshkarna@gmail.com', '7894561234', 'Meeting', '0000-00-00', NULL, NULL, NULL, 6, 'approved', 6, '2025-11-22 11:21:00', '2025-11-23 20:12:28', 'Voter ID', '1234856'),
-(11, 'mahesh', 'maheshkarna@gmail.com', '1593574568', 'Meeting', '0000-00-00', NULL, NULL, NULL, 6, 'approved', 6, '2025-11-22 11:23:45', '2025-11-23 20:11:03', 'Passport', '1234856'),
-(12, 'mahesh', 'maheshkarna@gmail.com', '7894561234', 'Meeting', '0000-00-00', NULL, NULL, NULL, 6, 'approved', 6, '2025-11-22 11:36:42', '2025-11-23 20:09:44', 'PAN Card', '1234856'),
-(13, 'sreenivas', 'sreenivas@gmail.com', '7894561234', 'Event Visit', '0000-00-00', NULL, NULL, NULL, 1, 'rejected', 1, '2025-11-22 17:02:05', '2025-11-23 20:01:21', 'PAN Card', '12345678'),
-(14, 'mahesh', 'test@gmail.com', '1234568945', 'Meeting', '0000-00-00', 'testing', NULL, NULL, 1, 'approved', 1, '2025-11-23 18:57:31', '2025-11-23 19:57:10', 'Aadhar Card', '519848410144');
+INSERT INTO `visitors` (`id`, `visitor_name`, `visitor_email`, `visitor_phone`, `purpose`, `visit_date`, `description`, `expected_from`, `expected_to`, `host_user_id`, `status`, `created_by`, `created_at`, `updated_at`, `proof_id_type`, `proof_id_number`, `qr_code`) VALUES
+(15, 'sanjay thota', 'sanjay@gmail.com', '9153684555', 'General Visit', '2025-11-26', 'sanjay thota ....General visit ', NULL, NULL, 8, 'pending', 8, '2025-11-24 12:30:27', '2025-11-24 12:30:27', 'Aadhar Card', '582369745244', NULL),
+(16, 'Pradeep k', 'pradeepk@gmail.com', '89147569999', 'Meeting', '2025-11-26', 'Meeting  Purpose ', NULL, NULL, 8, 'approved', 8, '2025-11-24 12:32:54', '2025-11-24 12:37:44', 'PAN Card', 'ABC125PAN', 'visitor_16_qr.png'),
+(19, 'mahesh', 'maheshkarna@gmail.com', '7894561234', 'General Visit', '2025-11-26', 'Mahesh General Visit ', NULL, NULL, 9, 'approved', 9, '2025-11-24 14:42:26', '2025-11-24 14:48:07', 'Aadhar Card', '89595896666', 'visitor_19_qr.png'),
+(20, 'Srinivas', 'ukmledp@gmail.com', '9347364990', 'Event Visit', '2025-11-27', 'Location visit for event', NULL, NULL, 9, 'approved', 9, '2025-11-24 15:01:32', '2025-11-24 15:07:31', 'PAN Card', 'a45th456', 'visitor_20_qr.png');
 
 -- --------------------------------------------------------
 
@@ -168,13 +164,13 @@ CREATE TABLE `visitor_logs` (
 --
 
 INSERT INTO `visitor_logs` (`id`, `visitor_request_id`, `action_type`, `old_status`, `new_status`, `remarks`, `performed_by`, `performed_at`) VALUES
-(1, 9, 'rejected', 'pending', 'Approved', 'Status changed by admin', 1, '2025-11-23 20:41:55'),
-(2, 8, 'approved', 'pending', 'approved', 'Status changed by admin', 1, '2025-11-23 20:44:19'),
-(3, 8, 'rejected', 'approved', 'rejected', 'Status changed by admin', 1, '2025-11-23 20:44:23'),
-(4, 7, 'rejected', 'pending', 'rejected', 'Status changed by admin', 1, '2025-11-23 20:47:03'),
-(5, 6, 'approved', 'pending', 'approved', 'Status changed by admin', 1, '2025-11-23 20:47:06'),
-(6, 5, 'approved', 'pending', 'approved', 'Status changed by admin', 1, '2025-11-23 20:50:07'),
-(7, 4, 'rejected', 'pending', 'rejected', 'Status changed by admin', 1, '2025-11-23 20:50:33');
+(1, 15, 'Created', NULL, 'Pending', '--', 8, '2025-11-24 12:30:27'),
+(2, 16, 'Created', NULL, 'Pending', '--', 8, '2025-11-24 12:32:54'),
+(3, 16, 'approved', 'pending', 'approved', '', 1, '2025-11-24 12:37:43'),
+(6, 19, 'Created', NULL, 'Pending', '--', 9, '2025-11-24 14:42:26'),
+(7, 19, 'approved', 'pending', 'approved', '', 1, '2025-11-24 14:48:06'),
+(8, 20, 'Created', NULL, 'Pending', '--', 9, '2025-11-24 15:01:32'),
+(9, 20, 'approved', 'pending', 'approved', '', 1, '2025-11-24 15:07:30');
 
 --
 -- Indexes for dumped tables
@@ -246,7 +242,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_hashkeys`
@@ -258,13 +254,13 @@ ALTER TABLE `user_hashkeys`
 -- AUTO_INCREMENT for table `visitors`
 --
 ALTER TABLE `visitors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `visitor_logs`
 --
 ALTER TABLE `visitor_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

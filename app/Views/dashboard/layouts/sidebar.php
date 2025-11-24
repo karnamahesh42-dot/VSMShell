@@ -13,7 +13,7 @@
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
         
-            <span class="brand-text fw-light">Smart VMS Portal</span>
+            <span class="brand-text" style=" font-weight: bold">Smart VMS Portal</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -31,15 +31,18 @@
               data-accordion="false"
               id="navigation" >
               
+            <?php if($_SESSION['role_id'] == '1' || $_SESSION['role_id'] == '2'){?>
               <li class="nav-item">
-                <a href="<?= base_url('user') ?>" class="nav-link">
-                  <i class="nav-icon bi bi-palette"></i>
+                <a href="<?= base_url('userlist') ?>" class="nav-link">
+                  <i class="nav-icon bi bi-circle-fill text-warning"></i>
                   <p>Users</p>
                 </a>
               </li>
+            <?php }?>
+
               <li class="nav-item">
                 <a href="<?= base_url('visitorequestlist') ?>" class="nav-link">
-                  <i class="nav-icon bi bi-file"></i>
+                  <i class="nav-icon bi bi-circle-fill text-warning"></i> 
                   <p>Visitor request</p>
                 </a>
               </li>

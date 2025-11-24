@@ -16,7 +16,9 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/VSMShell/';
+    // public string $baseURL = 'http://localhost/VSMShell/';
+    public string $baseURL = 'http://192.168.24.186/VSMShell/';
+
     
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

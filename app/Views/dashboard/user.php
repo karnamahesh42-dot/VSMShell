@@ -10,11 +10,11 @@
           <div class="container-fluid">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Dashboard</h3></div>
+              <div class="col-sm-6"><h3 class="mb-0">New User</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page"></li>
+                  <li class="breadcrumb-item"><a href="<?= base_url('/') ?>" >Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">User</li>
                 </ol>
               </div>
             </div>
@@ -43,7 +43,13 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Company</label>
                         <div class="col-sm-10">
-                            <input type="text" name="company_name" class="form-control" placeholder="Enter Company Name" required>
+                            <select name="company_name" class="form-control" required>
+                                <option value="">Select Company</option>
+                                <option value="UKML">UKML</option>
+                                <option value="UKML">DHPL</option>
+                                <option value="UKML">ETPL</option>
+                            </select>
+                            <!-- <input type="text" name="company_name" class="form-control" placeholder="Enter Company Name" required> -->
                         </div>
                     </div>
 
@@ -94,7 +100,7 @@
                     <!-- Submit / Cancel Buttons -->
                     <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Save User</button>
-                    <a href="<?= base_url('home')?>" class="btn btn-danger float-right" style="float:right" >Back</a>
+                    <a href="<?= base_url('userlist')?>" class="btn btn-danger float-right" style="float:right" >Back</a>
                     <!-- <button type="reset" class="btn btn-default float-right">Back</button> -->
                     </div>
                     </form>

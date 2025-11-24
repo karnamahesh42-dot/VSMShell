@@ -25,6 +25,45 @@
 
             <div class="row d-flex justify-content-center">
         
+
+                <!-- Satart view Visitor Request Form Pop-Up  -->
+                    <div class="modal fade" id="visitorModal">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Visitor Details</h5>
+                        <!-- <button type="button" class="close" data-bs-dismiss="modal">&times;</button> -->
+                        </div>
+
+                        <div class="modal-body">
+
+                        <table class="table table-bordered">
+                            <tr><th>Name</th><td id="v_name"></td></tr>
+                            <tr><th>Email</th><td id="v_email"></td></tr>
+                            <tr><th>Phone</th><td id="v_phone"></td></tr>
+                            <tr><th>Purpose</th><td id="v_purpose"></td></tr>
+                            <tr><th>ID Type</th><td id="v_id_type"></td></tr>
+                            <tr><th>ID Number</th><td id="v_id_number"></td></tr>
+                            <tr><th>Visit Date</th><td id="v_date"></td></tr>
+                            <tr><th>Description</th><td id="v_desc"></td></tr>
+                            <tr>
+                            <th>QR Code</th>
+                            <td><img id="v_qr" src="" width="150"></td>
+                            </tr>
+                        </table>
+
+                        </div>
+
+                        <div class="modal-footer">
+                        <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+
+                <!-- End view Visitor Request Form Pop-Up  -->
+
                     <div class="col-12">
                     <div class="card card-primary">
                         <div class="card-header">
@@ -34,7 +73,7 @@
                             <div class="input-group input-group-sm" style="width: 150px;">
                             <!-- <input type="button" name="add" class="form-control float-right" placeholder="Search"> -->
                             
-                            <a href="<?= base_url('visitorequest') ?>" class="btn btn-warning "> New Request</a>
+                            <a href="<?= base_url('visitorequest') ?>" class="btn btn-warning mt-1"> New Request</a>
                             </div>
                         </div>
                         </div>
@@ -51,7 +90,9 @@
                                             <th>Phone</th>
                                             <th>Description</th>
                                             <th>Status</th>
+                                            <?php if($_SESSION['role_id'] == '1' || $_SESSION['role_id'] == '2'){?>
                                             <th style="width:150px;">Actions</th>
+                                             <?php }?>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -154,7 +195,14 @@ function loadVisitorList() {
                         <td>${item.visitor_phone}</td>
                         <td>${item.description ?? ''}</td>
                         <td>${statusBadge}</td>
+                         <?php if($_SESSION['role_id'] == '1' || $_SESSION['role_id'] == '2'){?>
                         <td>${actions}</td>
+                        <?php } ?>
+                        <td>
+                        <button class="btn btn-info btn-sm viewBtn" data-id="${item.id}">
+                        View
+                        </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -163,6 +211,38 @@ function loadVisitorList() {
         }
     });
 }
+
+
+
+$(document).on("click", ".viewBtn", function () {
+    let id = $(this).data("id");
+
+    $.ajax({
+        url: "<?= base_url('getvisitorrequestdata/') ?>" + id,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+
+            $("#v_name").text(data.visitor_name);
+            $("#v_email").text(data.visitor_email);
+            $("#v_phone").text(data.visitor_phone);
+            $("#v_purpose").text(data.purpose);
+            $("#v_id_type").text(data.proof_id_type);
+            $("#v_id_number").text(data.proof_id_number);
+            $("#v_date").text(data.visit_date);
+            $("#v_desc").text(data.description);
+
+            if (data.qr_code) {
+                $("#v_qr").attr("src", "<?= base_url('public/uploads/qr_codes/') ?>" + data.qr_code);
+            } else {
+                $("#v_qr").attr("src", "");
+            }
+
+            $("#visitorModal").modal("show");
+        }
+    });
+});
+
 
 </script>
 

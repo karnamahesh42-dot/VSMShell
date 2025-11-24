@@ -41,6 +41,12 @@ class VisitorRequest extends BaseController
                 'performed_by'       => session()->get('user_id'),
             ]);
 
+
+
+            // if($_SESSION['role_id']== '1'){
+            //    $qrPath = $this->approvalProcess($qrText, $fileName);
+            // }
+
             return $this->response->setJSON(['status' => 'success']);
         } 
     }
@@ -48,51 +54,54 @@ class VisitorRequest extends BaseController
     
     public function approvalProcess()
     {
-        $id = $this->request->getPost('id');
-        $status = $this->request->getPost('status');
- 
-        $visitorModel = new \App\Models\VisitorRequestModel();
-        $logModel     = new \App\Models\VisitorLogModel();
+            $id = $this->request->getPost('id');
+            $status = $this->request->getPost('status');
+    
+            $visitorModel = new \App\Models\VisitorRequestModel();
+            $logModel     = new \App\Models\VisitorLogModel();
 
-        $vRequestdataById = $visitorModel->find($id);
-        $oldStatus = $vRequestdataById['status'];
-       
-        // Update Status
-        $update = $visitorModel->update($id, [
-            'status' => $status
-        ]);
-
-        // Insert log
-        $logModel->insert([
-            'visitor_request_id' => $id,
-            'action_type'        => $status === 'approved' ? 'approved' : 'rejected',
-            'old_status'         => $oldStatus,
-            'new_status'         => $status,
-            'remarks'            => '',
-            'performed_by'       => session()->get('user_id'),
-        ]);      
+            $vRequestdataById = $visitorModel->find($id);
+            $oldStatus = $vRequestdataById['status'];
         
-                // Generate QR Code
-            $qrText = "Visitor ID: $id \nName: ".$v['visitor_name']."\nPhone: ".$v['visitor_phone'];
-            $fileName = "visitor_".$id."_qr.png";
-
-            $qrPath = $this->generateQR($qrText, $fileName);
-
-            // Save QR path to database
-            $visitorModel->update($id, [
-            "qr_code" => $fileName
+            // Update Status
+            $update = $visitorModel->update($id, [
+                'status' => $status
             ]);
 
+            // Insert log
+            $logModel->insert([
+                'visitor_request_id' => $id,
+                'action_type'        => $status === 'approved' ? 'approved' : 'rejected',
+                'old_status'         => $oldStatus,
+                'new_status'         => $status,
+                'remarks'            => '',
+                'performed_by'       => session()->get('user_id'),
+            ]);      
+        
 
-        if ($update) {
-            return $this->response->setJSON(["status" => "success"]);
-        } else {
-            return $this->response->setJSON(["status" => "error"]);
-        }
+            if($status === 'approved'){
+                // Generate QR Code
+                // $qrText = "Visitor ID: $id \nName: ".$v['visitor_name']."\nPhone: ".$v['visitor_phone'];
+                $qrText = "Visitor ID : $id";
+                $fileName = "visitor_".$id."_qr.png";
+                $qrPath = $this->generateQR($qrText, $fileName);
+
+                // Save QR path to database
+                $visitorModel->update($id, [
+                "qr_code" => $fileName
+                ]);
+            }
+                
+
+            if ($update) {
+                return $this->response->setJSON(["status" => "success"]);
+            } else {
+                return $this->response->setJSON(["status" => "error"]);
+            }
 
     }
 
-     public function visitorDataListView()
+    public function visitorDataListView()
     {
         return view('dashboard/visitorrequestlist');
     } 
@@ -109,20 +118,31 @@ class VisitorRequest extends BaseController
 
     }
             
-    public function generateQR($text, $fileName)
-    {
-        $qrUrl = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" . urlencode($text);
+        // Save QR Code Image in path Folder
+        public function generateQR($text, $fileName)
+        {
+        $qrUrl = "https://quickchart.io/qr?text=" . urlencode($text) . "&size=300";
 
         $imageData = file_get_contents($qrUrl);
 
-        $savePath = FCPATH . "uploads/qr_codes/" . $fileName;
+        $savePath = FCPATH . "public/uploads/qr_codes/" . $fileName;
 
-        if (!is_dir(FCPATH . "uploads/qr_codes")) {
-            mkdir(FCPATH . "uploads/qr_codes", 0777, true);
+        if (!is_dir(FCPATH . "public/uploads/qr_codes")) {
+            mkdir(FCPATH . "public/uploads/qr_codes", 0777, true);
         }
 
         file_put_contents($savePath, $imageData);
 
         return $savePath;
-    }
+        }
+
+        // Get Visitor Request  Data By Id
+        public function getVisitorRequastDataById($id)
+        {
+            $model = new \App\Models\VisitorRequestModel();
+            $data = $model->find($id);
+
+            return $this->response->setJSON($data);
+        }
+
 }
