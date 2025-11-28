@@ -8,7 +8,7 @@
     <div class="app-content-header">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-6"><h3 class="mb-0">Visitor Request List</h3></div>
+                <div class="col-sm-6"><h3 class="mb-0">Visitor Request</h3></div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="<?= base_url('/') ?>">Home</a></li>
@@ -39,24 +39,24 @@
                         <div class="modal-body">
 
                         <table class="table table-bordered">
-                            <tr><th>Name</th><td id="v_name"></td></tr>
-                            <tr><th>Email</th><td id="v_email"></td></tr>
-                            <tr><th>Phone</th><td id="v_phone"></td></tr>
-                            <tr><th>Purpose</th><td id="v_purpose"></td></tr>
-                            <tr><th>ID Type</th><td id="v_id_type"></td></tr>
-                            <tr><th>ID Number</th><td id="v_id_number"></td></tr>
-                            <tr><th>Visit Date</th><td id="v_date"></td></tr>
-                            <tr><th>Description</th><td id="v_desc"></td></tr>
-                            <tr>
-                            <th>QR Code</th>
-                            <td><img id="v_qr" src="" width="150"></td>
-                            </tr>
+                            <tr><th>Name</th> <td id="v_name"></td></tr>
+                            <tr><th>Email</th> <td id="v_email"></td></tr>
+                            <tr><th>Phone</th> <td id="v_phone"></td></tr>
+                            <tr><th>Purpose</th> <td id="v_purpose"></td></tr>
+                            <tr><th>ID Type</th> <td id="v_id_type"></td></tr>
+                            <tr><th>ID Number</th> <td id="v_id_number"></td></tr>
+                            <tr><th>Visit Date</th> <td id="v_date"></td></tr>
+                            <tr><th>Description</th> <td id="v_desc"></td></tr>
+                            <tr><th>QR Code</th> <td><img id="v_qr" src="" width="150"></td></tr>
+                            <tr><th>V-Code</th> <td id="v_code"></td></tr>
+                            
+                            <tr id="action_row"><th>Actions</th> <th id='buttonContainer'></th></tr>
+                            <input type="hidden" id="v_id" value="test">
                         </table>
-
                         </div>
-
                         <div class="modal-footer">
-                        <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-success"  onclick="resendqr()" id="re-sendButton">Re-Send QR</button>
+                        <button class="btn btn-danger text-end" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                     </div>
@@ -70,7 +70,7 @@
                         <h3 class="card-title">Visitor Request List</h3>
 
                         <div class="card-tools">
-                            <div class="input-group input-group-sm" style="width: 150px;">
+                            <div class="input-group input-group-sm mx-2" >
                             <!-- <input type="button" name="add" class="form-control float-right" placeholder="Search"> -->
                             
                             <a href="<?= base_url('visitorequest') ?>" class="btn btn-warning mt-1"> New Request</a>
@@ -79,11 +79,11 @@
                         </div>
                         <!-- /.card-header -->
                          <!-- /.card-body -->
-                            <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap" id="visitorTable">
+                            <div class="card-body table-responsive">
+                                <table class="table table-bordered table-striped"  id="visitorTable">
                                     <thead class="bg-light">
                                         <tr>
-                                            <th>S No</th>
+                                            <th>#</th>
                                             <th>Visitor</th>
                                             <th>Visit Date</th>
                                             <th>Purpose</th>
@@ -117,16 +117,57 @@
 $(document).on("click", ".approvalBtn", function () {
     let id = $(this).data("id");
     let status = $(this).data("status");
+    let vcode = $(this).data("vcode")
 
-    approval(id, status);
+    approval(id, status,vcode);
 });
 
-function approval(id, status) {
+function resendqr() {
+
+    let name = $("#v_name").text();
+    let email = $("#v_email").text();
+    let phone = $("#v_phone").text();
+    let purpose = $("#v_purpose").text();
+    let vid =$('#v_id').val(); // << QR Image URL or Base64
+    let v_code =$('#v_code').text(); // V_Code
+  
+    $.ajax({
+        url: "<?= base_url('send-email') ?>",
+        type: "POST",
+        data: {
+            name: name,
+            email: email,
+            phone: phone,
+            purpose: purpose,
+            vid: vid,
+            v_code: v_code
+        },
+        dataType: "json",
+        success: function(data) {
+            if (data.status === "success") {
+                Swal.fire({
+                    position: 'top-end',
+                    toast: true,
+                    icon: 'success',
+                    title: 'Mail Sent Successfully',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else {
+
+                console.log(data);
+                Swal.fire("Error", "Mail Not Sent", "error");
+            }
+        }
+    });
+}
+
+function approval(id, status,vcode) {
 
     $.ajax({
         url: "<?= base_url('/approvalprocess') ?>",
         type: "POST",
-        data: { id: id, status: status },
+        data: { id: id, status: status ,v_code : vcode },
         dataType: "json",
         success: function (res) {
 
@@ -222,7 +263,6 @@ $(document).on("click", ".viewBtn", function () {
         type: "GET",
         dataType: "json",
         success: function (data) {
-
             $("#v_name").text(data.visitor_name);
             $("#v_email").text(data.visitor_email);
             $("#v_phone").text(data.visitor_phone);
@@ -231,6 +271,15 @@ $(document).on("click", ".viewBtn", function () {
             $("#v_id_number").text(data.proof_id_number);
             $("#v_date").text(data.visit_date);
             $("#v_desc").text(data.description);
+            $("#v_id").val(data.id);
+            $("#v_code").text(data.v_code);
+
+           
+            <?php if($_SESSION['role_id'] == '1' || $_SESSION['role_id'] == '2'){ ?>
+              $("#action_row").show();
+           <?php }else{?>
+              $("#action_row").hide();
+            <?php } ?> 
 
             if (data.qr_code) {
                 $("#v_qr").attr("src", "<?= base_url('public/uploads/qr_codes/') ?>" + data.qr_code);
@@ -238,6 +287,19 @@ $(document).on("click", ".viewBtn", function () {
                 $("#v_qr").attr("src", "");
             }
 
+            let buttons = '- -'
+            if(data.status == 'pending'){
+                $("#sendButton ").hide();
+               buttons = `<button class="btn btn-success btn-sm approvalBtn"
+                data-id="${data.id}" data-vcode = "${data.v_code}" data-status="approved">Approve</button>
+
+                <button class="btn btn-danger btn-sm approvalBtn"
+                data-id="${data.id}" data-vcode = "${data.v_code}" data-status="rejected">Reject</button>`;
+            }else{
+                 $("#sendButton ").show();
+            }
+              $("#buttonContainer").html(buttons);
+    
             $("#visitorModal").modal("show");
         }
     });

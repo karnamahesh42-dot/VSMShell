@@ -10,6 +10,7 @@ $routes->get('/home', 'Dashboard::index');
 
 $routes->get('/login', 'Login::index');
 $routes->get('/logout', 'Login::logout');
+
 $routes->post('/login', 'Login::checkLogin');
 
 $routes->get('/user', 'User::index');
@@ -23,8 +24,27 @@ $routes->post('/visitorequest/create','VisitorRequest::submit');
 $routes->post('/approvalprocess', 'VisitorRequest::approvalProcess');//To Approval Process 
 $routes->get('/getvisitorrequestdata/(:num)', 'VisitorRequest::getVisitorRequastDataById/$1'); //To get Visito Request Data By ID
 
+// $routes->get('send-email', 'MailController::sendMail');
+$routes->post('send-email', 'MailController::sendMail');
+
+$routes->get('reference', 'ReferenceControllere::index');
+$routes->post('/reference_save', 'ReferenceControllere::create');
+$routes->get('/referenceData', 'ReferenceControllere::getReferencePersons');
 
 
+// $routes->get('/reference-visitor-request/create', 'ReferenceVisitorRequestController::createForm');// Form
+$routes->post('/rvr_save', 'ReferenceVisitorRequestController::create');// Save
+$routes->get('reference_visitor_request', 'ReferenceVisitorRequestController::index'); // View reference visitor request
+$routes->get('/rvr_list', 'ReferenceVisitorRequestController::getAllReferenceVisitorRequest'); // List Data (AJAX)
+$routes->get('/get_reference_list', 'ReferenceVisitorRequestController::getAllReference'); // get list Of reference Data  (AJAX)
+$routes->get('rvr_request_by_id/(:num)', 'ReferenceVisitorRequestController::getReferenceVisitorRequestById/$1'); //reference Request Data By id 
+
+
+// Redirect using RVR code
+$routes->get('rvr_redirect/(:any)', 'RVRDetailsController::rvr_redirect/$1');
+
+// Load the visitor form page
+$routes->get('rvr_details_sheet', 'RVRDetailsController::rvr_details_sheet');
 
 
 // $routes->get('/', 'VisitorController::create');

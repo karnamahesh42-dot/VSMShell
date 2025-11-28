@@ -8,7 +8,7 @@
     <div class="app-content-header">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-6"><h3 class="mb-0">Visitor Request List</h3></div>
+                <div class="col-sm-6"><h3 class="mb-0">Users</h3></div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="<?= base_url('/') ?>">Home</a></li>
@@ -23,16 +23,16 @@
     <div class="app-content">
         <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
-                <div class="row mt-4">
+             
                     <div class="col-md-12">
                         <div class="card card-primary">
                             <div class="card-header">
                                 <h3 class="card-title">User List</h3>
 
                                     <div class="card-tools">
-                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                    <div class="input-group input-group-sm mx-2">
                                     <!-- <input type="button" name="add" class="form-control float-right" placeholder="Search"> -->
-                                    <a href="<?= base_url('user') ?>" class="btn btn-warning mt-1"><b>New User</b></a>
+                                    <a href="<?= base_url('user') ?>" class="btn btn-warning mt-1">New User</a>
                                     </div>
                                 </div>
                                
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+               
                                 
             </div>
 

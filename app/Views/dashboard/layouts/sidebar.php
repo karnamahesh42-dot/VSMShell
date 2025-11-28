@@ -46,6 +46,20 @@
                   <p>Visitor request</p>
                 </a>
               </li>
+
+               <li class="nav-item">
+                <a href="<?= base_url('reference') ?>" class="nav-link">
+                  <i class="nav-icon bi bi-circle-fill text-warning"></i> 
+                  <p>Reference</p>
+                </a>
+              </li>
+
+                <li class="nav-item">
+                <a href="<?= base_url('reference_visitor_request') ?>" class="nav-link">
+                  <i class="nav-icon bi bi-circle-fill text-warning"></i> 
+                  <p>Reference Visitor request</p>
+                </a>
+              </li>
             </ul>
             <!--end::Sidebar Menu-->
           </nav>

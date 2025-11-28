@@ -84,7 +84,7 @@
         <img src="<?= base_url('public/dist/ramoji-logo.png') ?>" alt="Logo">
     </div>
     
-    <div class="project-title">Secure Entry</div>
+    <div class="project-title">VMS Portal</div>
     <hr>
     <div class="login-title">Access Your Account</div>
 
@@ -96,7 +96,6 @@
 
     <form action="<?= base_url('login') ?>" method="post">
         <?= csrf_field() ?>
-
         <div class="mb-3">
             <label class="form-label">Username</label>
             <input type="text" name="username" class="form-control" placeholder="Enter your username" required>

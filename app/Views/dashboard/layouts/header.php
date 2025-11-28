@@ -4,7 +4,7 @@ $session = session();
     if (!$session->has('isLoggedIn') || !$session->has('user_id') || !$session->has('username') || !$session->has('role_id')) 
     {
     // Redirect to logout
-    header("Location: " . base_url('/logout'));
+    header("Location: " . base_url('/login'));
     exit;
     }
 ?>
@@ -91,6 +91,24 @@ $session = session();
       .form-group {
         margin: 10px 0px; !important;
        }
+
+    .form-group label {
+        font-size: 14px;
+        margin-bottom: 3px;
+    }
+    .form-control {
+        height: 35px;
+        font-size: 14px;
+    }
+    textarea.form-control {
+        height: auto !important;
+    }
+    h5 {
+        font-size: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
     </style>
   </head>
   <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">

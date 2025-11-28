@@ -28,15 +28,15 @@ class Login extends BaseController
                 'isLoggedIn' => true,
             ]);
 
-            return view('dashboard/dashboard');
+            // header("Location: " . base_url('/'));
+            // return view('dashboard/dashboard');
+            return redirect()->to(base_url('/'));
     }
 
     public function logout()
     {
         session()->destroy();
-        return view('auth/login');
-
-        header("Location: " . base_url('/login'));
+        return redirect()->to(base_url('/login'));
     
     }
 }
