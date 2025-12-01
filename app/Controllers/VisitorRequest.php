@@ -65,7 +65,6 @@ class VisitorRequest extends BaseController
                 'status'            => 'pending',
                 'created_by'        => session()->get('user_id'),
             ];
-
             // ---------- INSERT MAIN REQUEST ----------
             $visitorModel = new \App\Models\VisitorRequestModel();
             $vRequestId = $visitorModel->insert($data);
@@ -89,7 +88,7 @@ class VisitorRequest extends BaseController
 
     ///////////////////// Group Visitor Form Save /////////////////////////////
 
-   public function groupSubmit()
+public function groupSubmit()
 {
     if ($this->request->isAJAX()) {
 
@@ -177,56 +176,123 @@ class VisitorRequest extends BaseController
 
 
 
+public function approvalProcess()
+{
+        $id     = $this->request->getPost('id');
+        $status = $this->request->getPost('status');
+        $v_code = $this->request->getPost('v_code');
 
-    
+        $visitorModel = new \App\Models\VisitorRequestModel();
+        $logModel     = new \App\Models\VisitorLogModel();
 
-    
-    public function approvalProcess()
-    {
-            $id = $this->request->getPost('id');
-            $status = $this->request->getPost('status');
-            $v_code = $this->request->getPost('v_code');
-            $visitorModel = new \App\Models\VisitorRequestModel();
-            $logModel     = new \App\Models\VisitorLogModel();
-            $vRequestdataById = $visitorModel->find($id);
-            $oldStatus = $vRequestdataById['status'];
+        $visitor = $visitorModel->find($id);
+        $oldStatus = $visitor['status'];
+
+        // Update visitor status
+        $update = $visitorModel->update($id, ['status' => $status]);
+
+        // Insert log
+        $logModel->insert([
+            'visitor_request_id' => $id,
+            'action_type'        => ($status === 'approved') ? 'approved' : 'rejected',
+            'old_status'         => $oldStatus,
+            'new_status'         => $status,
+            'remarks'            => '',
+            'performed_by'       => session()->get('user_id'),
+        ]);
+
+        // ✔ Generate QR ONLY on approval
+        if ($status === 'approved') {
+
+            $qrText   = "Visitor ID : $v_code";
+            $fileName = "visitor_" . $id . "_qr.png";
+            $qrPath   = $this->generateQR($qrText, $fileName);
+
+            $visitorModel->update($id, ["qr_code" => $fileName]);
+
+            // ------------------------------------------
+            //  ✔ SEND EMAIL AFTER QR IS GENERATED
+            // ------------------------------------------
+
+            // Prepare POST data
+            $postData = [
+                'name'    => $visitor['visitor_name'],
+                'email'   => $visitor['visitor_email'],
+                'phone'   => $visitor['visitor_phone'],
+                'purpose' => $visitor['purpose'],
+                'vid'     => $id,
+                'v_code'  => $v_code
+            ];
+
+            // Call mail controller internally
+            $mailResponse = service('curlrequest')->post(
+                base_url('send-email'),
+                ['form_params' => $postData]
+            );
+
+            // Log or check mail status (optional)
+            $mailStatus = json_decode($mailResponse->getBody(), true);
+        }
+
+        return $this->response->setJSON(["status" => "success","mailResponse" => $mailStatus]);
+}
+
+
+//     public function approvalProcess()
+//     {
+//             $id = $this->request->getPost('id');
+//             $status = $this->request->getPost('status');
+//             $v_code = $this->request->getPost('v_code');
+//             $visitorModel = new \App\Models\VisitorRequestModel();
+//             $logModel     = new \App\Models\VisitorLogModel();
+//             $vRequestdataById = $visitorModel->find($id);
+//             $oldStatus = $vRequestdataById['status'];
         
-            // Update Status
-            $update = $visitorModel->update($id, [
-                'status' => $status
-            ]);
+//             // Update Status
+//             $update = $visitorModel->update($id, [
+//                 'status' => $status
+//             ]);
 
-            // Insert log
-            $logModel->insert([
-                'visitor_request_id' => $id,
-                'action_type'        => $status === 'approved' ? 'approved' : 'rejected',
-                'old_status'         => $oldStatus,
-                'new_status'         => $status,
-                'remarks'            => '',
-                'performed_by'       => session()->get('user_id'),
-            ]);      
+//             // Insert log
+//             $logModel->insert([
+//                 'visitor_request_id' => $id,
+//                 'action_type'        => $status === 'approved' ? 'approved' : 'rejected',
+//                 'old_status'         => $oldStatus,
+//                 'new_status'         => $status,
+//                 'remarks'            => '',
+//                 'performed_by'       => session()->get('user_id'),
+//             ]);      
         
 
-            if($status === 'approved'){
-                // Generate QR Code
-                // $qrText = "Visitor ID: $id \nName: ".$v['visitor_name']."\nPhone: ".$v['visitor_phone'];
-                $qrText = "Visitor ID : $v_code";
-                $fileName = "visitor_".$id."_qr.png";
-                $qrPath = $this->generateQR($qrText, $fileName);
-                // Save QR path to database
-                $visitorModel->update($id, [
-                "qr_code" => $fileName
-                ]);
-            }
+//             if($status === 'approved'){
+//                 // Generate QR Code
+//                 // $qrText = "Visitor ID: $id \nName: ".$v['visitor_name']."\nPhone: ".$v['visitor_phone'];
+//                 $qrText = "Visitor ID : $v_code";
+//                 $fileName = "visitor_".$id."_qr.png";
+//                 $qrPath = $this->generateQR($qrText, $fileName);
+//                 // Save QR path to database
+//                 $visitorModel->update($id, [
+//                 "qr_code" => $fileName
+//                 ]);
+//             }
                 
+// $name    = $this->request->getPost('name');
+// // $email   = 'karnamahesh42@gmail.com';
+// $email   =  $this->request->getPost('email');
+// $phone   = $this->request->getPost('phone');
+// $purpose = $this->request->getPost('purpose');
+// $vid     = $this->request->getPost('vid');
+// $v_code     = $this->request->getPost('v_code');
 
-            if ($update) {
-                return $this->response->setJSON(["status" => "success"]);
-            } else {
-                return $this->response->setJSON(["status" => "error"]);
-            }
 
-    }
+
+//             if ($update) {
+//                 return $this->response->setJSON(["status" => "success"]);
+//             } else {
+//                 return $this->response->setJSON(["status" => "error"]);
+//             }
+
+//     }
 
     public function visitorDataListView()
     {

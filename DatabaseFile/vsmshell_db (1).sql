@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2025 at 06:01 PM
+-- Generation Time: Dec 01, 2025 at 12:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -115,11 +115,38 @@ INSERT INTO `roles` (`id`, `role_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `security_gate_logs`
+--
+
+CREATE TABLE `security_gate_logs` (
+  `id` int(11) NOT NULL,
+  `visitor_request_id` int(11) NOT NULL,
+  `v_code` varchar(10) NOT NULL,
+  `check_in_time` datetime DEFAULT NULL,
+  `check_out_time` datetime DEFAULT NULL,
+  `verified_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `security_gate_logs`
+--
+
+INSERT INTO `security_gate_logs` (`id`, `visitor_request_id`, `v_code`, `check_in_time`, `check_out_time`, `verified_by`, `created_at`) VALUES
+(4, 2, 'V000002', '2025-12-01 11:19:33', '2025-12-01 11:21:37', 5, '2025-12-01 11:19:33'),
+(5, 3, 'V000003', '2025-12-01 11:44:51', NULL, 5, '2025-12-01 11:44:51'),
+(6, 5, 'V000005', '2025-12-01 16:05:56', '2025-12-01 16:11:00', 13, '2025-12-01 16:05:56'),
+(7, 6, 'V000006', '2025-12-01 16:07:15', NULL, 13, '2025-12-01 16:07:15');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `name` varchar(200) DEFAULT NULL,
   `company_name` varchar(150) DEFAULT NULL,
   `department_id` int(11) DEFAULT NULL,
   `username` varchar(50) NOT NULL,
@@ -137,16 +164,17 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `company_name`, `department_id`, `username`, `password`, `role_id`, `active`, `hash_key`, `created_at`, `created_by`, `email`, `employee_code`) VALUES
-(1, 'UKMPL', 1, 'superadmin', '274d015c638f62ba24b19ca23c9c9503', 1, 1, 'HASHKEY123', '2025-11-20 09:28:43', NULL, '', ''),
-(5, 'UKMPL', 1, 'admin', '457b2f73cbdf3cc57b92efc0aa80cb99', 2, 1, 'HASHKEY123', '2025-11-21 05:54:24', 1, 'mahesh@gmail.com', '123456'),
-(6, 'UKMPL', 3, 'user2', 'e27f4a867eaceaa81eca368d175a7716', 3, 1, 'HASHKEY123', '2025-11-21 22:15:08', 1, '', ''),
-(7, 'UKMPL', 3, 'admin2', 'bde72de2ac7798197faa307a4df2db69', 2, 1, 'HASHKEY123', '2025-11-22 05:56:17', 1, '', ''),
-(8, 'UKML', 1, 'user', 'd8847b1ec55e603141803c54ac610489', 3, 1, 'HASHKEY123', '2025-11-24 00:22:13', 1, '', ''),
-(9, 'UKML', 2, 'userlog', 'df15e08a109a1ca36c6129c4033dff9a', 3, 1, 'HASHKEY123', '2025-11-24 03:40:59', 1, '', ''),
-(10, 'UKML', 4, 'hod', 'c0da0e7607981099b9874324911d646b', 2, 1, 'HASHKEY123', '2025-11-27 23:56:49', 5, '', ''),
-(11, 'UKML', 2, 'FINANCEHOD', 'e27f4a867eaceaa81eca368d175a7716', 2, 1, 'HASHKEY123', '2025-11-30 09:57:12', 5, 'maheshkarna42@gmail.com', '2523011'),
-(12, 'UKML', 3, 'hrhod', 'f271d1efdfba760f7145d4436f845b8e', 2, 1, NULL, '2025-11-30 15:37:58', 5, 'test@gmail.com', '123456');
+INSERT INTO `users` (`id`, `name`, `company_name`, `department_id`, `username`, `password`, `role_id`, `active`, `hash_key`, `created_at`, `created_by`, `email`, `employee_code`) VALUES
+(1, NULL, 'UKMPL', 1, 'superadmin', '274d015c638f62ba24b19ca23c9c9503', 1, 1, 'HASHKEY123', '2025-11-20 09:28:43', NULL, '', ''),
+(5, NULL, 'UKMPL', 1, 'admin', '457b2f73cbdf3cc57b92efc0aa80cb99', 2, 1, 'HASHKEY123', '2025-11-21 05:54:24', 1, 'mahesh@gmail.com', '123456'),
+(6, NULL, 'UKMPL', 3, 'user2', 'e27f4a867eaceaa81eca368d175a7716', 3, 1, 'HASHKEY123', '2025-11-21 22:15:08', 1, '', ''),
+(7, NULL, 'UKMPL', 3, 'admin2', 'bde72de2ac7798197faa307a4df2db69', 2, 1, 'HASHKEY123', '2025-11-22 05:56:17', 1, '', ''),
+(8, NULL, 'UKML', 1, 'user', 'd8847b1ec55e603141803c54ac610489', 3, 1, 'HASHKEY123', '2025-11-24 00:22:13', 1, '', ''),
+(9, NULL, 'UKML', 2, 'userlog', 'df15e08a109a1ca36c6129c4033dff9a', 3, 1, 'HASHKEY123', '2025-11-24 03:40:59', 1, '', ''),
+(10, NULL, 'UKML', 4, 'hod', 'c0da0e7607981099b9874324911d646b', 2, 1, 'HASHKEY123', '2025-11-27 23:56:49', 5, '', ''),
+(11, NULL, 'UKML', 2, 'FINANCEHOD', 'e27f4a867eaceaa81eca368d175a7716', 2, 1, 'HASHKEY123', '2025-11-30 09:57:12', 5, 'maheshkarna42@gmail.com', '2523011'),
+(12, NULL, 'UKML', 3, 'hrhod', 'f271d1efdfba760f7145d4436f845b8e', 2, 1, NULL, '2025-11-30 15:37:58', 5, 'test@gmail.com', '123456'),
+(13, 'khan', 'UKML', 5, 'security', '7f56499c9bcb7018d17adba024f12b36', 4, 1, NULL, '2025-12-01 10:32:56', 5, 'khan@gmail.com', '89595875');
 
 -- --------------------------------------------------------
 
@@ -183,6 +211,8 @@ CREATE TABLE `visitors` (
   `host_user_id` int(11) NOT NULL,
   `reference_id` int(11) DEFAULT NULL,
   `status` enum('pending','approved','rejected','checked_in','checked_out','closed','no_show') DEFAULT 'pending',
+  `securityCheckStatus` tinyint(1) NOT NULL DEFAULT 0,
+  `spendTime` varchar(20) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -200,11 +230,14 @@ CREATE TABLE `visitors` (
 -- Dumping data for table `visitors`
 --
 
-INSERT INTO `visitors` (`id`, `v_code`, `group_code`, `visitor_name`, `visitor_email`, `visitor_phone`, `purpose`, `visit_date`, `description`, `expected_from`, `expected_to`, `host_user_id`, `reference_id`, `status`, `created_by`, `created_at`, `updated_at`, `proof_id_type`, `proof_id_number`, `qr_code`, `vehicle_no`, `vehicle_type`, `vehicle_id_proof`, `visitor_id_proof`, `visit_time`) VALUES
-(1, 'V000001', 'GV000001', 'mahesh', 'mahesh@gmail.com', '8959586333', 'Meeting', '2025-11-30', 'To Meet CITO ', NULL, NULL, 5, NULL, 'pending', 5, '2025-11-30 21:57:29', '2025-11-30 21:57:29', 'PAN Card', '123456', NULL, '123AP', 'Bike', '', '', '21:55:00'),
-(2, 'V000002', 'GV000001', 'ramesh', 'maheshkarna42@gmail.com', '8959586333', 'Meeting', '2025-11-30', 'To Meet CITO ', NULL, NULL, 5, NULL, 'approved', 5, '2025-11-30 21:57:29', '2025-11-30 22:24:00', 'PAN Card', '321PAN', 'visitor_2_qr.png', '123AP', 'Bike', '', '', '21:56:00'),
-(3, 'V000003', 'GV000002', 'prakash', 'prakash@gmail.com', '8965689666', 'Meeting', '2025-12-01', 'To Meet Electrical HOD', NULL, NULL, 5, NULL, 'approved', 5, '2025-11-30 21:59:26', '2025-11-30 22:14:42', 'PAN Card', '1586PAN', 'visitor_3_qr.png', 'V125APA', 'Car', '', '', '21:58:00'),
-(4, 'V000004', 'GV000003', 'vamsi T', 'vamsi@gmail.com', '8959563333', 'Interview', '2025-12-01', 'Project Meet Purpose ', NULL, NULL, 5, NULL, 'approved', 5, '2025-11-30 22:04:49', '2025-11-30 22:10:15', 'PAN Card', '25655585', 'visitor_4_qr.png', '', 'Car', '', '', '09:09:00');
+INSERT INTO `visitors` (`id`, `v_code`, `group_code`, `visitor_name`, `visitor_email`, `visitor_phone`, `purpose`, `visit_date`, `description`, `expected_from`, `expected_to`, `host_user_id`, `reference_id`, `status`, `securityCheckStatus`, `spendTime`, `created_by`, `created_at`, `updated_at`, `proof_id_type`, `proof_id_number`, `qr_code`, `vehicle_no`, `vehicle_type`, `vehicle_id_proof`, `visitor_id_proof`, `visit_time`) VALUES
+(1, 'V000001', 'GV000001', 'mahesh', 'mahesh@gmail.com', '8959586333', 'Meeting', '2025-11-30', 'To Meet CITO ', NULL, NULL, 5, NULL, 'pending', 0, NULL, 5, '2025-11-30 21:57:29', '2025-11-30 21:57:29', 'PAN Card', '123456', NULL, '123AP', 'Bike', '', '', '21:55:00'),
+(2, 'V000002', 'GV000001', 'ramesh', 'maheshkarna42@gmail.com', '8959586333', 'Meeting', '2025-11-30', 'To Meet CITO ', NULL, NULL, 5, NULL, 'approved', 2, NULL, 5, '2025-11-30 21:57:29', '2025-12-01 11:21:37', 'PAN Card', '321PAN', 'visitor_2_qr.png', '123AP', 'Bike', '', '', '21:56:00'),
+(3, 'V000003', 'GV000002', 'prakash', 'prakash@gmail.com', '8965689666', 'Meeting', '2025-12-01', 'To Meet Electrical HOD', NULL, NULL, 5, NULL, 'approved', 1, NULL, 5, '2025-11-30 21:59:26', '2025-12-01 11:44:51', 'PAN Card', '1586PAN', 'visitor_3_qr.png', 'V125APA', 'Car', '', '', '21:58:00'),
+(4, 'V000004', 'GV000003', 'vamsi T', 'vamsi@gmail.com', '8959563333', 'Interview', '2025-12-01', 'Project Meet Purpose ', NULL, NULL, 5, NULL, 'approved', 0, NULL, 5, '2025-11-30 22:04:49', '2025-12-01 11:15:56', 'PAN Card', '25655585', 'visitor_4_qr.png', '', 'Car', '', '', '09:09:00'),
+(5, 'V000005', 'GV000004', 'prakash', 'developers@ramojifilmcity.com', '8959586333', 'Meeting', '2025-12-02', 'to Meet CITO Garu', NULL, NULL, 9, NULL, 'approved', 2, '00:05:04', 9, '2025-12-01 15:52:41', '2025-12-01 16:11:00', 'Aadhar Card', '245863696632', 'visitor_5_qr.png', 'AP123TYT366', 'Bike', '1764584561_d09a987936442c4e0eb1.png', '1764584561_e50065c48f30de3bd02a.png', '09:50:00'),
+(6, 'V000006', 'GV000004', 'ravikumar', 'ukmledp@ramojifilmcity.com', '8959586333', 'Meeting', '2025-12-02', 'to Meet CITO Garu', NULL, NULL, 9, NULL, 'approved', 1, NULL, 9, '2025-12-01 15:52:41', '2025-12-01 16:07:15', 'Aadhar Card', '895958633321', 'visitor_6_qr.png', 'AP123TYT366', 'Bike', '', '', '09:52:00'),
+(7, 'V000007', 'GV000005', 'mahesh  karna', 'developers@ramojifilmcity.com', '1593574568', 'Site Inspection', '2025-12-02', 'Site Inspection Purpose ', NULL, NULL, 5, NULL, 'approved', 0, NULL, 5, '2025-12-01 16:57:59', '2025-12-01 16:58:19', 'PAN Card', 'PAN2528AT', 'visitor_7_qr.png', ' AP25TST232', 'Car', '', '', '09:57:00');
 
 -- --------------------------------------------------------
 
@@ -234,7 +267,13 @@ INSERT INTO `visitor_logs` (`id`, `visitor_request_id`, `action_type`, `old_stat
 (4, 4, 'Created', NULL, 'pending', '--', 5, '2025-11-30 22:04:49'),
 (5, 4, 'approved', 'pending', 'approved', '', 5, '2025-11-30 22:10:14'),
 (6, 3, 'approved', 'pending', 'approved', '', 5, '2025-11-30 22:14:41'),
-(7, 2, 'approved', 'pending', 'approved', '', 5, '2025-11-30 22:15:44');
+(7, 2, 'approved', 'pending', 'approved', '', 5, '2025-11-30 22:15:44'),
+(8, 5, 'Created', NULL, 'pending', '--', 9, '2025-12-01 15:52:41'),
+(9, 6, 'Created', NULL, 'pending', '--', 9, '2025-12-01 15:52:41'),
+(10, 6, 'approved', 'pending', 'approved', '', 5, '2025-12-01 15:54:02'),
+(11, 5, 'approved', 'pending', 'approved', '', 5, '2025-12-01 15:54:10'),
+(12, 7, 'Created', NULL, 'pending', '--', 5, '2025-12-01 16:57:59'),
+(13, 7, 'approved', 'pending', 'approved', '', 5, '2025-12-01 16:58:18');
 
 --
 -- Indexes for dumped tables
@@ -268,6 +307,13 @@ ALTER TABLE `reference_visitor_requests`
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `role_name` (`role_name`);
+
+--
+-- Indexes for table `security_gate_logs`
+--
+ALTER TABLE `security_gate_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `visitor_request_id` (`visitor_request_id`);
 
 --
 -- Indexes for table `users`
@@ -331,10 +377,16 @@ ALTER TABLE `roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `security_gate_logs`
+--
+ALTER TABLE `security_gate_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `user_hashkeys`
@@ -346,13 +398,13 @@ ALTER TABLE `user_hashkeys`
 -- AUTO_INCREMENT for table `visitors`
 --
 ALTER TABLE `visitors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `visitor_logs`
 --
 ALTER TABLE `visitor_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -369,6 +421,12 @@ ALTER TABLE `reference`
 --
 ALTER TABLE `reference_visitor_requests`
   ADD CONSTRAINT `reference_visitor_requests_ibfk_1` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`);
+
+--
+-- Constraints for table `security_gate_logs`
+--
+ALTER TABLE `security_gate_logs`
+  ADD CONSTRAINT `security_gate_logs_ibfk_1` FOREIGN KEY (`visitor_request_id`) REFERENCES `visitors` (`id`);
 
 --
 -- Constraints for table `users`

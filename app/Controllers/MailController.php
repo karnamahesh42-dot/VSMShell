@@ -7,7 +7,8 @@ class MailController extends Controller
 {
 
 public function sendMail()
-{
+{       
+    
         $name    = $this->request->getPost('name');
         // $email   = 'karnamahesh42@gmail.com';
         $email   =  $this->request->getPost('email');

@@ -24,6 +24,8 @@ class User extends BaseController
         }
 
         $data = [
+            
+            'name'   => $this->request->getPost('name'),
             'company_name'   => $this->request->getPost('company_name'),
             'department_id'  => $this->request->getPost('department_id'),
             'email'          => $this->request->getPost('email'),

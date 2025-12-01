@@ -60,6 +60,21 @@
                   <p>Reference Visitor request</p>
                 </a>
               </li>
+               <?php if($_SESSION['role_id'] == '4'){?>
+                <li class="nav-item">
+                <a href="<?= base_url('security_authorization') ?>" class="nav-link">
+                  <i class="nav-icon bi bi-circle-fill text-warning"></i> 
+                  <p>Security Authorization</p>
+                </a>
+              </li>
+
+                <li class="nav-item">
+                  <a href="<?= base_url('authorized_visitors_list') ?>" class="nav-link">
+                    <i class="nav-icon bi bi-circle-fill text-warning"></i> 
+                    <p>Authorized Visitor List</p>
+                  </a>
+              </li>
+             <?php } ?>
             </ul>
             <!--end::Sidebar Menu-->
           </nav>

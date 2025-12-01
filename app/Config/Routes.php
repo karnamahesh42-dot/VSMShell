@@ -55,6 +55,15 @@ $routes->get('rvr_redirect/(:any)', 'RVRDetailsController::rvr_redirect/$1');
 $routes->get('rvr_details_sheet', 'RVRDetailsController::rvr_details_sheet');
 
 
+
+$routes->get('/security_authorization', 'SecurityController::index');
+$routes->get('/authorized_visitors_list', 'SecurityController::View_authorized_visitor_list');
+$routes->get('/security/authorized_visitors_list_data', 'SecurityController::authorized_visitors_list_data');
+$routes->post('/security/verify', 'SecurityController::verifyVisitor');
+$routes->post('/security/checkin', 'SecurityController::checkIn');
+$routes->post('/security/checkout', 'SecurityController::checkOut');
+
+
 // $routes->get('/', 'VisitorController::create');
 // $routes->get('/visitor/create','VisitorController::create');
 // $routes->post('/visitor/submit','VisitorController::submit');

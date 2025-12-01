@@ -7,7 +7,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 15px;
-  color: #fff;
+  color: #000000ff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   padding-bottom: 10px;
 }
@@ -15,7 +15,7 @@
 /* Hover animation */
 .dashboard-box:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 25px rgba(65, 58, 58, 0.2);
 }
 
 /* Title beautification */
@@ -98,8 +98,8 @@
 
                <!-- /.col-md-6 -->
               
-<div class="col-lg-3 col-6 mb-2">
-  <div class="dashboard-box bg-warning animated-box p-2">
+<div class="col-lg-3 col-6 col-md-2 mb-2">
+  <div class="dashboard-box bg-warning animated-box p-3">
     <div class="inner">
       <h3 class="box-title">
         <i class="fa-solid fa-user icon-left"></i> User
@@ -117,11 +117,11 @@
               <!-- /.col-md-6 -->
 
                <!-- /.col-md-6 -->
-<div class="col-lg-3 col-6 mb-2">
-  <div class="dashboard-box bg-warning animated-box p-2">
+<div class="col-lg-3 col-6 col-md-2 mb-2">
+  <div class="dashboard-box bg-warning animated-box p-3">
     <div class="inner">
       <h3 class="box-title">
-        <i class="fa-solid fa-user icon-left"></i> Visitor Request
+        <i class="fa-solid fa-person"></i>  Visitor Request
       </h3>
       <p class="box-subtitle"> Visitor Request Form</p>
     </div>
@@ -138,11 +138,11 @@
 
                   <!-- /.col-md-6 -->
 
-          <div class="col-lg-3 col-6 mb-2">
-            <div class="dashboard-box bg-warning animated-box p-2">
+          <div class="col-lg-3 col-6 col-md-2 mb-2">
+            <div class="dashboard-box bg-warning animated-box p-3">
               <div class="inner">
                 <h6 class="box-title">
-                  <i class="fa-solid fa-user icon-left"></i> Group Request
+                 <i class="fa-solid fa-people-group"></i> Group Request
                 </h6>
                 <p class="box-subtitle"> Group Request Form</p>
               </div>

@@ -28,5 +28,7 @@ class VisitorRequestModel extends Model
         'vehicle_id_proof',
         'visitor_id_proof',
         'visit_time',
+        'securityCheckStatus',
+        'spendTime'
     ];
 }

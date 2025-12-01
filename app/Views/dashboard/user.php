@@ -67,6 +67,13 @@
                             </select>
                         </div>
                     </div>
+                      <!-- Name Dropdown -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+                        </div>
+                    </div>
                       <!-- Email -->
                       <div class="form-group row">
                           <label class="col-sm-2 col-form-label">Email</label>
