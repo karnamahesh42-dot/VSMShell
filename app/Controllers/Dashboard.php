@@ -72,6 +72,7 @@ class Dashboard extends BaseController
                     requested_date,
                     requested_time,
                     total_visitors,
+                    description,
                     status
                 ")
                 ->where('status', 'pending')
@@ -81,36 +82,35 @@ class Dashboard extends BaseController
 
             $data['pendingList'] = $pendingList;
 
+
+
         $recentAuthorized = $this->SecurityGateLogModel->getRecentAuthorized(10);
 
         // print_r ($recentAuthorized);
         // return;
+$weekStart = date('Y-m-d 00:00:00', strtotime('monday this week'));
+$weekEnd   = date('Y-m-d 23:59:59', strtotime('sunday this week'));
 
-         // Today visitors (actual check-in)
-$today = date('Y-m-d');
-$todayVisitors = $this->SecurityGateLogModel
-                        ->where('DATE(check_in_time)', $today)
-                        ->where('check_in_time IS NOT NULL')
-                        ->countAllResults();
-
-// Week visitors (Mon–Sun)
-$weekStart = date('Y-m-d', strtotime('monday this week'));
-$weekEnd   = date('Y-m-d', strtotime('sunday this week'));
 $weekVisitors = $this->SecurityGateLogModel
-                        ->where('DATE(check_in_time) >=', $weekStart)
-                        ->where('DATE(check_in_time) <=', $weekEnd)
-                        ->where('check_in_time IS NOT NULL')
-                        ->countAllResults();
+    ->where('check_in_time >=', $weekStart)
+    ->where('check_in_time <=', $weekEnd)
+    ->countAllResults();
+ 
+$todayStart = date('Y-m-d 00:00:00');
+$todayEnd   = date('Y-m-d 23:59:59');
 
-// Month visitors
-$monthStart = date('Y-m-01');
-$monthEnd   = date('Y-m-t');
+$todayVisitors = $this->SecurityGateLogModel
+    ->where('check_in_time >=', $todayStart)
+    ->where('check_in_time <=', $todayEnd)
+    ->countAllResults();
+
+$monthStart = date('Y-m-01 00:00:00');  // First day of month start time
+$monthEnd   = date('Y-m-t 23:59:59');   // Last day of month end time
+
 $monthVisitors = $this->SecurityGateLogModel
-                        ->where('DATE(check_in_time) >=', $monthStart)
-                        ->where('DATE(check_in_time) <=', $monthEnd)
-                        ->where('check_in_time IS NOT NULL')
-                        ->countAllResults();
-
+    ->where('check_in_time >=', $monthStart)
+    ->where('check_in_time <=', $monthEnd)
+    ->countAllResults();
         // Security alerts — example (0 for now, or fetch from DB)
         $alerts = 0;
 

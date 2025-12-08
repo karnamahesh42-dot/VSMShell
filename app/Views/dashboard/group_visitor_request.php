@@ -273,14 +273,10 @@ $("#visitorForm").submit(function(e){
                 showConfirmButton: false
                 });
                 setTimeout(() => location.reload(), 800);
-
-
                     // Send mails only for approved ones
-                if(res.submit_type === 'admin'){
-                    res.mail_data.forEach(item => {
-                        sendMail(item);
-                    });
-                }
+                  if(res.submit_type === 'admin'){
+                    sendMail(res.head_id); 
+                  }
             }
         },
 
@@ -299,22 +295,17 @@ $("#visitorForm").submit(function(e){
 });
 
 
-// Mail Function Calls 
-function sendMail(postData) {
-    $.ajax({
+
+function sendMail(head_id) {
+        $.ajax({
         url: "<?= base_url('/send-email') ?>",
         type: "POST",
-        data: postData,
-        dataType: "json",
-        success: function (mailRes) {
-            // console.log("Mail Sent:", mailRes);
-        },
-        error: function () {
-            // console.log("Email sending failed");
+        data: { head_id: head_id },   // 🔥 single variable
+        success: function(res) {
+        console.log(res);
         }
-    });
+        });
 }
-
 
 $(document).on('click', '.uploadBtn', function () {
     $(this).closest('td').find('.fileInput').click();

@@ -163,6 +163,7 @@ class VisitorRequest extends BaseController
         // Auto email logic
         if ($status === "approved") {
             $mail_data[] = [
+                'head_id' => $headerId,
                 'name'    => $visitorData['visitor_name'],
                 'email'   => $visitorData['visitor_email'],
                 'phone'   => $visitorData['visitor_phone'],
@@ -173,7 +174,7 @@ class VisitorRequest extends BaseController
             ];
             return $this->response->setJSON([
                 'status' => 'success',
-                'mail_data' => $mail_data,
+                'head_id' => $headerId,
                 'submit_type' => 'admin'
             ]);
         }
@@ -216,7 +217,8 @@ public function groupSubmit()
         'remarks'        => '',
         'purpose'        => $purpose,
         'description'    => $this->request->getPost('description'),
-        'email'          => $head_email
+        'email'          => $head_email,
+        'updated_by'         => $autoApprove ? session()->get('user_id') : ''
     ];
 
       $headerId = $this->VisitorRequestHeaderModel->insert($headerData);
@@ -258,6 +260,7 @@ public function groupSubmit()
         if ($autoApprove) 
         {
             // $mailDataList[] = [
+            //     'head_id' => $headerId,
             //     'name'    => $name,
             //     'email'   => $emails[$i],
             //     'phone'   => $phones[$i],
@@ -272,7 +275,7 @@ public function groupSubmit()
     return $this->response->setJSON([
         'status'      => 'success',
         'submit_type' => $autoApprove ? 'admin' : 'user',
-        'mail_data'   => $head_email
+        'head_id'   => $headerId
     ]);
 }
 
@@ -280,8 +283,6 @@ public function groupSubmit()
     /* ==================================================================
        APPROVAL PROCESS
     ================================================================== */
-
-
 
     public function approvalProcess()
     {
@@ -330,15 +331,16 @@ public function groupSubmit()
                     );
 
                     // ADD THIS: push visitor mail data to array
-                    $mail_data[] = [
-                        'name'    => $v['visitor_name'],
-                        'email'   => $v['visitor_email'],
-                        'phone'   => $v['visitor_phone'],
-                        'purpose' => $v['purpose'],
-                        'vid'     => $v['id'],
-                        'v_code'  => $v['v_code'],
-                        'qr_path' => $qrFile
-                    ];
+                    // $mail_data[] = [
+                    //     'head_id' => $head_id,
+                    //     'name'    => $v['visitor_name'],
+                    //     'email'   => $v['visitor_email'],
+                    //     'phone'   => $v['visitor_phone'],
+                    //     'purpose' => $v['purpose'],
+                    //     'vid'     => $v['id'],
+                    //     'v_code'  => $v['v_code'],
+                    //     'qr_path' => $qrFile
+                    // ];
                 }
 
             // -----------------------------------
@@ -350,7 +352,6 @@ public function groupSubmit()
             ]);
 
             
-
             // -----------------------------------
             // 4. SEND RESPONSE
             // -----------------------------------
@@ -358,49 +359,9 @@ public function groupSubmit()
             return $this->response->setJSON([
                 "status"  => "success",
                 "message" => "Head status & all visitors updated successfully!",
-                'mail_data' => $mail_data
+                'head_id' => $head_id
             ]);
-    
 
-
-
-        // $head_id     = $this->request->getPost('head_id');
-        // $status = $this->request->getPost('status');
-        // $head_code  = $this->request->getPost('head_code');
-        // $remark = $this->request->getPost('comment');
-
-        
-        //  $visitor = $this->visitorModel->find($head_id);
-
-        //  print_r($visitor);
-        
-         // $this->insertLog($id, $status, $visitor['status'], $status, $remark);
-
-        // if ($status === "approved") {
-
-        //     $qrFile = $this->generateQRcode($vCode);
-
-        //     $this->visitorModel->update($id, [
-        //         'qr_code' => $qrFile,
-        //         'status'  => $status
-        //     ]);
-
-        //     return $this->response->setJSON([
-        //         "status"    => "success",
-        //         "message"   => "Action completed successfully!",
-        //         "mail_data" => [
-        //             'name'    => $visitor['visitor_name'],
-        //             'email'   => $visitor['visitor_email'],
-        //             'phone'   => $visitor['visitor_phone'],
-        //             'purpose' => $visitor['purpose'],
-        //             'vid'     => $id,
-        //             'v_code'  => $vCode,
-        //             'qr_path' => $qrFile
-        //         ]
-        //     ]);
-        // }
-
-        // return $this->response->setJSON(["status" => "success"]);
     }
 
     /* ==================================================================

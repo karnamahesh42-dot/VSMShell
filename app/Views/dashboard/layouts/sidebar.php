@@ -10,7 +10,7 @@ if (!$session->has('isLoggedIn') || !$session->has('user_id') || !$session->has(
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Smart VMS Portal — Dashboard</title>
+  <title>RFC Visitor Management System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Bootstrap 5 -->
@@ -20,47 +20,109 @@ if (!$session->has('isLoggedIn') || !$session->has('user_id') || !$session->has(
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.5/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="<?= base_url('public/dist/css/costomstyle.css') ?>">
+  <style>
+.sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('<?= base_url("public/dist/sidebarpic.png") ?>');
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    z-index: -1;
+}
+
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100%;
+      /* background: linear-gradient(180deg, #4aa8ff,#ff7272); */
+      background: rgba(129, 129, 129, 0.65);
+      color: #fff;
+      transition: all 0.3s ease;
+      overflow-y: auto;
+      padding: 5px 10px;
+      z-index: 1040;
+    }
+</style>
 
 </head>
 <body>
 
 <!-- Sidebar -->
 <nav class="sidebar" id="sidebar">
+  
   <div class="brand-area">
-    <img src="<?= base_url('public/dist/ramoji-logo-3.png') ?>" alt="Logo">
+      <img src="<?= base_url('public/dist/ramoji-logo-3.png') ?>" alt="Logo">
   </div>
+
   <ul class="nav flex-column">
-    <li>
-    <a class="nav-link <?= (uri_string()=='' || uri_string()=='dashboard') ? 'active' : '' ?>" 
-       href="<?= base_url('/') ?>">
-        <i class="bi bi-house-fill"></i> Home
-    </a>
-</li>
-    <?php if($_SESSION['role_id'] == '1'){ ?>
-    <li><a class="nav-link <?= (uri_string()=='userlist') ? 'active' : '' ?>" href="<?= base_url('userlist') ?>"><i class="bi bi-people-fill"></i> Users</a></li>
-    <?php } ?>
-    <?php if(in_array($_SESSION['role_id'], ['1','2','3'])){ ?>
-    <li><a class="nav-link <?= (uri_string()=='visitorequestlist') ? 'active' : '' ?>" href="<?= base_url('visitorequestlist') ?>"><i class="bi bi-person-check-fill"></i> Visitor Request</a></li>
-    <?php } ?>
-    <?php if($_SESSION['role_id'] == '6'){ ?>
-    <li><a class="nav-link <?= (uri_string()=='reference') ? 'active' : '' ?>" href="<?= base_url('reference') ?>"><i class="bi bi-journal-text"></i> Reference</a></li>
-    <li><a class="nav-link <?= (uri_string()=='reference_visitor_request') ? 'active' : '' ?>" href="<?= base_url('reference_visitor_request') ?>"><i class="bi bi-journal-check"></i> Reference Visitor Request</a></li>
-    <?php } ?>
-    <?php if(in_array($_SESSION['role_id'], ['1','4'])){ ?>
-    <li><a class="nav-link <?= (uri_string()=='security_authorization') ? 'active' : '' ?>" href="<?= base_url('security_authorization') ?>"><i class="bi bi-shield-lock-fill"></i> Security Authorization</a></li>
-    <?php } ?>
-    <?php if(in_array($_SESSION['role_id'], ['1','2','4'])){ ?>
-    <li><a class="nav-link <?= (uri_string()=='authorized_visitors_list') ? 'active' : '' ?>" href="<?= base_url('authorized_visitors_list') ?>"><i class="bi bi-card-checklist"></i> Authorized Visitor List</a></li>
-    <?php } ?>
-    
-<li>
-    <a class="nav-link" 
-       href="<?= base_url('logout') ?>">
-        <i class="bi bi-box-arrow-right"></i> Logout
-    </a>
-</li>
+
+      <li>
+        <a class="nav-link <?= (uri_string()=='' || uri_string()=='dashboard') ? 'active' : '' ?>" 
+          href="<?= base_url('/') ?>">
+          <i class="bi bi-house-fill"></i> Home
+        </a>
+      </li>
+
+      <?php if($_SESSION['role_id'] == '1'){ ?>
+      <li><a class="nav-link <?= (uri_string()=='userlist') ? 'active' : '' ?>" 
+             href="<?= base_url('userlist') ?>">
+             <i class="bi bi-people-fill"></i> Users
+      </a></li>
+      <?php } ?>
+
+      <?php if(in_array($_SESSION['role_id'], ['1','2','3'])){ ?>
+      <li><a class="nav-link <?= (uri_string()=='visitorequestlist') ? 'active' : '' ?>" 
+             href="<?= base_url('visitorequestlist') ?>">
+             <i class="bi bi-person-check-fill"></i> Visitor Request
+      </a></li>
+      <?php } ?>
+
+      <?php if($_SESSION['role_id'] == '6'){ ?>
+      <li><a class="nav-link <?= (uri_string()=='reference') ? 'active' : '' ?>" 
+             href="<?= base_url('reference') ?>">
+             <i class="bi bi-journal-text"></i> Reference
+      </a></li>
+
+      <li><a class="nav-link <?= (uri_string()=='reference_visitor_request') ? 'active' : '' ?>" 
+             href="<?= base_url('reference_visitor_request') ?>">
+             <i class="bi bi-journal-check"></i> Reference Visitor Request
+      </a></li>
+      <?php } ?>
+
+      <?php if(in_array($_SESSION['role_id'], ['1','4'])){ ?>
+      <li><a class="nav-link <?= (uri_string()=='security_authorization') ? 'active' : '' ?>" 
+             href="<?= base_url('security_authorization') ?>">
+             <i class="bi bi-shield-lock-fill"></i> Security Authorization
+      </a></li>
+      <?php } ?>
+
+      <?php if(in_array($_SESSION['role_id'], ['1','2','4'])){ ?>
+      <li><a class="nav-link <?= (uri_string()=='authorized_visitors_list') ? 'active' : '' ?>" 
+             href="<?= base_url('authorized_visitors_list') ?>">
+             <i class="bi bi-card-checklist"></i> Authorized Visitor List
+      </a></li>
+      <?php } ?>
+
+
+      <li>
+        <a class="nav-link" href="<?= base_url('logout') ?>">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+      </li>
+
   </ul>
+
 </nav>
+
 
 <!-- Overlay -->
 <div class="overlay" id="overlay"></div>

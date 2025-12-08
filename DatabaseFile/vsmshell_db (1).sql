@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2025 at 06:11 PM
+-- Generation Time: Dec 08, 2025 at 12:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -136,7 +136,10 @@ INSERT INTO `security_gate_logs` (`id`, `visitor_request_id`, `v_code`, `check_i
 (1, 1, 'V000001', '2025-12-07 14:00:43', NULL, 1, '2025-12-07 14:00:43'),
 (2, 2, 'V000002', '2025-12-07 14:01:03', '2025-12-07 15:14:51', 1, '2025-12-07 14:01:03'),
 (3, 12, 'V000012', '2025-12-07 15:24:43', NULL, 1, '2025-12-07 15:24:43'),
-(4, 24, 'V000024', '2025-12-07 22:39:16', NULL, 1, '2025-12-07 22:39:16');
+(4, 24, 'V000024', '2025-12-07 22:39:16', NULL, 1, '2025-12-07 22:39:16'),
+(5, 4, 'V000004', '2025-12-08 09:23:47', NULL, 1, '2025-12-08 09:23:47'),
+(6, 26, 'V000026', '2025-12-08 10:49:40', '2025-12-08 12:25:42', 13, '2025-12-08 10:49:40'),
+(7, 27, 'V000027', '2025-12-08 10:50:14', NULL, 13, '2025-12-08 10:50:14');
 
 -- --------------------------------------------------------
 
@@ -236,7 +239,7 @@ INSERT INTO `visitors` (`id`, `request_header_id`, `v_code`, `group_code`, `visi
 (1, 1, 'V000001', 'GV000001', 'raghavendra', 'ragavendra@gmail.com', '8919146333', 'General Visit', '2025-12-06', 'Test 1', NULL, NULL, 9, NULL, 'approved', 1, NULL, 9, '2025-12-06 15:31:07', '2025-12-07 14:00:43', 'PAN Card', '123546S', 'visitor_V000001_qr.png', ' AP25TST232', 'Bike', '', '', '15:30:00'),
 (2, 2, 'V000002', 'GV000002', 'Prakash', 'john@example.com', '9876543210', 'Meeting', '2025-12-06', 'SAP Meeting Purpose ', NULL, NULL, 9, NULL, 'approved', 2, '01:13:48', 9, '2025-12-06 15:32:18', '2025-12-07 15:14:51', 'Aadhaar Card', '123456789012', 'visitor_V000002_qr.png', 'TN10AB1234', 'Car', '', '', '15:31:00'),
 (3, 2, 'V000003', 'GV000002', 'Sharath', 'mary@example.com', '9876501234', 'Meeting', '2025-12-06', 'SAP Meeting Purpose ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-06 15:32:18', '2025-12-06 16:33:07', 'PAN Card', 'ABCDE1234F', 'visitor_V000003_qr.png', 'TN09XY9876', 'Bike', '', '', '15:31:00'),
-(4, 3, 'V000004', 'GV000003', 'raju', 'john@example.com', '9876543210', 'Event Visit', '2025-12-05', 'test description ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-06 15:43:28', '2025-12-06 16:34:58', 'Aadhaar Card', '123456789012', 'visitor_V000004_qr.png', 'TN10AB1234', 'Car', '', '', '22:00:00'),
+(4, 3, 'V000004', 'GV000003', 'raju', 'john@example.com', '9876543210', 'Event Visit', '2025-12-05', 'test description ', NULL, NULL, 9, NULL, 'approved', 1, NULL, 9, '2025-12-06 15:43:28', '2025-12-08 09:23:47', 'Aadhaar Card', '123456789012', 'visitor_V000004_qr.png', 'TN10AB1234', 'Car', '', '', '22:00:00'),
 (5, 3, 'V000005', 'GV000003', 'shyam', 'mary@example.com', '9876501234', 'Event Visit', '2025-12-05', 'test description ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-06 15:43:28', '2025-12-06 16:34:58', 'PAN Card', 'ABCDE1234F', 'visitor_V000005_qr.png', 'TN09XY9876', 'Bike', '', '', '22:00:00'),
 (6, 4, 'V000006', 'GV000004', 'Prakash', 'john@example.com', '9876543210', 'General Visit', '2025-12-06', 'Test@gmail.com', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-06 16:48:41', '2025-12-06 16:50:16', 'Aadhaar Card', '123456789012', 'visitor_V000006_qr.png', 'TN10AB1234', 'Car', '', '', '16:48:00'),
 (7, 4, 'V000007', 'GV000004', 'Sharath', 'mary@example.com', '9876501234', 'General Visit', '2025-12-06', 'Test@gmail.com', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-06 16:48:41', '2025-12-06 16:50:17', 'PAN Card', 'ABCDE1234F', 'visitor_V000007_qr.png', 'TN09XY9876', 'Bike', '', '', '16:48:00'),
@@ -246,17 +249,29 @@ INSERT INTO `visitors` (`id`, `request_header_id`, `v_code`, `group_code`, `visi
 (11, 7, 'V000011', 'GV000007', 'Sharath', 'mary@example.com', '9876501234', 'Meeting', '2025-12-05', 'test', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-06 17:01:08', '2025-12-06 17:05:19', 'PAN Card', 'ABCDE1234F', 'visitor_V000011_qr.png', 'TN09XY9876', 'Bike', '', '', '17:00:00'),
 (12, 8, 'V000012', 'GV000008', 'Prakash etred', 'john@example.com', '9876543210', 'Meeting', '2025-12-06', 'test', NULL, NULL, 9, NULL, 'approved', 1, NULL, 9, '2025-12-06 17:01:41', '2025-12-07 15:24:43', 'Aadhaar Card', '123456789012', 'visitor_V000012_qr.png', 'TN10AB1234', 'Car', '', '', '17:01:00'),
 (13, 8, 'V000013', 'GV000008', 'Sharath dfsd', 'mary@example.com', '9876501234', 'Meeting', '2025-12-06', 'test', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-06 17:01:41', '2025-12-06 17:06:24', 'PAN Card', 'ABCDE1234F', 'visitor_V000013_qr.png', 'TN09XY9876', 'Bike', '', '', '17:01:00'),
-(14, 9, 'V000014', 'GV000009', 'Praveen', 'john@example.com', '9876543210', 'Document Submission', '2025-12-08', 'Document submission', NULL, NULL, 9, NULL, 'pending', 0, NULL, 9, '2025-12-07 14:34:19', '2025-12-07 14:34:19', 'Aadhaar Card', '123456789012', '', 'TN10AB1234', 'Car', '', '', '10:30:00'),
-(15, 9, 'V000015', 'GV000009', 'Sai', 'mary@example.com', '9876501234', 'Document Submission', '2025-12-08', 'Document submission', NULL, NULL, 9, NULL, 'pending', 0, NULL, 9, '2025-12-07 14:34:19', '2025-12-07 14:34:19', 'PAN Card', 'ABCDE1234F', '', 'TN09XY9876', 'Bike', '', '', '10:30:00'),
+(14, 9, 'V000014', 'GV000009', 'Praveen', 'john@example.com', '9876543210', 'Document Submission', '2025-12-08', 'Document submission', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-07 14:34:19', '2025-12-08 13:01:38', 'Aadhaar Card', '123456789012', 'visitor_V000014_qr.png', 'TN10AB1234', 'Car', '', '', '10:30:00'),
+(15, 9, 'V000015', 'GV000009', 'Sai', 'mary@example.com', '9876501234', 'Document Submission', '2025-12-08', 'Document submission', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-07 14:34:19', '2025-12-08 13:01:38', 'PAN Card', 'ABCDE1234F', 'visitor_V000015_qr.png', 'TN09XY9876', 'Bike', '', '', '10:30:00'),
 (16, 10, 'V000016', 'GV000010', 'Venkatesh', 'venkey@gmail.com', '8919146333', 'General Visit', '2025-12-08', 'General Visit', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-07 20:46:18', '2025-12-07 22:04:56', 'Aadhar Card', '74108529696', 'visitor_V000016_qr.png', 'AP123586', 'Bike', '', '', '09:30:00'),
-(17, 11, 'V000017', 'GV000011', 'Praveen', 'praveen@gmail.com', '8919146335', 'Meeting', '2025-12-08', 'SAP Meeting', NULL, NULL, 9, NULL, 'pending', 0, NULL, 9, '2025-12-07 20:55:37', '2025-12-07 20:55:37', 'Aadhar Card', '89191463333', '', 'AP1235SJ', 'Car', '', '', '10:00:00'),
+(17, 11, 'V000017', 'GV000011', 'Praveen', 'praveen@gmail.com', '8919146335', 'Meeting', '2025-12-08', 'SAP Meeting', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-07 20:55:37', '2025-12-08 12:08:12', 'Aadhar Card', '89191463333', 'visitor_V000017_qr.png', 'AP1235SJ', 'Car', '', '', '10:00:00'),
 (18, 12, 'V000018', 'GV000012', 'Ravikumar ', 'john@example.com', '9876543210', 'Meeting', '2025-12-08', 'Event Visit Purpose ', NULL, NULL, 9, NULL, 'pending', 0, NULL, 9, '2025-12-07 21:11:51', '2025-12-07 21:11:51', 'Aadhaar Card', '123456789', '', 'TN10AB1234', 'Car', '', '', '20:00:00'),
 (19, 12, 'V000019', 'GV000012', 'Sai Prakash', 'mary@example.com', '9876501234', 'Meeting', '2025-12-08', 'Event Visit Purpose ', NULL, NULL, 9, NULL, 'pending', 0, NULL, 9, '2025-12-07 21:11:51', '2025-12-07 21:11:51', 'PAN Card', 'ABCDE1234F', '', 'TN09XY9876', 'Bike', '', '', '20:00:00'),
 (20, 13, 'V000020', 'GV000013', 'Murali', 'murali@gmail.com', '8959585633', 'Tourism Visit', '2025-12-08', 'Tourism Visit Purpose ', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-07 22:10:40', '2025-12-07 22:10:40', 'Aadhar Card', '255F15616', 'visitor_V000020_qr.png', 'AP12565SDF', 'Bike', '', '', '10:00:00'),
 (21, 14, 'V000021', 'GV000014', 'Lokesh', 'lokesh@gmail.com', '7894561234', 'Maintenance / Service', '2025-12-09', 'Maintenance  Visit Purpose ', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-07 22:23:26', '2025-12-07 22:23:26', 'Aadhar Card', '741852963741', 'visitor_V000021_qr.png', 'AP42AS5DA', 'Bike', '', '', '10:00:00'),
 (22, 15, 'V000022', 'GV000015', 'Prathap', 'prathap@gmail.com', '7894561234', 'General Visit', '2025-12-08', 'General Visit', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-07 22:25:16', '2025-12-07 22:25:16', 'Aadhar Card', '7417528969685', 'visitor_V000022_qr.png', 'ADS758WD85', 'Car', '', '', '12:00:00'),
 (23, 16, 'V000023', 'GV000016', 'Lovaraju', 'raju@gmail.com', '1234556789', 'Meeting', '2025-12-08', 'General Meeting ', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-07 22:27:32', '2025-12-07 22:27:32', 'Aadhar Card', '74185296374', 'visitor_V000023_qr.png', 'SDS456', 'Car', '', '', '11:26:00'),
-(24, 17, 'V000024', 'GV000017', 'Kartheek ', 'karthik@gmail.com', '1232951561', 'Event Visit', '2025-12-08', 'Testing ', NULL, NULL, 1, NULL, 'approved', 1, NULL, 1, '2025-12-07 22:38:30', '2025-12-07 22:39:16', 'Aadhar Card', '351654684854654', 'visitor_V000024_qr.png', 'TES225DS8', 'Car', '', '', '10:30:00');
+(24, 17, 'V000024', 'GV000017', 'Kartheek ', 'karthik@gmail.com', '1232951561', 'Event Visit', '2025-12-08', 'Testing ', NULL, NULL, 1, NULL, 'approved', 1, NULL, 1, '2025-12-07 22:38:30', '2025-12-07 22:39:16', 'Aadhar Card', '351654684854654', 'visitor_V000024_qr.png', 'TES225DS8', 'Car', '', '', '10:30:00'),
+(25, 18, 'V000025', 'GV000018', 'Sreenu', 'mahesh@gmail.com', '1321635131', 'General Visit', '2025-12-08', 'General  Visit ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-08 10:02:56', '2025-12-08 10:17:26', 'Aadhar Card', '561268551684', 'visitor_V000025_qr.png', 'AT245247DSDS', 'Car', '', '', '10:30:00'),
+(26, 19, 'V000026', 'GV000019', 'Sravan', 'john@example.com', '9876543210', 'Event Visit', '2025-12-08', 'Location Recci Purpose ', NULL, NULL, 9, NULL, 'approved', 2, '01:36:02', 9, '2025-12-08 10:22:42', '2025-12-08 12:25:42', 'Aadhaar Card', '123456789012', 'visitor_V000026_qr.png', 'TN10AB1234', 'Car', '', '', '12:00:00'),
+(27, 19, 'V000027', 'GV000019', 'Balu', 'mary@example.com', '9876501234', 'Event Visit', '2025-12-08', 'Location Recci Purpose ', NULL, NULL, 9, NULL, 'approved', 1, NULL, 9, '2025-12-08 10:22:42', '2025-12-08 10:50:14', 'PAN Card', 'ABCDE1234F', 'visitor_V000027_qr.png', 'TN09XY9876', 'Bike', '', '', '12:00:00'),
+(28, 20, 'V000028', 'GV000020', 'Ravikimar', 'ravi@gmail.com', '1234567894', 'Site Inspection', '2025-12-09', 'Test Visit Purpose ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-08 14:07:36', '2025-12-08 15:50:07', 'Aadhar Card', '123546DDS5', 'visitor_V000028_qr.png', 'AF52FE5W', 'Bike', '', '', '14:06:00'),
+(29, 21, 'V000029', 'GV000021', 'laxman', 'john@example.com', '9876543210', 'Maintenance / Service', '2025-12-09', 'Test Description ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-08 14:09:13', '2025-12-08 14:20:49', 'Aadhaar Card', '123456789012', 'visitor_V000029_qr.png', 'TN10AB1234', 'Car', '', '', '15:07:00'),
+(30, 21, 'V000030', 'GV000021', 'Joy', 'mary@example.com', '9876501234', 'Maintenance / Service', '2025-12-09', 'Test Description ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 9, '2025-12-08 14:09:13', '2025-12-08 14:20:50', 'PAN Card', 'ABCDE1234F', 'visitor_V000030_qr.png', 'TN09XY9876', 'Bike', '', '', '15:07:00'),
+(31, 22, 'V000031', 'GV000022', 'Prakash', 'john@example.com', '9876543210', 'Document Submission', '2025-12-08', 'Test', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-08 15:51:23', '2025-12-08 15:51:23', 'Aadhaar Card', '123456789012', 'visitor_V000031_qr.png', 'TN10AB1234', 'Car', '', '', '15:50:00'),
+(32, 22, 'V000032', 'GV000022', 'Sharath', 'mary@example.com', '9876501234', 'Document Submission', '2025-12-08', 'Test', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-08 15:51:23', '2025-12-08 15:51:23', 'PAN Card', 'ABCDE1234F', 'visitor_V000032_qr.png', 'TN09XY9876', 'Bike', '', '', '15:50:00'),
+(33, 23, 'V000033', 'GV000023', 'Prakash Tets', 'john@example.com', '9876543210', 'General Visit', '2025-12-08', 'Test', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-08 15:56:29', '2025-12-08 15:56:29', 'Aadhaar Card', '123456789012', 'visitor_V000033_qr.png', 'TN10AB1234', 'Car', '', '', '15:56:00'),
+(34, 23, 'V000034', 'GV000023', 'Sharath Test', 'mary@example.com', '9876501234', 'General Visit', '2025-12-08', 'Test', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-08 15:56:30', '2025-12-08 15:56:30', 'PAN Card', 'ABCDE1234F', 'visitor_V000034_qr.png', 'TN09XY9876', 'Bike', '', '', '15:56:00'),
+(35, 24, 'V000035', 'GV000024', 'Prakash Test 1', 'john@example.com', '9876543210', 'Interview', '2025-12-09', 'Test Description ', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-08 16:01:28', '2025-12-08 16:01:28', 'Aadhaar Card', '123456789012', 'visitor_V000035_qr.png', 'TN10AB1234', 'Car', '', '', '16:00:00'),
+(36, 24, 'V000036', 'GV000024', 'Sharath Test 2', 'mary@example.com', '9876501234', 'Interview', '2025-12-09', 'Test Description ', NULL, NULL, 1, NULL, 'approved', 0, NULL, 1, '2025-12-08 16:01:29', '2025-12-08 16:01:29', 'PAN Card', 'ABCDE1234F', 'visitor_V000036_qr.png', 'TN09XY9876', 'Bike', '', '', '16:00:00');
 
 -- --------------------------------------------------------
 
@@ -317,7 +332,30 @@ INSERT INTO `visitor_logs` (`id`, `visitor_request_id`, `action_type`, `old_stat
 (35, 21, 'Created', NULL, 'approved', '--', 1, '2025-12-07 22:23:26'),
 (36, 22, 'Created', NULL, 'approved', '--', 1, '2025-12-07 22:25:16'),
 (37, 23, 'Created', NULL, 'approved', '--', 1, '2025-12-07 22:27:32'),
-(38, 24, 'Created', NULL, 'approved', '--', 1, '2025-12-07 22:38:30');
+(38, 24, 'Created', NULL, 'approved', '--', 1, '2025-12-07 22:38:30'),
+(39, 25, 'Created', NULL, 'pending', '--', 9, '2025-12-08 10:02:56'),
+(40, 25, 'approved', 'pending', 'approved', '', 1, '2025-12-08 10:17:26'),
+(41, 25, 'approved', 'approved', 'approved', NULL, 1, '2025-12-08 10:18:43'),
+(42, 24, 'approved', 'approved', 'approved', NULL, 1, '2025-12-08 10:18:55'),
+(43, 26, 'Created', NULL, 'pending', '--', 9, '2025-12-08 10:22:42'),
+(44, 27, 'Created', NULL, 'pending', '--', 9, '2025-12-08 10:22:42'),
+(45, 26, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 10:44:53'),
+(46, 27, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 10:44:54'),
+(47, 17, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 12:08:12'),
+(48, 14, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 13:01:38'),
+(49, 15, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 13:01:38'),
+(50, 28, 'Created', NULL, 'pending', '--', 9, '2025-12-08 14:07:36'),
+(51, 29, 'Created', NULL, 'pending', '--', 9, '2025-12-08 14:09:13'),
+(52, 30, 'Created', NULL, 'pending', '--', 9, '2025-12-08 14:09:13'),
+(53, 29, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 14:20:49'),
+(54, 30, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 14:20:50'),
+(55, 28, 'approved', 'pending', 'approved', NULL, 1, '2025-12-08 15:50:07'),
+(56, 31, 'Created', NULL, 'approved', '--', 1, '2025-12-08 15:51:23'),
+(57, 32, 'Created', NULL, 'approved', '--', 1, '2025-12-08 15:51:23'),
+(58, 33, 'Created', NULL, 'approved', '--', 1, '2025-12-08 15:56:29'),
+(59, 34, 'Created', NULL, 'approved', '--', 1, '2025-12-08 15:56:30'),
+(60, 35, 'Created', NULL, 'approved', '--', 1, '2025-12-08 16:01:28'),
+(61, 36, 'Created', NULL, 'approved', '--', 1, '2025-12-08 16:01:29');
 
 -- --------------------------------------------------------
 
@@ -337,6 +375,7 @@ CREATE TABLE `visitor_request_header` (
   `email` varchar(255) DEFAULT NULL,
   `total_visitors` int(11) DEFAULT 0,
   `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `updated_by` int(11) DEFAULT NULL,
   `remarks` text DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -347,24 +386,31 @@ CREATE TABLE `visitor_request_header` (
 -- Dumping data for table `visitor_request_header`
 --
 
-INSERT INTO `visitor_request_header` (`id`, `header_code`, `requested_by`, `requested_date`, `requested_time`, `department`, `purpose`, `description`, `email`, `total_visitors`, `status`, `remarks`, `created_at`, `updated_at`, `company`) VALUES
-(1, 'GV000001', '9', '2025-12-06', '15:30:00', 'Finance', 'General Visit', 'Test 1', 'ragavendra@gmail.com', 1, 'approved', '', '2025-12-06 15:31:07', '2025-12-06 16:19:45', 'UKMPL'),
-(2, 'GV000002', '9', '2025-12-06', '15:31:00', 'Finance', 'Meeting', 'SAP Meeting Purpose ', 'test@gmail.com', 2, 'approved', '', '2025-12-06 15:32:18', '2025-12-06 16:33:07', 'UKMPL'),
-(3, 'GV000003', '9', '2025-12-05', '22:00:00', 'Finance', 'Event Visit', 'test description ', 'Test@gmail.com', 2, 'approved', '', '2025-12-06 15:43:28', '2025-12-06 16:34:58', 'UKMPL'),
-(4, 'GV000004', '9', '2025-12-06', '16:48:00', 'Finance', 'General Visit', 'Test@gmail.com', 'Test@gmail.com', 2, 'approved', '', '2025-12-06 16:48:41', '2025-12-06 16:50:17', 'UKMPL'),
-(5, 'GV000005', '9', '2025-12-06', '16:48:00', 'Finance', 'General Visit', 'Test Description ', 'ravi@gmail.com', 1, 'approved', '', '2025-12-06 16:49:44', '2025-12-06 16:54:27', 'UKMPL'),
-(6, 'GV000006', '9', '2025-12-05', '16:59:00', 'Finance', 'Meeting', 'Rdfsdf', 'prathap@gmail.com', 1, 'approved', '', '2025-12-06 17:00:18', '2025-12-06 17:04:40', 'UKMPL'),
-(7, 'GV000007', '9', '2025-12-05', '17:00:00', 'Finance', 'Meeting', 'test', 'test@gmail.com', 2, 'approved', '', '2025-12-06 17:01:08', '2025-12-06 17:05:19', 'UKMPL'),
-(8, 'GV000008', '9', '2025-12-06', '17:01:00', 'Finance', 'Meeting', 'test', 'test@gmail.com', 2, 'approved', '', '2025-12-06 17:01:41', '2025-12-06 17:06:24', 'UKMPL'),
-(9, 'GV000009', '9', '2025-12-08', '10:30:00', 'Finance', 'Document Submission', 'Document submission', 'test@gmail.com', 2, 'pending', '', '2025-12-07 14:34:19', '2025-12-07 14:34:19', 'UKMPL'),
-(10, 'GV000010', '9', '2025-12-08', '09:30:00', 'Finance', 'General Visit', 'General Visit', 'venkey@gmail.com', 1, 'approved', '', '2025-12-07 20:46:18', '2025-12-07 22:04:56', 'UKMPL'),
-(11, 'GV000011', '9', '2025-12-08', '10:00:00', 'Finance', 'Meeting', 'SAP Meeting', 'praveen@gmail.com', 1, 'pending', '', '2025-12-07 20:55:37', '2025-12-07 20:55:37', 'UKMPL'),
-(12, 'GV000012', '9', '2025-12-08', '20:00:00', 'Finance', 'Meeting', 'Event Visit Purpose ', 'testmail@gmail.com', 2, 'pending', '', '2025-12-07 21:11:51', '2025-12-07 21:11:51', 'UKMPL'),
-(13, 'GV000013', '1', '2025-12-08', '10:00:00', 'IT', 'Tourism Visit', 'Tourism Visit Purpose ', 'murali@gmail.com', 1, 'approved', '', '2025-12-07 22:10:40', '2025-12-07 22:10:40', 'UKMPL'),
-(14, 'GV000014', '1', '2025-12-09', '10:00:00', 'IT', 'Maintenance / Service', 'Maintenance  Visit Purpose ', 'lokesh@gmail.com', 1, 'approved', '', '2025-12-07 22:23:26', '2025-12-07 22:23:26', 'UKMPL'),
-(15, 'GV000015', '1', '2025-12-08', '12:00:00', 'IT', 'General Visit', 'General Visit', 'prathap@gmail.com', 1, 'approved', '', '2025-12-07 22:25:16', '2025-12-07 22:25:16', 'UKMPL'),
-(16, 'GV000016', '1', '2025-12-08', '11:26:00', 'IT', 'Meeting', 'General Meeting ', 'raju@gmail.com', 1, 'approved', '', '2025-12-07 22:27:32', '2025-12-07 22:27:32', 'UKMPL'),
-(17, 'GV000017', '1', '2025-12-08', '10:30:00', 'IT', 'Event Visit', 'Testing ', 'karthik@gmail.com', 1, 'approved', '', '2025-12-07 22:38:30', '2025-12-07 22:38:30', 'UKMPL');
+INSERT INTO `visitor_request_header` (`id`, `header_code`, `requested_by`, `requested_date`, `requested_time`, `department`, `purpose`, `description`, `email`, `total_visitors`, `status`, `updated_by`, `remarks`, `created_at`, `updated_at`, `company`) VALUES
+(1, 'GV000001', '9', '2025-12-06', '15:30:00', 'Finance', 'General Visit', 'Test 1', 'ragavendra@gmail.com', 1, 'approved', NULL, '', '2025-12-06 15:31:07', '2025-12-06 16:19:45', 'UKMPL'),
+(2, 'GV000002', '9', '2025-12-06', '15:31:00', 'Finance', 'Meeting', 'SAP Meeting Purpose ', 'test@gmail.com', 2, 'approved', NULL, '', '2025-12-06 15:32:18', '2025-12-06 16:33:07', 'UKMPL'),
+(3, 'GV000003', '9', '2025-12-05', '22:00:00', 'Finance', 'Event Visit', 'test description ', 'Test@gmail.com', 2, 'approved', NULL, '', '2025-12-06 15:43:28', '2025-12-06 16:34:58', 'UKMPL'),
+(4, 'GV000004', '9', '2025-12-06', '16:48:00', 'Finance', 'General Visit', 'Test@gmail.com', 'Test@gmail.com', 2, 'approved', NULL, '', '2025-12-06 16:48:41', '2025-12-06 16:50:17', 'UKMPL'),
+(5, 'GV000005', '9', '2025-12-06', '16:48:00', 'Finance', 'General Visit', 'Test Description ', 'ravi@gmail.com', 1, 'approved', NULL, '', '2025-12-06 16:49:44', '2025-12-06 16:54:27', 'UKMPL'),
+(6, 'GV000006', '9', '2025-12-05', '16:59:00', 'Finance', 'Meeting', 'Rdfsdf', 'prathap@gmail.com', 1, 'approved', NULL, '', '2025-12-06 17:00:18', '2025-12-06 17:04:40', 'UKMPL'),
+(7, 'GV000007', '9', '2025-12-05', '17:00:00', 'Finance', 'Meeting', 'test', 'test@gmail.com', 2, 'approved', NULL, '', '2025-12-06 17:01:08', '2025-12-06 17:05:19', 'UKMPL'),
+(8, 'GV000008', '9', '2025-12-06', '17:01:00', 'Finance', 'Meeting', 'test', 'test@gmail.com', 2, 'approved', NULL, '', '2025-12-06 17:01:41', '2025-12-06 17:06:24', 'UKMPL'),
+(9, 'GV000009', '9', '2025-12-08', '10:30:00', 'Finance', 'Document Submission', 'Document submission', 'test@gmail.com', 2, 'approved', NULL, '', '2025-12-07 14:34:19', '2025-12-08 13:01:38', 'UKMPL'),
+(10, 'GV000010', '9', '2025-12-08', '09:30:00', 'Finance', 'General Visit', 'General Visit', 'venkey@gmail.com', 1, 'approved', NULL, '', '2025-12-07 20:46:18', '2025-12-07 22:04:56', 'UKMPL'),
+(11, 'GV000011', '9', '2025-12-08', '10:00:00', 'Finance', 'Meeting', 'SAP Meeting', 'praveen@gmail.com', 1, 'approved', NULL, '', '2025-12-07 20:55:37', '2025-12-08 12:08:12', 'UKMPL'),
+(12, 'GV000012', '9', '2025-12-08', '20:00:00', 'Finance', 'Meeting', 'Event Visit Purpose ', 'testmail@gmail.com', 2, 'approved', NULL, '', '2025-12-07 21:11:51', '2025-12-08 12:52:17', 'UKMPL'),
+(13, 'GV000013', '1', '2025-12-08', '10:00:00', 'IT', 'Tourism Visit', 'Tourism Visit Purpose ', 'murali@gmail.com', 1, 'approved', NULL, '', '2025-12-07 22:10:40', '2025-12-07 22:10:40', 'UKMPL'),
+(14, 'GV000014', '1', '2025-12-09', '10:00:00', 'IT', 'Maintenance / Service', 'Maintenance  Visit Purpose ', 'lokesh@gmail.com', 1, 'approved', NULL, '', '2025-12-07 22:23:26', '2025-12-07 22:23:26', 'UKMPL'),
+(15, 'GV000015', '1', '2025-12-08', '12:00:00', 'IT', 'General Visit', 'General Visit', 'prathap@gmail.com', 1, 'approved', NULL, '', '2025-12-07 22:25:16', '2025-12-07 22:25:16', 'UKMPL'),
+(16, 'GV000016', '1', '2025-12-08', '11:26:00', 'IT', 'Meeting', 'General Meeting ', 'raju@gmail.com', 1, 'approved', NULL, '', '2025-12-07 22:27:32', '2025-12-07 22:27:32', 'UKMPL'),
+(17, 'GV000017', '1', '2025-12-08', '10:30:00', 'IT', 'Event Visit', 'Testing ', 'karthik@gmail.com', 1, 'approved', NULL, '', '2025-12-07 22:38:30', '2025-12-08 10:18:55', 'UKMPL'),
+(18, 'GV000018', '9', '2025-12-08', '10:30:00', 'Finance', 'General Visit', 'General  Visit ', 'mahesh@gmail.com', 1, 'approved', NULL, '', '2025-12-08 10:02:56', '2025-12-08 10:18:43', 'UKMPL'),
+(19, 'GV000019', '9', '2025-12-08', '12:00:00', 'Finance', 'Event Visit', 'Location Recci Purpose ', 'kasi34u@gmail.com', 2, 'approved', NULL, '', '2025-12-08 10:22:42', '2025-12-08 10:44:54', 'UKMPL'),
+(20, 'GV000020', '9', '2025-12-09', '14:06:00', 'Finance', 'Site Inspection', 'Test Visit Purpose ', 'ravi@gmail.com', 1, 'approved', NULL, '', '2025-12-08 14:07:36', '2025-12-08 15:50:07', 'UKMPL'),
+(21, 'GV000021', '9', '2025-12-09', '15:07:00', 'Finance', 'Maintenance / Service', 'Test Description ', 'test@gmail.com', 2, 'approved', NULL, '', '2025-12-08 14:09:13', '2025-12-08 14:20:50', 'UKMPL'),
+(22, 'GV000022', '1', '2025-12-08', '15:50:00', 'IT', 'Document Submission', 'Test', 'test@gmail.com', 2, 'approved', NULL, '', '2025-12-08 15:51:22', '2025-12-08 15:51:22', 'UKMPL'),
+(23, 'GV000023', '1', '2025-12-08', '15:56:00', 'IT', 'General Visit', 'Test', 'karnamahesh42@gmail.com', 2, 'approved', NULL, '', '2025-12-08 15:56:28', '2025-12-08 15:56:28', 'UKMPL'),
+(24, 'GV000024', '1', '2025-12-09', '16:00:00', 'IT', 'Interview', 'Test Description ', 'test@gmail.com', 2, 'approved', NULL, '', '2025-12-08 16:01:27', '2025-12-08 16:01:27', 'UKMPL');
 
 --
 -- Indexes for dumped tables
@@ -477,7 +523,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `security_gate_logs`
 --
 ALTER TABLE `security_gate_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -495,19 +541,19 @@ ALTER TABLE `user_hashkeys`
 -- AUTO_INCREMENT for table `visitors`
 --
 ALTER TABLE `visitors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `visitor_logs`
 --
 ALTER TABLE `visitor_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `visitor_request_header`
 --
 ALTER TABLE `visitor_request_header`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables

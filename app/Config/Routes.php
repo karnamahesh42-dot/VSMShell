@@ -37,6 +37,8 @@ $routes->post('/visitor-template-upload', 'VisitorRequest::uploadCsv');
 
 // $routes->get('send-email', 'MailController::sendMail');
 $routes->post('send-email', 'MailController::sendMail');
+// $routes->post('send-email', 'MailController::sendMailTwo');
+
 
 $routes->get('reference', 'ReferenceControllere::index');
 $routes->post('/reference_save', 'ReferenceControllere::create');

@@ -233,7 +233,7 @@ $("#visitorForm").submit(function(e){
                 // setTimeout(() => location.reload(), 800);
 
                 if(res.submit_type === 'admin'){
-                    sendMail(JSON.stringify(res.mail_data)); 
+                    sendMail(res.head_id); 
                 }
             }
         },
@@ -262,20 +262,32 @@ $("#visitorForm").submit(function(e){
 //     });
 // }
 
-
-function sendMail(maildata) {
-    $.ajax({
+function sendMail(head_id) {
+        $.ajax({
         url: "<?= base_url('/send-email') ?>",
         type: "POST",
-        data:{ mail_data : maildata },
-        dataType: "json",
-        success: function (mailRes) {
-            console.log(mailRes);
-        },
-        error: function () {
-            console.log("Email sending failed");
+        data: { head_id: head_id },   // 🔥 single variable
+        success: function(res) {
+        console.log(res);
         }
-    });
+        });
 }
+
+
+
+// function sendMail(maildata) {
+//     $.ajax({
+//         url: "<?= base_url('/send-email') ?>",
+//         type: "POST",
+//         data:{ mail_data : maildata },
+//         dataType: "json",
+//         success: function (mailRes) {
+//             console.log(mailRes);
+//         },
+//         error: function () {
+//             console.log("Email sending failed");
+//         }
+//     });
+// }
 
 </script>

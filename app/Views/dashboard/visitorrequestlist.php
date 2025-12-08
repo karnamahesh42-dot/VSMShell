@@ -56,7 +56,7 @@
 
                              <div class="col-md-3">
                                 <label class="fw-semibold">Visitors Count </label>
-                                <div id="h_count">2</div>
+                                <div id="h_count"></div>
                             </div>
 
                              <div class="col-md-3">
@@ -245,18 +245,19 @@ function view_visitor(id){
             let actionButtons = "";
             let h = res.data[0];
 
-            // console.log(h)
-            // console.log(h.status)
+            console.log(h)
+            console.log(h.status);
+            
             if (h.status === "pending" ) {
 
                     actionButtons = `
                         <button class="btn btn-success btn-sm me-2"
-                            onclick="approvalProcess(${h.id}, 'approved', '${h.header_code}')">
+                            onclick="approvalProcess(${h.request_header_id}, 'approved', '${h.header_code}')">
                             <i class="fas fa-check-circle"></i> Approve
                         </button>
 
                         <button class="btn btn-danger btn-sm"
-                            onclick="rejectComment(${h.id}, 'rejected', '${h.header_code}')">
+                            onclick="rejectComment(${h.request_header_id }, 'rejected', '${h.header_code}')">
                             <i class="fas fa-times-circle"></i> Reject
                         </button>
                     `;
@@ -268,7 +269,8 @@ function view_visitor(id){
             $("#h_department").text(h.department);
             $("#h_email").text(h.email ?? "-");
             $("#h_company").text(h.company);
-            // $("#h_date").text(h.requested_date '-'h.visit_time );
+            
+            $("#h_count").text(h.total_visitors);
             $("#h_requested_by").text(h.visitor_created_by_name);
             $("#h_purpose").text(h.purpose);
             $("#h_date").text(h.requested_date +" & "+ h.requested_time);

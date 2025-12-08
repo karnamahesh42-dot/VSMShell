@@ -2,7 +2,9 @@
 <header class="topbar" id="topbar">
   <button class="btn btn-outline-secondary d-md-none me-2" id="mobileSidebarToggle"><i class="bi bi-list"></i></button>
   <button class="btn btn-outline-secondary d-none d-md-inline me-3" id="sidebarCollapse"><i class="bi bi-list"></i></button>
-  <div class="brand">Smart VMS Portal</div>
+  <div class="brand">Visitor Management System <div class="brand-subtitle">Manage Every Visitor Digitally and Securely</div> </div>
+ 
+  
   <div class="top-actions">
     <button class="btn btn-outline-secondary" id="fullScreenBtn" title="Fullscreen"><i class="bi bi-arrows-fullscreen"></i></button>
     <div class="dropdown">
