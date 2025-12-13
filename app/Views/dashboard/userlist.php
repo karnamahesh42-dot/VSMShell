@@ -11,7 +11,7 @@
         <div class="modal-content shadow-lg border-0">
 
             <!-- Header -->
-            <div class="modal-header bg-primary text-white py-3">
+            <div class="modal-header text-white py-3">
                 <h5 class="modal-title fw-semibold">
                     <i class="fas fa-user-edit me-2"></i>Edit User Details
                 </h5>
@@ -90,7 +90,7 @@
                     <div class="col-md-12">
                         <div class="card visitor-list-card">
                             <div class="card-header d-flex justify-content-between align-items-center card-header-actions">
-                                <h3 class="card-title mb-0">User List</h3>
+                                <h5 class="mb-0">User List</h5>
 
                                 <a href="<?= base_url('user') ?>" class="btn btn-warning">
                                     <i class="bi bi-person-plus-fill"></i> New User
@@ -141,9 +141,11 @@
             </div>
 
             <!-- Reset Button -->
-            <div class="col-md-2 mb-2">
-                <a href="<?= base_url('userlist') ?>" class="btn btn-secondary w-100">Reset Filters</a>
-            </div>
+                    <div class="col-md-2 mb-2">
+                        <a href="<?= base_url('userlist') ?>" class="btn btn-secondary w-100">
+                            <i class="fa fa-rotate-left me-1"></i> Reset 
+                        </a>
+                    </div>
 
         </div>
     </form>

@@ -24,15 +24,19 @@ if (!$session->has('isLoggedIn') || !$session->has('user_id') || !$session->has(
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-body {
+body,.card-title {
     font-family: 'Lato', sans-serif;
 }
-h1, h2, h3, h4 {
-    font-family: 'Playfair Display', serif;
+h1, h2, h3, h4, .card-title {
+    font-family: 'Playfair Display', serif; !important;
 }
 </style>
 
   <style>
+  .card-header{
+      background: #398aaaff;
+  }
+
 .sidebar::before {
     content: "";
     position: absolute;

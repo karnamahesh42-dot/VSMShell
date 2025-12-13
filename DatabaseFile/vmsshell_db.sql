@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 13, 2025 at 12:07 AM
+-- Generation Time: Dec 13, 2025 at 12:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -157,7 +157,9 @@ CREATE TABLE `security_gate_logs` (
 --
 
 INSERT INTO `security_gate_logs` (`id`, `visitor_request_id`, `v_code`, `check_in_time`, `check_out_time`, `verified_by`, `created_at`) VALUES
-(1, 1, 'V000001', '2025-12-13 02:20:51', '2025-12-13 03:38:49', 13, '2025-12-13 02:20:51');
+(1, 1, 'V000001', '2025-12-13 02:20:51', '2025-12-13 03:38:49', 13, '2025-12-13 02:20:51'),
+(2, 4, 'V000004', '2025-12-13 11:13:39', NULL, 11, '2025-12-13 11:13:39'),
+(3, 7, 'V000007', '2025-12-13 15:16:18', '2025-12-13 15:19:43', 13, '2025-12-13 15:16:18');
 
 -- --------------------------------------------------------
 
@@ -194,12 +196,13 @@ INSERT INTO `users` (`id`, `priority`, `name`, `company_name`, `department_id`, 
 (8, 0, 'Sury kumar', 'UKMPL', 1, 'ituser', '8e3f128f3e5075f40cd8b8361cb1d24d', 3, 1, 'HASHKEY123', '2025-11-24 00:22:13', 1, 'kumar@gmail.com', '87456321'),
 (9, 10, 'Radhika', 'UKMPL', 2, 'radhika', '2a14558094169ea7f79f928213fd9a20', 3, 1, 'HASHKEY123', '2025-11-24 03:40:59', 1, 'radhika@gmail.com', '951456357'),
 (10, 10, 'Sailesh Kumar', 'UKMPL', 2, 'sailesh', '439dd07182ce0dcd1f225293d85be464', 2, 1, 'HASHKEY123', '2025-11-27 23:56:49', 5, 'miscentraloffice@ramojifilmcity.com', '741963258'),
-(11, 0, 'Satish Kumar', 'UKMPL', 2, 'satish', '135c44d20155d3a67bc984f17492a3d3', 2, 1, 'HASHKEY123', '2025-11-30 09:57:12', 5, 'gmaccounts@ramojifilmcity.com', '321987456'),
+(11, 2, 'Satish Kumar', 'UKMPL', 2, 'satish', '135c44d20155d3a67bc984f17492a3d3', 2, 1, 'HASHKEY123', '2025-11-30 09:57:12', 5, 'gmaccounts@ramojifilmcity.com', '321987456'),
 (12, 0, 'pallam raju', 'UKMPL', 3, 'hruser', '5980d6ad05354bd8681adff071323804', 3, 1, 'HASHKEY123', '2025-11-30 15:37:58', 5, 'raju@gmail.com', '456812397'),
 (13, 10, 'khan', 'UKMPL', 6, 'security', '7f56499c9bcb7018d17adba024f12b36', 4, 1, NULL, '2025-12-01 10:32:56', 5, 'khan@gmail.com', '89595875'),
 (14, 0, 'Kumar', 'UKMPL', 5, 'kumar', 'b9b580e1f1d30f72a52c9696dfa3c1a3', 3, 0, NULL, '2025-12-02 03:46:21', 5, 'kumar@gmail.com', '53532581'),
 (15, 0, 'Mahesh', 'UKMPL', 5, 'stores@rfc.com', 'bde72de2ac7798197faa307a4df2db69', 3, 1, 'HASHKEY123', '2025-12-09 11:46:10', 1, 'store@gmail.com', '123456'),
-(16, 9, 'Lokesh', 'UKMPL', 2, 'lokesh', 'd273c8b0aa7f42e27fe0ea75f896167a', 2, 1, 'HASHKEY123', '2025-12-12 15:37:09', 1, 'lokesh@gmail.com', '87456321');
+(16, 3, 'Lokesh', 'UKMPL', 2, 'lokesh', 'd273c8b0aa7f42e27fe0ea75f896167a', 2, 1, 'HASHKEY123', '2025-12-12 15:37:09', 1, 'lokesh@gmail.com', '87456321'),
+(18, 1, 'K Ravindara Rao', 'UKMPL', 2, 'kravindra', '6c185769e88bffa03bed6a8129277205', 2, 1, 'HASHKEY123', '2025-12-13 09:29:06', 1, 'ravindra@gmail.com', '789564264');
 
 -- --------------------------------------------------------
 
@@ -262,7 +265,11 @@ CREATE TABLE `visitors` (
 INSERT INTO `visitors` (`id`, `request_header_id`, `v_code`, `group_code`, `visitor_name`, `visitor_email`, `visitor_phone`, `purpose`, `visit_date`, `description`, `expected_from`, `expected_to`, `host_user_id`, `reference_id`, `status`, `meeting_status`, `meeting_completed_at`, `validity`, `securityCheckStatus`, `spendTime`, `created_by`, `created_at`, `updated_at`, `proof_id_type`, `proof_id_number`, `qr_code`, `vehicle_no`, `vehicle_type`, `vehicle_id_proof`, `visitor_id_proof`, `visit_time`) VALUES
 (1, 1, 'V000001', 'GV000001', 'Ravikumar', 'karnamahesh42@gmail.com', '8919146333', 'General Visit', '2025-12-13', 'Testing Purpose ', NULL, NULL, 1, NULL, 'approved', 1, '2025-12-13 03:36:28', 1, 2, '01:17:58', 1, '2025-12-12 22:19:39', '2025-12-13 03:38:49', 'Aadhar Card', '852369741123', 'visitor_V000001_qr.png', 'AP123AD52', 'Bike', '', '', '10:30:00'),
 (2, 2, 'V000002', 'GV000002', 'Rakesh', 'karnamahesh42@gmail.com', '7894561234', 'Meeting', '2025-12-12', 'Test Visit Purpose  ', NULL, NULL, 9, NULL, 'approved', 0, NULL, 0, 0, NULL, 9, '2025-12-12 22:34:33', '2025-12-13 04:01:35', 'Aadhar Card', '74185296388', 'visitor_V000002_qr.png', 'TS55DF5F5', 'Bike', '', '', '22:33:00'),
-(3, 3, 'V000003', 'GV000003', 'Rahul', 'karnamahesh42@gmail.com', '7894561237', 'Meeting', '2025-12-12', 'Test Meeting Visit', NULL, NULL, 9, NULL, 'pending', 0, NULL, 0, 0, NULL, 9, '2025-12-12 22:36:16', '2025-12-13 00:02:05', 'PAN Card', '1D55D54F8', '', '465SDD54', 'Bike', '', '', '22:35:00');
+(3, 3, 'V000003', 'GV000003', 'Rahul', 'karnamahesh42@gmail.com', '7894561237', 'Meeting', '2025-12-12', 'Test Meeting Visit', NULL, NULL, 9, NULL, 'pending', 0, NULL, 0, 0, NULL, 9, '2025-12-12 22:36:16', '2025-12-13 00:02:05', 'PAN Card', '1D55D54F8', '', '465SDD54', 'Bike', '', '', '22:35:00'),
+(4, 4, 'V000004', 'GV000004', 'Prakash', 'karnamahesh42@gmail.com', '9876543210', 'Vendor Visit', '2025-12-13', 'Test Visit', NULL, NULL, 9, NULL, 'approved', 0, NULL, 1, 1, NULL, 9, '2025-12-13 10:48:10', '2025-12-13 11:13:39', 'Aadhaar Card', '123456789012', 'visitor_V000004_qr.png', 'TN10AB1234', 'Car', '', '', '10:50:00'),
+(5, 4, 'V000005', 'GV000004', 'Sharath', 'karnamahesh42@gmail.com', '9876501234', 'Vendor Visit', '2025-12-13', 'Test Visit', NULL, NULL, 9, NULL, 'approved', 0, NULL, 1, 0, NULL, 9, '2025-12-13 10:48:10', '2025-12-13 10:54:30', 'PAN Card', 'ABCDE1234F', 'visitor_V000005_qr.png', 'TN10AB1234', 'Car', '', '', '10:50:00'),
+(6, 5, 'V000006', 'GV000005', 'Tarun Tota', 'ukmledp@ramojifilmcity.com', '6789543256', 'Event Visit', '2025-12-13', 'Client Planning For Event', NULL, NULL, 9, NULL, 'pending', 0, NULL, 1, 0, NULL, 9, '2025-12-13 13:57:28', '2025-12-13 13:57:28', 'Aadhar Card', '234567890', '', 'TS26EF4567', 'Car', '', '', '14:30:00'),
+(7, 6, 'V000007', 'GV000006', 'Raja', 'karnamahesh42@gmail.com', '8919146333', 'Location Recci', '2025-12-13', 'Test Description ', NULL, NULL, 9, NULL, 'approved', 1, '2025-12-13 15:19:19', 1, 2, '00:03:25', 9, '2025-12-13 14:54:13', '2025-12-13 15:19:43', 'Aadhar Card', 'AP3524685', 'visitor_V000007_qr.png', 'AS545788S', 'Bike', '', '', '15:53:00');
 
 -- --------------------------------------------------------
 
@@ -289,7 +296,14 @@ INSERT INTO `visitor_logs` (`id`, `visitor_request_id`, `action_type`, `old_stat
 (1, 1, 'Created', NULL, 'approved', '--', 1, '2025-12-12 22:19:39'),
 (2, 2, 'Created', NULL, 'pending', '--', 9, '2025-12-12 22:34:33'),
 (3, 3, 'Created', NULL, 'pending', '--', 9, '2025-12-12 22:36:16'),
-(4, 2, 'approved', 'pending', 'approved', NULL, 11, '2025-12-13 04:01:35');
+(4, 2, 'approved', 'pending', 'approved', NULL, 11, '2025-12-13 04:01:35'),
+(5, 4, 'Created', NULL, 'pending', '--', 9, '2025-12-13 10:48:10'),
+(6, 5, 'Created', NULL, 'pending', '--', 9, '2025-12-13 10:48:10'),
+(7, 4, 'approved', 'pending', 'approved', NULL, 11, '2025-12-13 10:54:29'),
+(8, 5, 'approved', 'pending', 'approved', NULL, 11, '2025-12-13 10:54:30'),
+(9, 6, 'Created', NULL, 'pending', '--', 9, '2025-12-13 13:57:28'),
+(10, 7, 'Created', NULL, 'pending', '--', 9, '2025-12-13 14:54:13'),
+(11, 7, 'approved', 'pending', 'approved', NULL, 16, '2025-12-13 15:13:47');
 
 -- --------------------------------------------------------
 
@@ -324,7 +338,10 @@ CREATE TABLE `visitor_request_header` (
 INSERT INTO `visitor_request_header` (`id`, `header_code`, `requested_by`, `referred_by`, `requested_date`, `requested_time`, `department`, `purpose`, `description`, `email`, `total_visitors`, `status`, `updated_by`, `remarks`, `created_at`, `updated_at`, `company`) VALUES
 (1, 'GV000001', '1', 5, '2025-12-13', '10:30:00', 'IT', 'General Visit', 'Testing Purpose ', 'karnamahesh42@gmail.com', 1, 'approved', NULL, '', '2025-12-12 22:19:39', '2025-12-12 22:19:39', 'UKMPL'),
 (2, 'GV000002', '9', 11, '2025-12-12', '22:33:00', 'Finance', 'Meeting', 'Test Visit Purpose  ', 'karnamahesh42@gmail.com', 1, 'approved', NULL, NULL, '2025-12-12 22:34:33', '2025-12-13 04:01:35', 'UKMPL'),
-(3, 'GV000003', '9', 16, '2025-12-12', '22:35:00', 'Finance', 'Meeting', 'Test Meeting Visit', 'karnamahesh42@gmail.com', 1, 'pending', NULL, '', '2025-12-12 22:36:16', '2025-12-12 22:36:16', 'UKMPL');
+(3, 'GV000003', '9', 16, '2025-12-12', '22:35:00', 'Finance', 'Meeting', 'Test Meeting Visit', 'karnamahesh42@gmail.com', 1, 'pending', NULL, '', '2025-12-12 22:36:16', '2025-12-12 22:36:16', 'UKMPL'),
+(4, 'GV000004', '9', 11, '2025-12-13', '10:50:00', 'Finance', 'Vendor Visit', 'Test Visit', 'karnamahesh42@gmail.com', 2, 'approved', NULL, NULL, '2025-12-13 10:48:10', '2025-12-13 10:54:30', 'UKMPL'),
+(5, 'GV000005', '9', 16, '2025-12-13', '14:30:00', 'Finance', 'Event Visit', 'Client Planning For Event', 'ukmledp@ramojifilmcity.com', 1, 'pending', NULL, '', '2025-12-13 13:57:28', '2025-12-13 13:57:28', 'UKMPL'),
+(6, 'GV000006', '9', 16, '2025-12-13', '15:53:00', 'Finance', 'Location Recci', 'Test Description ', 'karnamahesh42@gmail.com', 1, 'approved', NULL, NULL, '2025-12-13 14:54:13', '2025-12-13 15:13:47', 'UKMPL');
 
 --
 -- Indexes for dumped tables
@@ -449,13 +466,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `security_gate_logs`
 --
 ALTER TABLE `security_gate_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `user_hashkeys`
@@ -467,19 +484,19 @@ ALTER TABLE `user_hashkeys`
 -- AUTO_INCREMENT for table `visitors`
 --
 ALTER TABLE `visitors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `visitor_logs`
 --
 ALTER TABLE `visitor_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `visitor_request_header`
 --
 ALTER TABLE `visitor_request_header`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

@@ -9,7 +9,7 @@
                 <div class="col-md-6">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">User</h3>
+                            <h3>User</h3>
                         </div>
 
                         <form class="form-horizontal" method="post" id="createUserForm">

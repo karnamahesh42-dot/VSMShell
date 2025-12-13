@@ -147,14 +147,14 @@
 
                   <!-- AUTHORIZED VISITOR LIST -->
                     <div class="card visitor-list-card">
-                        <div class="card-header bg-primary text-white d-flex">
+                        <div class="card-header text-white d-flex">
                             <h5 class="mb-0">
                                 <i class="fas fa-users"></i> Authorized Visitor List
                             </h5>
                             <!-- <span class="badge bg-light text-success fw-bold" id="authCount">0</span> -->
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body px-2">
                             <div class="card mb-3">
                               
                                     <div class="card-body" >
@@ -165,7 +165,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label">V-Code</label>
-                                            <input type ='text' id="v_code" placeholder="Enter V-Code" class="form-control">
+                                                <input type ='text' id="f_v_code" placeholder="Enter V-Code" class="form-control">
                                             </div>
 
                                             <div class="col-md-2">
@@ -220,20 +220,18 @@
                                             </div>
                                         </div>
                                     </div>
-                               
 
-                   
-                                </div>
-
+                         </div>
+                         <div class="card-body p-0">
                             <div class="table-responsive">                            
                                 <table class="table table-hover mb-0">
                                     <thead class="table-light" id="authorizedVisitorTablehead">
                                         <tr>
-                                            <th>S.No</th>
+                                            <!-- <th>S.No</th> -->
                                             <!-- <th>Request Code</th> -->
                                             <!-- <th>V-Code</th> -->
                                             <th>Company</th>
-                                            <th>department</th>
+                                            <th>Department</th>
                                             <th>Rquested By</th>
                                             <th>Visitor</th>
                                             <th>Contact</th>
@@ -242,9 +240,10 @@
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="authorizedVisitorTable"></tbody>
+                                    <tbody id="authorizedVisitorTable" ></tbody>
                                 </table>
                             </div>
+                          </div>
                         </div>
                     </div>
                     <!-- AUTHORIZED VISITOR LIST  Card End -->
@@ -263,6 +262,7 @@ $(document).ready(function () {
 })
 
 function loadAuthorizedVisitors() {
+
     $.ajax({
         url: "<?= base_url('/security/authorized_visitors_list_data') ?>",
         type: "GET",
@@ -272,7 +272,7 @@ function loadAuthorizedVisitors() {
             department: $("#filterDepartment").val(),
             securityCheckStatus: $("#filterSecurity").val(),
             requestcode:  $("#requestcode").val(),
-            v_code:   $("#v_code").val()
+            v_code:   $("#f_v_code").val()
         },
         success: function(res) {
 
@@ -303,7 +303,7 @@ function loadAuthorizedVisitors() {
                             Inside <br>
                             In: ${v.check_in_time ?? '-'} <br>
                             Out: ${v.check_out_time ?? '-'} <br>
-                            Spend: ${v.spendTime ?? '-'}
+                          
                         </span>
                     `;
                 } else {
@@ -312,7 +312,7 @@ function loadAuthorizedVisitors() {
                             Completed <br>
                             In: ${v.check_in_time ?? '-'} <br>
                             Out: ${v.check_out_time ?? '-'} <br>
-                            Spend: ${v.spendTime ?? '-'}
+                          
                         </span>
                     `;
                 }
@@ -320,15 +320,15 @@ function loadAuthorizedVisitors() {
 
                 let validityBadge = "";
                 if (v.validity == 1) {
-                     validityBadge = `<span class="badge bg-success">Valid</span>`;
+                     validityBadge = `<i class="bi bi-check-circle btn btn-success" style="font-size: large; font-weight: bold;"></i>`;
                 } 
                 else {
-                   validityBadge = `<span class="badge bg-warning text-dark">Expire</span>`;
+                   validityBadge = `<i class="bi bi-x-circle btn btn-danger " style="font-size: large; font-weight: bold;"></i>`;
                 }
 
                 tbody.append(`
                     <tr onclick="openVisitorPopup('${v.v_code}')">
-                        <td>${index + 1}</td>
+                      
                         <td>${v.company}</td>
                         <td>${v.department_name}</td>
                         <td>${v.created_by_name}</td>
@@ -350,7 +350,7 @@ function resetFilters() {
     $("#filterDepartment").val('');
     $("#filterSecurity").val('');
     $("#requestcode").val('');
-     $("#v_code").val('');
+     $("#f_v_code").val('');
     loadAuthorizedVisitors();
 }
 
@@ -383,6 +383,38 @@ function exportTable() {
     a.download = "authorized_visitors.csv";
     a.click();
 }
+
+
+// /// On Enter Event 
+// function handleVCodeEnter(event) {
+//     if (event.key === "Enter") {
+//         event.preventDefault(); // stop form submit if inside form
+
+//         let v_code = document.getElementById("f_v_code").value.trim();
+
+//         if (v_code === "") {
+//             alert("Please enter V-Code");
+//             return;
+//         }
+
+//         openVisitorPopup(v_code);
+//     }
+// }
+
+
+$('#f_v_code').on('keypress', function (e) {
+    if (e.which === 13) { // Enter key
+        e.preventDefault();
+
+        let v_code = $(this).val().trim();
+        if (v_code === '') {
+            alert('Please enter V-Code');
+            return;
+        }
+
+        openVisitorPopup(v_code);
+    }
+});
 
 
 function openVisitorPopup(v_code) {

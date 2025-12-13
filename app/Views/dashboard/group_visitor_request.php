@@ -63,13 +63,28 @@
                                     <input type="email" name="email"  class="form-control" placeholder=" Please Enter Email" required>
                                 </div>
 
+                                                     
+                                <div class="col-md-2 mb-2">
+                                    <label>Referred By</label>
+                                    <select name="referred_by" class="form-control" required>
+                                        <option value="">--Select Admin --</option>
+                                        <?php if (!empty($admins)) : ?>
+                                            <?php foreach ($admins as $admin) : ?>
+                                                <option value="<?= $admin['id']; ?>">
+                                                    <?= $admin['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </select>
+                                </div>
+
                                 <div class="col-md-6 mb-2">
                                     <label>Description</label>
                                     <textarea name="description"  id="description" class="form-control" rows="1" placeholder="Please Enter Description"></textarea>
                                 </div>
 
                                 <!-- ====== Download & Upload Excel Buttons ====== -->
-                                <div class="col-md-6 mb-2 d-flex align-items-end gap-2">
+                                <div class="col-md-4 mb-2 d-flex align-items-end gap-2">
 
                                     <!-- download button -->
                                     <a href="<?= base_url('visitor-template-download') ?>" 
@@ -428,24 +443,5 @@ $("#excelUpload").change(function () {
     });
 
 
-    // function applyValidation() {
-    //     $(".nameField").off().on("input", function(){
-    //         this.value = this.value.replace(/[^A-Za-z ]/g, ""); 
-    //     });
-
-    //     $(".idNumberField").off().on("input", function(){
-    //         this.value = this.value.replace(/[^A-Za-z0-9]/g, "");
-    //     });
-
-    //     $(".phoneField").off().on("input", function(){
-    //         this.value = this.value.replace(/[^0-9]/g, "").slice(0,10);
-    //     });
-    // }
-
-    // applyValidation();
-
-    // $(document).on("click", ".addRow", function () {
-    //     setTimeout(applyValidation, 200);
-    // });
 
 </script>

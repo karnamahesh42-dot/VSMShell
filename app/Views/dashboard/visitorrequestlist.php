@@ -20,7 +20,7 @@
         <div class="modal-content shadow-lg rounded-4 border-0">
 
             <!-- HEADER -->
-            <div class="modal-header bg-primary text-white rounded-top-4">
+            <div class="modal-header card-header text-white rounded-top-4">
                 <h5 class="modal-title">Visitor Request Details</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -115,9 +115,9 @@
 
                 <!-- End view Visitor Request Form Pop-Up  -->
                 <div class="col-12">
-                    <div class="card card-primary visitor-list-card">
+                    <div class="card  visitor-list-card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h3 class="card-title mb-0">Visitor Request List</h3>
+                            <h5 class="mb-0">Visitor Request List</h5>
 
                             <div class="card-header-actions">
                                 <a href="<?= base_url('group_visito_request') ?>" class="btn btn-warning mx-1">

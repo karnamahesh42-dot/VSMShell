@@ -68,7 +68,35 @@ class VisitorRequest extends BaseController
 
     public function groupVisitorRequestForm(): string
     {
-        return view('dashboard/group_visitor_request');
+        $session = session();
+        $dep_id     = $session->get('dep_id');
+        $role_id    = $session->get('role_id');
+        $user_id    = $session->get('user_id');
+
+        $userModel = new \App\Models\UserModel();
+
+        // CASE 1: Super Admin (role_id = 1) → Show ALL Admins ordered by priority
+        if ($role_id == 1) {
+            $admins = $userModel
+                        ->where('role_id', 2)
+                        ->orderBy('priority', 'ASC')
+                        ->findAll();
+        }
+        // CASE 2: Admin (role_id = 2) → Show ONLY same department admins ordered by priority
+        else {
+            $admins = $userModel
+                        ->where('role_id', 2)
+                        ->where('department_id', $dep_id)
+                        ->orderBy('priority', 'ASC')
+                        ->findAll();
+        }
+
+        $data = [
+            'admins' => $admins,
+            'logged_user_id' => $user_id,
+        ];
+
+        return view('dashboard/group_visitor_request',$data);
     }
 
     /* ------------------------------------------------------------------
@@ -247,6 +275,7 @@ public function groupSubmit()
     $headerData = [
         'header_code'    => $groupCode,
         'requested_by'   => session()->get('user_id'),
+        'referred_by'  => $this->request->getPost('referred_by'),
         'requested_date' => $visit_date, // Take from first visitor
         'requested_time' => $visit_time,
         'department'     => session()->get('department_name'),
@@ -366,6 +395,7 @@ public function groupSubmit()
             $this->VisitorRequestHeaderModel->update($head_id, [
                 'status' => $status,
                 'remarks' => $remark,
+                'updated_by' => session()->get('user_id'),
             ]);
 
             

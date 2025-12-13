@@ -42,8 +42,8 @@
                                                     
                                 <div class="col-md-3 mb-2">
                                     <label>Referred By</label>
-                                    <select name="referred_by" class="form-control" required>
-                                        <option value="">--Select Admin --</option>
+                                    <select name="referred_by" class="form-control" required title="Select Referred By">
+                                        <!-- <option value="">--Select Admin --</option> -->
                                         <?php if (!empty($admins)) : ?>
                                             <?php foreach ($admins as $admin) : ?>
                                                 <option value="<?= $admin['id']; ?>">

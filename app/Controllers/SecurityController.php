@@ -70,8 +70,6 @@ public function authorized_visitors_list_data()
     
 
 
-
-
     if (!empty($company)) {
         $builder->where('hr.company', $company);
     }

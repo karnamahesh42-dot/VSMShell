@@ -153,7 +153,7 @@
                   <h5 class="mb-0">Pending Approvals</h5>
                   <div class="muted">Requests that need action</div>
                 </div>
-                <div><a href="<?= base_url('visitorequestlist') ?>" class="btn btn-sm btn-outline-primary">List View</a></div>
+                <div><a href="<?= base_url('visitorequestlist') ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-list"></i></a></div>
               </div>
                 <ul class="pending-list mt-2">
                     <?php if (!empty($pendingList)): ?>
@@ -176,7 +176,7 @@
                                 </div>
 
                                 <div class="text-end">
-                                    <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                    <a href="#" class="btn btn-sm btn-outline-primary"><i class="fa fa-eye"></i></a>
                                     <!-- <span class="badge-pending"> Pending </span> -->
                                 </div>
 
@@ -253,7 +253,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+     </div>
 
 <!-- <test></test> -->
         </div>

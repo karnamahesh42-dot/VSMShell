@@ -28,28 +28,30 @@ class Dashboard extends BaseController
 
     public function index()
     {
-        
+         // Visits today
+        $today = date('Y-m-d');
         $session = session();
         // Dynamic counts from DB
         $totalVisitors = $this->visitorModel->countAll(); // total rows
 
-        $pendingIndents = $this->VisitorRequestHeaderModel
+        $pendingIndents = $this->visitorModel
                             ->where('status', 'pending')
+                            ->where('visit_date', $today)
                             ->countAllResults();
 
-        $approved = $this->VisitorRequestHeaderModel
+        $approved = $this->visitorModel
                             ->where('status', 'approved')
+                            ->where('visit_date', $today)
                             ->countAllResults();
 
-        $rejected = $this->VisitorRequestHeaderModel
+        $rejected = $this->visitorModel
                             ->where('status', 'rejected')
+                            ->where('visit_date', $today)
                             ->countAllResults();
 
 
-        // Visits today
-        $today = date('Y-m-d');
-        $visitsToday = $this->VisitorRequestHeaderModel
-                            ->where('requested_date', $today)
+        $visitsToday = $this->visitorModel
+                            ->where('visit_date', $today)
                             ->countAllResults();
 
         // Gate entries (from logs table?)
@@ -57,12 +59,12 @@ class Dashboard extends BaseController
 
         // Prepare card data
         $data['smallCards'] = [
-            ['title'=>'Total Visitors','value'=>$totalVisitors,'icon'=>'fa-user','color'=>'c1'],
-            ['title'=>'Pending Requests','value'=>$pendingIndents,'icon'=>'fa-file-alt','color'=>'c2'],
+            ['title'=>'Visits Today','value'=>$visitsToday,'icon'=>'fa-calendar-day','color'=>'c6'],
+            ['title'=>'Gate Entries','value'=>$gateEntries,'icon'=>'fa-door-open','color'=>'c5'],
+            ['title'=>'Waiting for approvals ','value'=>$pendingIndents,'icon'=>'fa-file-alt','color'=>'c2'],
             ['title'=>'Approved','value'=>$approved,'icon'=>'fa-check-circle','color'=>'c3'],
             ['title'=>'Rejected','value'=>$rejected,'icon'=>'fa-times-circle','color'=>'c4'],
-            ['title'=>'Gate Entries','value'=>$gateEntries,'icon'=>'fa-door-open','color'=>'c5'],
-            ['title'=>'Visits Today','value'=>$visitsToday,'icon'=>'fa-calendar-day','color'=>'c6'],
+            ['title'=>'Total Visitors','value'=>$totalVisitors,'icon'=>'fa-user','color'=>'c1'],
         ];
 
 
