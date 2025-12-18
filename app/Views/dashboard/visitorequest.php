@@ -7,7 +7,7 @@
             <div class="col-md-10">
                 <div class="card card-primary">
                     <div class="card-header py-2">
-                        <h3 class="card-title m-0">Visitor Request</h3>
+                        <h5 class="m-0">Visitor Request</h5>
                     </div>
 
                     <form id="visitorForm" enctype="multipart/form-data">

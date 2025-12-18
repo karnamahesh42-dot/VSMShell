@@ -19,10 +19,68 @@ const mainContent = document.getElementById('mainContent');
 const topbar = document.getElementById('topbar');
 const footer = document.getElementById('footer');
 
-// Mobile toggle
-mobileToggle?.addEventListener('click', () => {
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('active');
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const topbar = document.getElementById('topbar');
+    const footer = document.getElementById('footer');
+    const mobileToggle = document.getElementById('mobileSidebarToggle');
+
+    function initMobileView() {
+        if (window.innerWidth <= 425) {
+            sidebar.classList.add('closed');
+            mainContent.classList.add('expanded');
+            topbar.classList.add('collapsed');
+            footer.classList.add('expanded');
+            document.body.classList.remove('sidebar-open'); // ✅ important
+        }
+    }
+
+    // Run on page load
+    initMobileView();
+
+    // Run on resize
+    window.addEventListener('resize', initMobileView);
+
+    // Toggle sidebar
+    mobileToggle?.addEventListener('click', function () {
+
+        sidebar.classList.toggle('closed');
+        mainContent.classList.toggle('expanded');
+        topbar.classList.toggle('collapsed');
+        footer.classList.toggle('expanded');
+
+        // ✅ ADD THIS
+        if (!sidebar.classList.contains('closed') && window.innerWidth <= 768) {
+            document.body.classList.add('sidebar-open');
+        } else {
+            document.body.classList.remove('sidebar-open');
+        }
+
+    });
+
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const fullScreenBtn = document.getElementById('fullScreenBtn');
+    fullScreenBtn?.addEventListener('click', function () {
+        // Desktop only
+        if (window.innerWidth <= 425) return;
+
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.error('Fullscreen error:', err);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    });
+
 });
 
 overlay?.addEventListener('click', () => {

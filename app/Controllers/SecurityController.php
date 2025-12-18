@@ -15,13 +15,15 @@ class SecurityController extends BaseController
      public function View_authorized_visitor_list()
     {
           $deptModel = new DepartmentModel();
-    $data['departments'] = $deptModel->findAll();
-      return view('dashboard/authorized_visitor_list',$data);
+          $data['departments'] = $deptModel->findAll();
+          return view('dashboard/authorized_visitor_list',$data);
     }
 
 
 public function authorized_visitors_list_data()
 {
+     $user_id  = session()->get('user_id');
+     $role_id  = session()->get('role_id');
 
     $db = \Config\Database::connect();
     $builder = $db->table('visitors vr');
@@ -40,6 +42,7 @@ public function authorized_visitors_list_data()
         vr.validity,
         vr.proof_id_type,
         vr.proof_id_number,
+        vr.meeting_status,
         vr.securityCheckStatus,
         vr.spendTime,
         log.check_in_time,
@@ -51,13 +54,19 @@ public function authorized_visitors_list_data()
         hr.requested_by,
         hr.requested_date,
         hr.requested_time,
-        u.name AS created_by_name
+        u.name AS created_by_name,
+        usr.name AS referred_by_name,
+        usr2.name AS check_in_by,
+        usr3.name AS check_out_by
+
     ");
 
     $builder->join('security_gate_logs log', 'log.visitor_request_id = vr.id', 'left');
     $builder->join('visitor_request_header hr', 'hr.id = vr.request_header_id', 'left');
     $builder->join('users u', 'u.id = vr.created_by', 'left');
-
+    $builder->join('users usr', 'usr.id = hr.referred_by', 'left');
+    $builder->join('users usr2', 'usr2.id = log.verified_by', 'left');
+    $builder->join('users usr3', 'usr3.id = log.updated_by', 'left');
     // Only approved
     $builder->where('vr.status', 'approved');
 
@@ -69,25 +78,36 @@ public function authorized_visitors_list_data()
     $v_code = $this->request->getGet('v_code');
     
 
+    if($role_id == '4'){        /// Securuty Condition 
+           
+        if (!empty($company)) {
+            $builder->where('hr.company', $company);
+        }
 
-    if (!empty($company)) {
-        $builder->where('hr.company', $company);
-    }
+        if (!empty($department)) {
+            $builder->where('hr.department', $department);
+        }
 
-    if (!empty($department)) {
-        $builder->where('hr.department', $department);
-    }
+        if ($security !== "" && $security !== null) {
+            $builder->where('vr.securityCheckStatus', $security);
+        }
+        
+        if ($requestcode !== "" && $requestcode !== null) {
+            $builder->where('hr.header_code', $requestcode);
+        }
 
-    if ($security !== "" && $security !== null) {
-        $builder->where('vr.securityCheckStatus', $security);
-    }
-    
-    if ($requestcode !== "" && $requestcode !== null) {
-        $builder->where('hr.header_code', $requestcode);
-    }
+        if ($v_code !== "" && $v_code !== null) {
+            $builder->where('vr.v_code', $v_code);
+        }
 
-    if ($v_code !== "" && $v_code !== null) {
-        $builder->where('vr.v_code', $v_code);
+        $builder->orderBy('vr.id', 'DESC');
+
+    }else if($role_id == '3'){                /// User Condition 
+            $builder->where('vr.created_by', $user_id);
+
+    }else if($role_id  == '2'){                 /// Admin Condition 
+ 
+            $builder->where('hr.referred_by', $user_id);
     }
 
     $builder->orderBy('vr.id', 'DESC');
@@ -119,156 +139,89 @@ public function verifyVisitor()
 
 }
 
-    
-// public function checkIn() 
-// {
-//     date_default_timezone_set('Asia/Kolkata');
-
-//     $log = new \App\Models\SecurityGateLogModel();
-//     $visitorModel = new \App\Models\VisitorRequestModel();
-
-//     $visitorId = $this->request->getPost('visitor_request_id');
-//     $v_code = $this->request->getPost('v_code');
-
-//     // Check if already checked-in
-//     $existing = $log->where('visitor_request_id', $visitorId)->first();
-
-//     if ($existing && $existing['check_in_time']) {
-//         return $this->response->setJSON(['status' => 'exists', 'check_point' => 0]);
-//     }
-
-
-//     // Insert log entry
-//     $log->insert([
-//         'visitor_request_id' => $visitorId,
-//         'v_code'             => $v_code,
-//         'check_in_time'      => date('Y-m-d H:i:s'),
-//         'verified_by'        => session()->get('user_id'),
-//     ]);
-
-//     $visitorModel->update($visitorId, [
-//         'securityCheckStatus' => 1
-//     ]);
-
-//     return $this->response->setJSON(['status' => 'success', 'check_point' => 1]);
-// }
-
-public function checkIn() 
-{
-    date_default_timezone_set('Asia/Kolkata');
-
-    $log = new \App\Models\SecurityGateLogModel();
-    $visitorModel = new \App\Models\VisitorRequestModel();
-
-    $visitorId = $this->request->getPost('visitor_request_id');
-    $v_code    = $this->request->getPost('v_code');
-
-    // 🔹 Fetch visitor details
-    $visitor = $visitorModel->find($visitorId);
-
-    if (!$visitor) {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Visitor not found'
-        ]);
-    }
-
-    // 🔹 VALIDITY CHECK
-    if ($visitor['validity'] != 1) {
-        return $this->response->setJSON([
-            'status' => 'invalid',
-            'message' => 'Visitor pass expired / not valid'
-        ]);
-    }
-
-    // 🔹 Check if already checked-in
-    $existing = $log
-        ->where('visitor_request_id', $visitorId)
-        ->where('check_in_time IS NOT NULL', null, false)
-        ->first();
-
-    if ($existing) {
-        return $this->response->setJSON([
-            'status' => 'exists',
-            'check_point' => 0
-        ]);
-    }
-
-    // 🔹 Insert gate log
-    $log->insert([
-        'visitor_request_id' => $visitorId,
-        'v_code'             => $v_code,
-        'check_in_time'      => date('Y-m-d H:i:s'),
-        'verified_by'        => session()->get('user_id'),
-    ]);
-
-    // 🔹 Update visitor status
-    $visitorModel->update($visitorId, [
-        'securityCheckStatus' => 1
-    ]);
-
-    return $this->response->setJSON([
-        'status' => 'success',
-        'check_point' => 1
-    ]);
-}
-
-
-
-
-    public function checkOut()
+   
+    public function securityAction()
     {
-            date_default_timezone_set('Asia/Kolkata');
+        date_default_timezone_set('Asia/Kolkata');
 
-            $logModel = new \App\Models\SecurityGateLogModel();
-            $visitorModel = new \App\Models\VisitorRequestModel();
+        $logModel     = new \App\Models\SecurityGateLogModel();
+        $visitorModel = new \App\Models\VisitorRequestModel();
+        $v_code = $this->request->getPost('v_code');
 
-            $visitorId = $this->request->getPost('visitor_request_id');
+        // 🔹 Validate V-Code
+        $visitor = $visitorModel->where('v_code', $v_code)->first();
 
+        if (!$visitor) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid V-Code'
+            ]);
+        }
+        $visitorId = $visitor['id'];
 
+        // 🔹 Check active log (decides action)
+        $activeLog = $logModel
+            ->where('visitor_request_id', $visitorId)
+            ->where('check_out_time IS NULL', null, false)
+            ->first();
 
-            // Fetch visitor
-            $visitor = $visitorModel->find($visitorId);
-
-            if (!$visitor || $visitor['securityCheckStatus'] != 1) {
-                return $this->response->setJSON(['status' => 'no_entry']);
-            }
+        /* =====================================================
+        CHECK-OUT (if log exists)
+        ===================================================== */
+        if ($activeLog) {
 
             if ($visitor['meeting_status'] != 1) {
                 return $this->response->setJSON([
-                  'status'  => 'meeting_not_completed'
+                    'status' => 'meeting_not_completed'
                 ]);
             }
 
-            // Fetch security log entry
-            $log = $logModel->where('visitor_request_id', $visitorId)->first();
-
-            if (!$log || !$log['check_in_time'] ) {
-                return $this->response->setJSON(['status' => 'no_entry']);
-            }
-
-            // Calculate spend time
-            $entryTime = strtotime($log['check_in_time']);
+            $entryTime = strtotime($activeLog['check_in_time']);
             $exitTime  = time();
+            $spendTime = gmdate("H:i:s", $exitTime - $entryTime);
 
-            $spentSeconds = $exitTime - $entryTime;
-            $spendTime = gmdate("H:i:s", $spentSeconds); // HH:MM:SS format
-
-            // Update log checkout time
-            $logModel->update($log['id'], [
-                'check_out_time' => date('Y-m-d H:i:s')
+            $logModel->update($activeLog['id'], [
+                'check_out_time' => date('Y-m-d H:i:s'),
+                'updated_at'      => date('Y-m-d H:i:s'),
+                'updated_by'        => session()->get('user_id')
             ]);
 
-            // Update visitor table
             $visitorModel->update($visitorId, [
-                'securityCheckStatus' => 2,        // Completed visit
-                'spendTime'          => $spendTime
+                'securityCheckStatus' => 2,
+                'spendTime'           => $spendTime
             ]);
 
             return $this->response->setJSON([
-                'status' => 'success',
+                'status' => 'checkout_success',
                 'spendTime' => $spendTime
             ]);
+        }
+
+        /* =====================================================
+        CHECK-IN (if no log exists)
+        ===================================================== */
+        if ($visitor['validity'] != 1) {
+            return $this->response->setJSON([
+                'status' => 'invalid',
+                'message' => 'Visitor pass expired / not valid'
+            ]);
+        }
+
+        $logModel->insert([
+            'visitor_request_id' => $visitorId,
+            'v_code'             => $v_code,
+            'check_in_time'      => date('Y-m-d H:i:s'),
+            'verified_by'        => session()->get('user_id')
+        ]);
+
+        $visitorModel->update($visitorId, [
+            'securityCheckStatus' => 1
+        ]);
+
+        return $this->response->setJSON([
+            'status' => 'checkin_success'
+        ]);
     }
+
 
 }

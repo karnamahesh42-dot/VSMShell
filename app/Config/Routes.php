@@ -40,6 +40,7 @@ $routes->get('/visitor-template-download', 'VisitorRequest::downloadCsvTemplate'
 $routes->post('/visitor-template-upload', 'VisitorRequest::uploadCsv');
 $routes->post('/visitor/complete-meeting', 'VisitorRequest::completeMeeting');
 
+
 // $routes->get('send-email', 'MailController::sendMail');
 $routes->post('send-email', 'MailController::sendMail');
 // $routes->post('send-email', 'MailController::sendMailTwo');
@@ -71,8 +72,14 @@ $routes->get('/security_authorization', 'SecurityController::index');
 $routes->get('/authorized_visitors_list', 'SecurityController::View_authorized_visitor_list');
 $routes->get('/security/authorized_visitors_list_data', 'SecurityController::authorized_visitors_list_data');
 $routes->post('/security/verify', 'SecurityController::verifyVisitor');
-$routes->post('/security/checkin', 'SecurityController::checkIn');
-$routes->post('/security/checkout', 'SecurityController::checkOut');
+// $routes->post('/security/checkin', 'SecurityController::checkIn');
+// $routes->post('/security/checkout', 'SecurityController::checkOut');
+$routes->post('/security/securityAction', 'SecurityController::securityAction');
+
+///////////////////////////////////// Reports  Start /////////////////////////////////////////////////////////////
+$routes->get('/daily_visitor_report', 'ReportController::dailyVisitorReport');
+
+///////////////////////////////////// Reports  End /////////////////////////////////////////////////////////////
 
 
 // $routes->get('/', 'VisitorController::create');

@@ -27,48 +27,48 @@
                        
                         <div class="row g-2">
 
-                            <div class="col-md-3">
-                                <label class="fw-semibold">Request Code:</label>
+                            <div class="col-md-3 col-sm-6 col-4">
+                                <label class="fw-semibold">Request ID:</label>
                                 <div id="h_code" class="text-primary" class="cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Requested By:</label>
                                 <div id="h_requested_by" class="cardData"></div>
                             </div>
 
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Referred By:</label>
                                 <div id="referred_by" class="cardData"></div>
                             </div>
                               
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Company:</label>
                                 <div id="h_company" class="cardData"></div>
                             </div>
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Department</label>
                                 <div id="h_department" class="cardData"></div>
                             </div>
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Visitors Count </label>
                                 <div id="h_count" class="cardData"></div>
                             </div>
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Email</label>
                                 <div id="h_email" class="cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Purpose </label>
                                 <div id="h_purpose" class="cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-6 col-4">
                                 <label class="fw-semibold">Visit Date & Time </label>
                                 <div id="h_date" class="cardData"></div>
                             </div>
@@ -78,7 +78,7 @@
                                 <div id="h_description" class="cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-6 col-6">
                                 <label class="fw-semibold">Actions</label>
                                 <?php if(session()->get('role_id') <= 2){ ?>
                                
@@ -112,7 +112,7 @@
                   <div class="card-dash-sm <?= $c['color'] ?>">
                       <div class="left">
                           <div class="title"><?= esc($c['title']) ?></div>
-                          <div class="value"><?= esc($c['value']) ?></div>
+                          <div class="value"><?= esc($c['value']) ?><span class="subtitle"><?= esc($c['subtitle']) ?></span></div>
                       </div>
                       <div class="right">
                           <i class="fa <?= esc($c['icon']) ?> fa-2x"></i>
@@ -121,10 +121,10 @@
               <?php endforeach; ?>
             </section>
           <!-- ROW 2: Medium Cards -->
-    <section class="dash-row row-medium mb-3">
+<?php if (!in_array($_SESSION['role_id'], [3, 4])) { ?>
+ <section class="dash-row row-medium mb-3">
     <?php foreach($meds as $m): ?>
     <div class="card-dash card-medium">
-
         <!-- Icon + Title side-by-side -->
         <div class="title-row">
             <i class="fa <?= esc($m['icon']) ?> icon"></i>
@@ -140,10 +140,9 @@
     </div>
     <?php endforeach; ?>
 </section>
+<?php } ?>
 
-          
-
-          
+        
         <section class="row row-large mb-3">
             <!-- ROW 3: Pending  List -->
             <?php if($_SESSION['role_id'] != 4){?>
@@ -156,9 +155,6 @@
                         </div>
                         <div><a href="<?= base_url('visitorequestlist') ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-list"></i></a></div>
                     </div>
-
-
-
                         <ul class="pending-list mt-2">
                             <?php if (!empty($pendingList)): ?>
                                 <?php foreach ($pendingList as $item): ?>
@@ -198,52 +194,35 @@
                 <!--  Pending List End  -->
                 <!-- Recent Entries Example Table -->
                 <?php if($_SESSION['role_id'] == 4){?>
-                <div class="col-md-8"> 
-                    <div class="card-dash mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <h5 class="mb-0">Recent Authorized Entries</h5>
-                            <small class="muted">Latest 10</small>
-                        </div>
+                  <div class="col-md-8"> 
+                    <div class="card visitor-list-card">
+                            <div class="card-header text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-users"></i> Recent Authorized Visitor List
+                                </h5>
+                             <div><a href="<?= base_url('authorized_visitors_list') ?>" class="btn btn-sm btn-light"><i class="bi bi-list"></i></a></div>
+                            </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
+                        <div class="table-responsive" style="font-size: 14px;">
+                            <table class="table table-hover mb-0  table-bordered">
+                                <thead class="table-light" id="authorizedVisitorTablehead">
                                     <tr>
+                                        <!-- <th>S.No</th> -->
+                                        <!-- <th>Request Code</th> -->
+                                        <!-- <th>V-Code</th> -->
+                                        <th>Visit Date</th>
+                                        <th>Company</th>
+                                        <th>Department</th>
+                                        <th>Referred</th>
+                                        <th>Rquested By</th>
                                         <th>Visitor</th>
-                                        <th>Phone</th>
+                                        <th>Contact</th>
                                         <th>Purpose</th>
-                                        <th>V-Code</th>
-                                        <th>Check-In</th>
-                                        <th>Check-Out</th>
-                                        <th>Status</th> <!-- ⭐ Added -->
+                                        <th>QR Validity</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php foreach($recentAuthorized as $row): ?>
-
-                                    <?php 
-                                        // STATUS LOGIC
-                                        if (!empty($row['check_in_time']) && empty($row['check_out_time'])) {
-                                            $status = "<span class='badge bg-info'>Inside</span>";
-                                        } 
-                                        elseif (!empty($row['check_in_time']) && !empty($row['check_out_time'])) {
-                                            $status = "<span class='badge bg-success'>Completed</span>";
-                                        } 
-                                        else {
-                                            $status = "<span class='badge bg-warning text-dark'>Pending</span>";
-                                        }
-                                    ?>
-                                    <tr>
-                                        <td><?= $row['visitor_name'] ?></td>
-                                        <td><?= $row['visitor_phone'] ?></td>
-                                        <td><?= $row['purpose'] ?></td>
-                                        <td><?= $row['v_code'] ?></td>
-                                        <td><?= $row['check_in_time'] ?></td>
-                                        <td><?= $row['check_out_time'] ?></td>
-                                        <td><?= $status ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
+                                <tbody id="authorizedVisitorTable" ></tbody>
                             </table>
                         </div>
                     </div>
@@ -254,19 +233,70 @@
                 <div class="col-md-4"> 
                     <div class="card-dash card-large">
                     <h5 class="mb-1">Quick Links</h5>
- <div class="title-underline">
-    <span></span>
-</div>
+                        <div class="title-underline">
+                            <span></span>
+                        </div>
                     <div class="quick-links">
                         <a href="<?= base_url('visitorequest') ?>"><i class="bi bi-person-plus me-2"></i> Create Visitor Request</a>
                         <a href="<?= base_url('group_visito_request') ?>"><i class="bi bi-people me-2"></i> Create Group Request</a>
+                        <a href="<?= base_url('visitorequestlist') ?>"><i class="bi bi-people me-2"></i> Visitor Request List</a>
+                      
                         <a href="<?= base_url('authorized_visitors_list') ?>"><i class="bi bi-card-checklist me-2"></i> Authorized Visitors</a>
-                        <a href="<?= base_url('security_authorization') ?>"><i class="bi bi-shield-lock-fill me-2"></i> Security Authorization</a>
+                        <!-- <a href="<?= base_url('security_authorization') ?>"><i class="bi bi-shield-lock-fill me-2"></i> Security Authorization</a> -->
                         <a href="<?= base_url('userlist') ?>"><i class="bi bi-gear me-2"></i> User Management</a>
                     </div>
                     </div>
                 </div>
                 <!-- Quick Links end -->
+                <?php if(in_array($_SESSION['role_id'], [1,3,2])) { ?>
+
+                <!--//////////////// Recent Otherisation List To the User ///////////////////  -->
+               
+                    <div class="col-md-12 mt-3 mb-5">
+
+                      <!-- AUTHORIZED VISITOR LIST -->
+                        <div class="card visitor-list-card">
+                            <div class="card-header text-white d-flex">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-users"></i> Recent Authorized Visitor List
+                                </h5>
+                                <!-- <span class="badge bg-light text-success fw-bold" id="authCount">0</span> -->
+                            </div>
+                         
+                            <div class="card-body p-0">
+                                <div class="table-responsive">                            
+                                    <table class="table table-hover mb-0 table-bordered">
+                                        <thead class="table-light" id="authorizedVisitorTablehead">
+                                            <tr>
+                                                <!-- <th>S.No</th> -->
+                                                <!-- <th>Request Code</th> -->
+                                                <!-- <th>V-Code</th> -->
+                                               <th>Visit Date</th>
+                                                <th>Company</th>
+                                                <th>Department</th>
+                                                <th>Referred</th>
+                                                <th>Rquested By</th>
+                                                <th>Visitor</th>
+                                                <th>Contact</th>
+                                                <th>Purpose</th>
+                                                <th>QR Validity</th>
+                                                <th>Status</th>
+                                                <?php if($_SESSION['role_id'] == '2'){?>
+                                                <th>Meeting Status</th>
+                                                 <?php } ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="authorizedVisitorTable" ></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- AUTHORIZED VISITOR LIST  Card End -->
+                   </div>
+                <!--///////////////////// Recent Otherisation List To the User End  ///////////////  -->    
+                <?php } ?>
+
           </section>
         </div>
       </main>
@@ -324,7 +354,7 @@
             $("#h_purpose").text(h.purpose);
             $("#h_date").text(h.requested_date +" & "+ h.requested_time);
             $("#h_description").text(h.description);
-             $("#referred_by").text(h.referred_by_name);
+            $("#referred_by").text(h.referred_by_name);
                            
             
             let cardsHtml = "";
@@ -345,37 +375,26 @@
                         </button>`;
                 }
 
-                   cardsHtml += `<div class="col-md-6">
-                        <div class="card visitor-card p-4">
+                   cardsHtml += `<div class="row px-4 py-2 justify-content-start">
+                        <div class="card visitor-card p-4 col-md-4 col-12 col-sm-12">
 
                             <div class="row visitor-card-body">
-
                                 <!-- Visitor Details -->
-                                <div class="col-8 visitor-details">
+                                <div class="col-12 visitor-details">
                                     <h5 class="visitor-name">
                                         <i class="fas fa-user text-primary me-2"></i> ${v.visitor_name}
                                     </h5>
                                     <p class="visitor-email">${v.visitor_email}</p>
                                     <p class="visitor-code">Code: ${v.v_code}</p>
-                                    <p class="visitor-info"><b>Phone:</b> ${v.visitor_phone}</p>
-                                    <p class="visitor-info"><b>ID Type:</b> ${v.proof_id_type}</p>
-                                    <p class="visitor-info"><b>ID Number:</b> ${v.proof_id_number}</p>
-                                    <p class="visitor-info"><b>Visit Date:</b> ${v.visit_date}</p>
+                                    <p class="visitor-info"><b>Phone :</b> ${v.visitor_phone}</p>
+                                    <p class="visitor-info"><b>Vehicle Type :</b> ${v.vehicle_type}</p>
+                                    <p class="visitor-info"><b>ID Type :</b> ${v.proof_id_type}</p>
+                                    <p class="visitor-info"><b>ID Number :</b> ${v.proof_id_number}</p>
+                                    <p class="visitor-info"><b>Vehicle No :</b> ${v.vehicle_no}</p>
+                                   
                                 </div>
-
-                                <!-- QR & Resend -->
-                                <div class="col-4 text-center">
-                                    <img src="${qrImg}" class="visitor-qr mb-2">
-
-                                    ${v.status === "approved" ? `
-                                        <button class="btn btn-warning btn-sm w-100 resend-btn"
-                                            onclick="resendqr('${v.v_code}')">
-                                            <i class="fas fa-paper-plane"></i> Send QR
-                                        </button>` : ""}
-                                </div>
-
+                              <!-- QR & Resend -->
                             </div>
-
                         </div>
                     </div>`;
             });
@@ -420,17 +439,8 @@ function approvalProcess(head_id, status, header_code, comment) {
 
         success: function (res) {
             if (res.status === "success") {
-            //  Swal.fire({
-            //         icon: 'success',
-            //         title: 'Action Completed Successfully!',
-            //         showConfirmButton: false,
-            //         timer: 900
-            //     });
-            //     // Call send-email using AJAX
-            //     // sendMail(res.mail_data);
-            //     // console.log(res.mail_data);
-            // sendMail(res.head_id); 
-            //     // loadVisitorList();
+                        sendMail(res.head_id); 
+                       
                         Swal.fire({
                             icon: 'success',
                             title: 'Action Completed Successfully!',
@@ -438,12 +448,9 @@ function approvalProcess(head_id, status, header_code, comment) {
                             confirmButtonText: 'OK'
                         }).then((result) => {
                             if (result.isConfirmed) {
-
-                                // Call send-email using AJAX
-                                sendMail(res.head_id); 
-                                
-                                // Reload page
-                                location.reload();
+                                loadAuthorizedVisitors()
+                                // $("#visitorModal").modal("hide");
+                               location.reload();
                             }
                         });
                         
@@ -474,6 +481,7 @@ function sendMail(head_id) {
 
 $(document).ready(function () {
     updateVisitorValidity();
+    loadAuthorizedVisitors();
 });
 
 function updateVisitorValidity() {
@@ -486,6 +494,164 @@ function updateVisitorValidity() {
         },
         error: function (xhr) {
             console.log(xhr);
+        }
+    });
+}
+
+
+
+
+
+function loadAuthorizedVisitors() {
+
+    $.ajax({
+        url: "<?= base_url('/security/authorized_visitors_list_data') ?>",
+        type: "GET",
+        dataType: "json",
+        data: {
+            company: $("#filterCompany").val(),
+            department: $("#filterDepartment").val(),
+            securityCheckStatus: $("#filterSecurity").val(),
+            requestcode:  $("#requestcode").val(),
+            v_code:   $("#f_v_code").val()
+        },
+        success: function(res) {
+
+            // console.log(res[0].meeting_status);
+            
+            let tbody = $("#authorizedVisitorTable");
+            tbody.empty();
+
+            if (!res.length) {
+                tbody.append(`
+                    <tr>
+                        <td colspan='13' class='text-center text-muted'>No authorized visitors found</td>
+                    </tr>
+                `);
+                return;
+            }
+
+            res.forEach((v, index) => {
+         
+                let statusBadge = "";
+                if (v.securityCheckStatus == 0) {
+                    statusBadge = `
+                        <span class="badge bg-secondary">
+                            Not Entered
+                        </span>
+                    `;
+                } else if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
+                    statusBadge = `
+                        <span class="badge bg-primary warning text-lite">
+                             Inside <br>
+                             Meeting Not Yet Completed <br>
+                            In: ${v.check_in_time ?? '-'} <br>
+                            Out: ${v.check_out_time ?? '-'} <br>
+                          
+                        </span>
+                    `;
+                } 
+                else if (v.securityCheckStatus == 1 && v.meeting_status == 1){
+                      statusBadge = `
+                        <span class="badge bg-warning text-dark">
+                             Inside <br>
+                             Meeting Completed <br>
+                            In: ${v.check_in_time ?? '-'} <br>
+                            Out: ${v.check_out_time ?? '-'} <br>
+                          
+                        </span>
+                    `;
+                }else {
+                    statusBadge = `
+                        <span class="badge bg-success">
+                            Completed <br>
+                            In: ${v.check_in_time ?? '-'} <br>
+                            Out: ${v.check_out_time ?? '-'} <br>
+                          
+                        </span>
+                    `;
+                }
+                let validityBadge = "";
+                let meetingActionBtn = "--";
+                if (v.validity == 1) {
+                     validityBadge = `<i class="bi bi-check-circle text-success" style="font-size: large; font-weight: bold;"></i>`;
+                } 
+                else {
+                   validityBadge = `<i class="bi bi-x-circle text-danger" style="font-size: large; font-weight: bold;"></i>`;
+                }
+
+                if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
+                    
+                    // Visitor inside → Meeting pending (click to complete)
+                    meetingActionBtn = `
+                        <span class="btn cursor-pointer meetingCmpleteBtn"
+                            style="cursor:pointer "
+                            onclick="markMeetingCompleted('${v.v_code}')">
+                            <i class="fas fa-check-circle"></i> In Meeting
+                        </span>
+                    `;
+                }
+                else if (v.meeting_status == 1) {
+                    meetingActionBtn = `
+                        <span class="badge bg-success">
+                            <i class="fas fa-check-double"></i> Completed
+                        </span>
+                    `;
+                }
+
+
+                tbody.append(`
+                    <tr>
+                        <td>${v.visit_date}</td>
+                        <td>${v.company}</td>
+                        <td>${v.department_name}</td>
+                        <td>${v.referred_by_name}</td>
+                        <td>${v.created_by_name}</td>
+                        <td>${v.visitor_name}</td>
+                        <td>${v.visitor_phone}</td>
+                        <td>${v.purpose}</td>
+                        <td>${validityBadge}</td>
+                        <td>${statusBadge}</td>
+                        <?php if($_SESSION['role_id'] == '2'){?>
+                            <td>${meetingActionBtn}</td>
+                        <?php } ?>
+                    </tr>
+                `);
+            });
+        }
+    });
+}
+
+
+function markMeetingCompleted(v_code) {
+    Swal.fire({
+        title: "Complete Meeting?",
+        text: "Confirm that the visitor meeting is completed.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Complete",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "<?= base_url('/visitor/complete-meeting') ?>",
+                type: "POST",
+                data: { v_code: v_code },
+                dataType: "json",
+                success: function (res) {
+                    if (res.status === "success") {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Meeting Completed",
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                    } else {
+                        Swal.fire("Error", res.message, "error");
+                    }
+                }
+            });
         }
     });
 }

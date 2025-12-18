@@ -315,9 +315,9 @@ function view_visitor(id){
                 //     : "--";
 
 
-let actionBtn = "";
+let actionBtn = " -- ";
 let meetStatus = "";
-if (v.securityCheckStatus == 0) {
+if (v.securityCheckStatus == 0 && v.status == 'approved') {
     // Visitor not inside → Resend QR
     actionBtn = `
         <button class="btn btn-warning btn-sm" onclick="resendqr('${v.v_code}')">
@@ -327,23 +327,23 @@ if (v.securityCheckStatus == 0) {
 }
 
 
-if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
-    // Visitor inside → Meeting pending (click to complete)
-    meetStatus = `
-        <span class="badge bg-danger cursor-pointer"
-              style="cursor:pointer"
-              onclick="markMeetingCompleted('${v.v_code}')">
-            <i class="fas fa-check-circle"></i> Pending
-        </span>
-    `;
-}
-else if (v.meeting_status == 1) {
-    meetStatus = `
-        <span class="badge bg-success">
-            <i class="fas fa-check-double"></i> Completed
-        </span>
-    `;
-}
+    if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
+        // Visitor inside → Meeting pending (click to complete)
+        meetStatus = `
+            <span class="btn cursor-pointer meetingCmpleteBtn"
+                style="cursor:pointer "
+                onclick="markMeetingCompleted('${v.v_code}')">
+                <i class="fas fa-check-circle"></i> In Meeting
+            </span>
+        `;
+    }
+    else if (v.meeting_status == 1) {
+        meetStatus = `
+            <span class="badge bg-success">
+                <i class="fas fa-check-double"></i> Completed
+            </span>
+        `;
+    }
 
                 tableHtml += `
                      <tr>

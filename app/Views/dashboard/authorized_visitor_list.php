@@ -1,6 +1,17 @@
 <?= $this->include('/dashboard/layouts/sidebar') ?>
   <?= $this->include('/dashboard/layouts/navbar') ?>
      
+  
+        <!-- FULLSCREEN QR SCANNER -->
+<div id="qrScanner" class="qr-fullscreen">
+    <div id="reader"></div>
+
+    <button class="btn btn-danger qr-cancel" onclick="stopScan()">
+        ✕ Cancel
+    </button>
+</div>
+
+
    <main class="main-content" id="mainContent">
         <div class="container-fluid">
     
@@ -211,6 +222,19 @@
                                                 <button class="btn btn-secondary" onclick="resetFilters()" title="Reset Filters">
                                                     <i class="fas fa-sync-alt"></i>
                                                 </button>
+
+                                                <!-- Scan Button -->
+                                                <!-- <button class="btn btn-success active" id="scanBtn" onclick="toggleScan()" title="Scan">
+                                                      <i class="fas fa-qrcode"></i>
+                                                </button> -->
+
+                                                 <!-- Mobile Scan Button -->
+                                                <button class="btn btn-success" id="scanBtnMbl">
+                                                    <i class="fas fa-qrcode"></i> Scan QR
+                                                </button>
+                                              
+
+
                                               <?php if($_SESSION['role_id'] == '1'){?>
                                                 <!-- Export Button -->
                                                 <button class="btn btn-success" onclick="exportTable()" title="Export Data">
@@ -224,18 +248,22 @@
                          </div>
                          <div class="card-body p-0">
                             <div class="table-responsive">                            
-                                <table class="table table-hover mb-0">
+                                <table class="table table-hover mb-0  table-bordered">
                                     <thead class="table-light" id="authorizedVisitorTablehead">
                                         <tr>
                                             <!-- <th>S.No</th> -->
                                             <!-- <th>Request Code</th> -->
                                             <!-- <th>V-Code</th> -->
+                                            <th>Visit Date</th>
                                             <th>Company</th>
                                             <th>Department</th>
+                                            <th>Referred</th>
                                             <th>Rquested By</th>
                                             <th>Visitor</th>
                                             <th>Contact</th>
                                             <th>Purpose</th>
+                                            <th>Check-In By</th>
+                                            <!-- <th>Check-Out By</th> -->
                                             <th>Validity</th>
                                             <th>Status</th>
                                         </tr>
@@ -253,13 +281,139 @@
     </main>
 
 <?= $this->include('/dashboard/layouts/footer') ?>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 
 <!-- JS -->
  <script>
 $(document).ready(function () {
     loadAuthorizedVisitors();
+    $('#f_v_code').focus();
 })
+///////////////////////  Auto Scan Logic  ////////////////////////////////////
+
+// function toggleScan() {
+//     const scanBtn = document.getElementById('scanBtn');
+
+//     if (scanBtn.classList.contains('active')) {
+//         // Inactive state
+//         scanBtn.classList.remove('active', 'btn-success');
+//         scanBtn.classList.add('btn-secondary');
+//     } else {
+//         // Active state
+//         scanBtn.classList.add('active', 'btn-success');
+//         scanBtn.classList.remove('btn-secondary');
+//     }
+// }
+
+// Listen when user types / scanner fills
+document.getElementById('f_v_code').addEventListener('input', function () {
+  
+    const vCode = this.value.trim();
+    // const scanBtn = document.getElementById('scanBtn');
+    // // Conditions:
+    // if (scanBtn.classList.contains('active') && vCode.length === 7) {
+    // }
+
+      if (vCode.length === 7) {
+         processSecurity(vCode);
+         $('#f_v_code').val('');
+      }
+     
+});
+
+
+
+function processSecurity(vCode) {
+    $.ajax({
+        url: "<?= base_url('/security/securityAction') ?>",
+        type: "POST",
+        data: { v_code: vCode },
+        success: function (res) {
+
+            if (res.status === 'checkin_success') {
+                Swal.fire("Success", "Visitor Checked In", "success");
+            }
+            else if (res.status === 'checkout_success') {
+                Swal.fire("Success", "Visitor Checked Out", "success");
+            }
+            else if (res.status === 'meeting_not_completed') {
+                Swal.fire("Warning", "Meeting not completed", "warning");
+            }
+            else if (res.status === 'invalid') {
+                Swal.fire("Denied", res.message, "error");
+            }
+            else {
+                Swal.fire("Error", res.message || "Something went wrong", "error");
+            }
+           
+            $("#visitorModal").modal("hide");
+            loadAuthorizedVisitors();
+        }
+    });
+}
+
+
+
+////////////////////////////////Mobile Scane Start //////////////////////////////////////////////
+
+let html5QrCode;
+
+document.getElementById('scanBtnMbl').addEventListener('click', () => {
+
+    // Mobile only
+    if (window.innerWidth > 768) {
+        Swal.fire("Info", "QR scanning is available on mobile only", "info");
+        return;
+    }
+
+    const scanner = document.getElementById('qrScanner');
+    scanner.style.display = 'block';
+
+    html5QrCode = new Html5Qrcode("reader");
+
+    html5QrCode.start(
+        { facingMode: "environment" },
+        {
+            fps: 10,
+            qrbox: { width: 260, height: 260 }
+        },
+        (decodedText) => {
+            stopScan();
+
+            const vCode = decodedText.trim();
+
+            if (vCode.length !== 7) {
+                Swal.fire("Invalid QR", "Invalid V-Code scanned", "warning");
+                return;
+            }
+
+            // 🔥 Your existing security flow
+            processSecurity(vCode);
+        },
+        () => {} // ignore errors
+    );
+});
+
+function stopScan() {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            document.getElementById('qrScanner').style.display = 'none';
+            html5QrCode.clear();
+        }).catch(() => {
+            document.getElementById('qrScanner').style.display = 'none';
+        });
+    }
+}
+
+/////////////////////////////////////////End Mobile Scane/////////////////////////////////////////////////////////
+
+
+
+
+
+
+////////////////////////// Auto Scan Logic End ////////////////////////////////////
 
 function loadAuthorizedVisitors() {
 
@@ -291,24 +445,37 @@ function loadAuthorizedVisitors() {
             res.forEach((v, index) => {
          
                 let statusBadge = "";
+             
                 if (v.securityCheckStatus == 0) {
                     statusBadge = `
-                        <span class="badge bg-secondary">
+                        <span class="badge bg-secondary p-2">
                             Not Entered
                         </span>
                     `;
-                } else if (v.securityCheckStatus == 1) {
+                } else if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
                     statusBadge = `
-                        <span class="badge bg-warning text-dark">
-                            Inside <br>
+                        <span class="badge bg-primary warning text-lite p-2">
+                             Inside <br>
+                             Meeting Not Yet Completed <br>
                             In: ${v.check_in_time ?? '-'} <br>
-                            Out: ${v.check_out_time ?? '-'} <br>
+                         
                           
                         </span>
                     `;
-                } else {
+                } 
+                else if (v.securityCheckStatus == 1 && v.meeting_status == 1){
+                      statusBadge = `
+                        <span class="badge bg-warning text-dark p-2">
+                             Inside <br>
+                             Meeting Completed <br>
+                            In: ${v.check_in_time ?? '-'} <br>
+                          
+                          
+                        </span>
+                    `;
+                }else {
                     statusBadge = `
-                        <span class="badge bg-success">
+                        <span class="badge bg-success p-2" >
                             Completed <br>
                             In: ${v.check_in_time ?? '-'} <br>
                             Out: ${v.check_out_time ?? '-'} <br>
@@ -320,21 +487,24 @@ function loadAuthorizedVisitors() {
 
                 let validityBadge = "";
                 if (v.validity == 1) {
-                     validityBadge = `<i class="bi bi-check-circle btn btn-success" style="font-size: large; font-weight: bold;"></i>`;
+                     validityBadge = `<i class="bi bi-check-circle text-success" style="font-size: 20px; font-weight: bold;"></i>`;
                 } 
                 else {
-                   validityBadge = `<i class="bi bi-x-circle btn btn-danger " style="font-size: large; font-weight: bold;"></i>`;
+                   validityBadge = `<i class="bi bi-x-circle text-danger " style="font-size: 20px; font-weight: bold;"></i>`;
                 }
 
                 tbody.append(`
                     <tr onclick="openVisitorPopup('${v.v_code}')">
-                      
+                        <td>${v.visit_date}</td>
                         <td>${v.company}</td>
                         <td>${v.department_name}</td>
+                        <td>${v.referred_by_name}</td>
                         <td>${v.created_by_name}</td>
                         <td>${v.visitor_name}</td>
                         <td>${v.visitor_phone}</td>
                         <td>${v.purpose}</td>
+                        <td>${v.check_in_by ? v.check_in_by : '--'}</td>
+                        
                         <td>${validityBadge}</td>
                         <td>${statusBadge}</td>
                     </tr>
@@ -376,31 +546,13 @@ function exportTable() {
  
     let csvContent = "data:text/csv;charset=utf-8, " 
                      + rows.join("\n");
-    console.log(csvContent);
+    // console.log(csvContent);
 
     let a = document.createElement("a");
     a.href = encodeURI(csvContent);
     a.download = "authorized_visitors.csv";
     a.click();
 }
-
-
-// /// On Enter Event 
-// function handleVCodeEnter(event) {
-//     if (event.key === "Enter") {
-//         event.preventDefault(); // stop form submit if inside form
-
-//         let v_code = document.getElementById("f_v_code").value.trim();
-
-//         if (v_code === "") {
-//             alert("Please enter V-Code");
-//             return;
-//         }
-
-//         openVisitorPopup(v_code);
-//     }
-// }
-
 
 $('#f_v_code').on('keypress', function (e) {
     if (e.which === 13) { // Enter key
@@ -425,7 +577,7 @@ function openVisitorPopup(v_code) {
         data: { v_code: v_code },
         dataType: "json",
         success: function (d) {
-// console.log(d)
+            // console.log(d)
             // HEADER FIELDS
             $("#h_code").text(d.header_code);
             $("#h_requested_by").text(d.created_by_name);
@@ -437,7 +589,6 @@ function openVisitorPopup(v_code) {
             $("#h_purpose").text(d.purpose);
             $("#h_date").text(d.visit_date + " " + d.visit_time);
             $("#h_description").text(d.description);
-
             $("#v_name").text(d.visitor_name);
             $("#v_phone").text(d.visitor_phone);
             $("#v_email").text(d.visitor_email);
@@ -452,7 +603,7 @@ function openVisitorPopup(v_code) {
 if (d.securityCheckStatus == 0) {
     // NOT ENTERED → Allow Entry
     actionHTML = `
-        <button class="btn btn-success btn-sm" onclick="allowEntry('${d.v_id}','${d.v_code}')">
+        <button class="btn btn-success btn-sm" onclick="processSecurity('${d.v_code}')">
             <i class="bi bi-door-open"></i> Allow Entry
         </button>
     `;
@@ -460,7 +611,7 @@ if (d.securityCheckStatus == 0) {
 else if (d.securityCheckStatus == 1) {
     // INSIDE → Mark Exit
     actionHTML = `
-        <button class="btn btn-warning btn-sm" onclick="markExit('${d.v_id}')">
+        <button class="btn btn-warning btn-sm" onclick="processSecurity('${d.v_code}')" >
             <i class="bi bi-box-arrow-right"></i> Mark Exit
         </button>
     `;
@@ -478,106 +629,4 @@ $("#actionBtns").html(actionHTML);
     });
 }
 
-
-
-
-
-// -----------------------------------------------------
-//  ALLOW ENTRY (CHECK-IN)
-// -----------------------------------------------------
-
- function allowEntry(v_id,v_code){
-    $.ajax({
-        url: "<?= base_url('/security/checkin') ?>",
-        type: "POST",
-        data: {
-            visitor_request_id: v_id,
-            v_code: v_code
-        },
-        success: function (res) {
-
-            if (res.status === "invalid") {
-                Swal.fire({
-                    icon: "error",
-                    title: "Entry Denied",
-                    text: res.message,
-                    confirmButtonText: "OK"
-                });
-                return;
-            }
-
-            if (res.status === "exists") {
-                Swal.fire({
-                    icon: "warning",
-                    title: "Already Checked In",
-                    text: "Visitor already entered",
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                return;
-            }
-
-            if (res.status === "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "Entry Allowed",
-                    text: "Visitor checked in successfully",
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            }
-
-        }
-    });
- }
-
-
-// -----------------------------------------------------
-//  MARK EXIT
-// -----------------------------------------------------
-
- function markExit(v_id){
-    
-    $.ajax({
-        url: "<?= base_url('/security/checkout') ?>",
-        type: "POST",
-        data: { visitor_request_id: v_id },
-        success: function (res) {
-
-            if (res.status === "no_entry") {
-                Swal.fire({
-                    icon: "warning",
-                    title: "No Entry",
-                    text: "Visitor has no entry record.",
-                    timer: 1500,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-                return;
-            }
-
-            if (res.status === "meeting_not_completed") {
-                Swal.fire({
-                    icon: "warning",
-                    title: "Visit Not Completed",
-                    text: "The meeting is not yet completed. Exit cannot be marked.",
-                    timer: 1800,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-                return;
-            }
-
-            Swal.fire({
-                icon: "success",
-                title: "Recorded",
-                text: "Visitor exit recorded.",
-                timer: 1500,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-        }
-    });
-
- }
 </script>

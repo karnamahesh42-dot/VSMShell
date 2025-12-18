@@ -159,6 +159,7 @@
                                             <th>Name</th>
                                             <th>Username</th>
                                             <th>Role</th>
+                                            <th>Priority</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -174,6 +175,7 @@
                                                     <td><?= $user['name'] ?></td>
                                                     <td><?= $user['username'] ?></td>
                                                     <td><?= $user['role_name'] ?></td>
+                                                    <td><?= $user['priority'] ?></td>
                                                     
                                                     <td>
 

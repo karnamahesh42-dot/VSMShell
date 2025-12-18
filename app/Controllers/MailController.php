@@ -7,72 +7,7 @@ use Dompdf\Options;
 
 class MailController extends Controller
 {
-    // public function sendMail()
-    // {
-    //     try {
-    //     $resendVId = $this->request->getPost();
-    //     $request_head_id = $this->request->getPost('head_id');
-    //     $headerModel = new \App\Models\VisitorRequestHeaderModel();
-    //     $maileType = "";
-
-        
-    //      if(isset($resendVId['re_send']) && $resendVId['re_send'] != '' ){
-            
-    //           $data = $headerModel->getHeaderWithVisitorsMailDataByVCode($resendVId);
-    //           $maileType= 'Resend';
-    //      }else{
-
-    //          $data = $headerModel->getHeaderWithVisitorsMailData($request_head_id);
-    //          $maileType= 'Approvel Send';
-    //     }   
-
-    //     print_r($data);
-            
-    //        echo $mailCount = count($data);
-    //         $emailService = \Config\Services::email();
-    //         $successCount = 0;
-    //         $failed = [];
-
-    //       for($i = 0; $i < $mailCount; $i++ ){
-           
-    //         // $email   = "karnamahesh42@gmail.com";
-    //         $email   = $data[$i]['visitor_email'];
-    //         $qrFile = FCPATH . 'public/uploads/qr_codes/' . $data[$i]['qr_code'];
-    //         // Prepare Email
-    //         $emailService->clear(true);
-    //         $emailService->setTo($email);
-    //         $emailService->setFrom(env('app.email.fromEmail'), env('app.email.fromName'));
-    //         $emailService->setSubject("Your Visitor QR Code");
-    //         $emailService->setMessage(view("emails/gate_pass_layout.php",  ['mailData' => $data[$i]]));
-    //         $emailService->attach($qrFile);
-    //         // Send
-    //         if ($emailService->send()) {
-                
-    //             $successCount++;
-    //         } else {
-    //             $failed[] = [
-    //                 "email"  => $email,
-    //                 "reason" => $emailService->printDebugger()
-    //             ];
-    //         }
-
-    //      }
-    //     return $this->response->setJSON([
-    //         "status" => "success",
-    //         "sendType" => $maileType,
-    //         "message" => "Mail process completed",
-    //         "sent" => $successCount,
-    //         "failed" => $failed
-    //     ]);
-
-    //     } catch (\Exception $e) {
-
-    //         return $this->response->setJSON([
-    //             "status" => "error",
-    //             "message" => $e->getMessage()
-    //         ]);
-    //     }
-    // }
+    
 
         public function sendMail()
         {
@@ -88,6 +23,8 @@ class MailController extends Controller
                 } else {
                     $data = $headerModel->getHeaderWithVisitorsMailData($request_head_id);
                     $mailType = 'Approval Send';
+
+                    // print_r($data);
                 }
 
                 $emailService = \Config\Services::email();
@@ -97,9 +34,7 @@ class MailController extends Controller
                 foreach($data as $row){
 
                     $email = $row['visitor_email'];
-
-                    print_r($row);
-
+                    // print_r($row);
                     // 1️⃣ Generate PDF from HTML
                     $html = view('emails/gate_pass_layout', ['mailData' => $row]);
 

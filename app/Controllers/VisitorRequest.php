@@ -422,7 +422,6 @@ public function groupSubmit()
 
     public function visitorData()
     {
-       
             $role = session()->get('role_id');
             $uid  = session()->get('user_id');
 
@@ -622,34 +621,34 @@ public function groupSubmit()
 
 public function completeMeeting()
 {
-    $v_code = $this->request->getPost('v_code');
+        $v_code = $this->request->getPost('v_code');
 
-    $visitorModel = new \App\Models\VisitorRequestModel();
+        $visitorModel = new \App\Models\VisitorRequestModel();
 
-    $visitor = $visitorModel->where('v_code', $v_code)->first();
+        $visitor = $visitorModel->where('v_code', $v_code)->first();
 
-    if (!$visitor) {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Visitor not found'
+        if (!$visitor) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Visitor not found'
+            ]);
+        }
+
+        if ($visitor['securityCheckStatus'] != 1) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Visitor is not inside'
+            ]);
+        }
+
+        $visitorModel->update($visitor['id'], [
+            'meeting_status' => 1,
+            'meeting_completed_at' => date('Y-m-d H:i:s')
         ]);
-    }
 
-    if ($visitor['securityCheckStatus'] != 1) {
         return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Visitor is not inside'
+            'status' => 'success'
         ]);
-    }
-
-    $visitorModel->update($visitor['id'], [
-        'meeting_status' => 1,
-        'meeting_completed_at' => date('Y-m-d H:i:s')
-    ]);
-
-    return $this->response->setJSON([
-        'status' => 'success'
-    ]);
 }
 
 }

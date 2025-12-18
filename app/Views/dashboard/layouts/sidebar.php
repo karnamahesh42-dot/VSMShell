@@ -47,7 +47,7 @@ h1, h2, h3, h4, .card-title {
     background-image: url('<?= base_url("public/dist/sidebarpic.png") ?>');
     background-size: cover;
     background-position: center;
-    opacity: 1;
+    opacity: 0.8;
     z-index: -1;
 }
 
@@ -98,7 +98,7 @@ h1, h2, h3, h4, .card-title {
       <?php if(in_array($_SESSION['role_id'], ['1','2','3'])){ ?>
       <li><a class="nav-link <?= (uri_string()=='visitorequestlist') ? 'active' : '' ?>" 
              href="<?= base_url('visitorequestlist') ?>">
-             <i class="bi bi-person-check-fill"></i> Visitor Request
+             <i class="bi bi-person-check-fill"></i> Visitor Request List
       </a></li>
       <?php } ?>
 
@@ -115,18 +115,66 @@ h1, h2, h3, h4, .card-title {
       <?php } ?>
 
       <?php if(in_array($_SESSION['role_id'], ['1','4'])){ ?>
-      <li><a class="nav-link <?= (uri_string()=='security_authorization') ? 'active' : '' ?>" 
+      <!-- <li><a class="nav-link <?= (uri_string()=='security_authorization') ? 'active' : '' ?>" 
              href="<?= base_url('security_authorization') ?>">
              <i class="bi bi-shield-lock-fill"></i> Security Authorization
-      </a></li>
-      <?php } ?>
+      </a></li> -->
 
-      <?php if(in_array($_SESSION['role_id'], ['1','2','4'])){ ?>
-      <li><a class="nav-link <?= (uri_string()=='authorized_visitors_list') ? 'active' : '' ?>" 
+       <li><a class="nav-link <?= (uri_string()=='authorized_visitors_list') ? 'active' : '' ?>" 
              href="<?= base_url('authorized_visitors_list') ?>">
              <i class="bi bi-card-checklist"></i> Authorized Visitor List
       </a></li>
+
       <?php } ?>
+
+      
+    <?php if (in_array($_SESSION['role_id'], ['1'])) { ?>
+<li class="nav-item">
+    <a class="nav-link <?= in_array(uri_string(), [
+            'report/daily',
+            'report/current',
+            'report/history'
+        ]) ? 'active' : '' ?>"
+       data-bs-toggle="collapse"
+       href="#reportMenu"
+       role="button"
+       aria-expanded="false"
+       aria-controls="reportMenu">
+
+        <i class="bi bi-file-earmark-text-fill"></i> Report
+        <i class="bi bi-chevron-down float-end"></i>
+    </a>
+
+    <ul class="collapse list-unstyled ps-3 <?= in_array(uri_string(), [
+            'daily_visitor_report',
+            'report/current',
+            'report/history'
+        ]) ? 'show' : '' ?>" id="reportMenu">
+
+        <li>
+            <a class="nav-link <?= (uri_string()=='daily_visitor_report') ? 'active' : '' ?>"
+               href="<?= base_url('daily_visitor_report') ?>">
+               <i class="bi bi-calendar-day"></i> Daily Visitor Report
+            </a>
+        </li>
+
+        <li>
+            <a class="nav-link <?= (uri_string()=='report/current') ? 'active' : '' ?>"
+               href="#">
+               <i class="bi bi-person-check-fill"></i> Currently Inside
+            </a>
+        </li>
+
+        <li>
+            <a class="nav-link <?= (uri_string()=='report/history') ? 'active' : '' ?>"
+               href="#">
+               <i class="bi bi-clock-history"></i> Visitor History
+            </a>
+        </li>
+    </ul>
+</li>
+<?php } ?>
+
 
 
       <li>

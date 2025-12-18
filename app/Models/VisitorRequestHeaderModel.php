@@ -67,7 +67,6 @@ class VisitorRequestHeaderModel extends Model
 }
 
 
-
 public function getHeaderWithVisitorsMailData($headerId)
 {
     return $this->select("
@@ -85,16 +84,35 @@ public function getHeaderWithVisitorsMailData($headerId)
             visitors.vehicle_type,    
             users.name AS created_by_name,
             users.email AS created_by_email,
-            u2.name as referred_by_name
+            u2.name AS referred_by_name,
             departments.department_name
         ")
-        ->join('visitors', 'visitors.request_header_id = visitor_request_header.id', 'left')
-        ->join('users', 'users.id = visitors.created_by', 'left')
-        ->join('users u2', 'u2.id = visitor_request_header.referred_by', 'left')
-        ->join('departments', 'departments.id = users.department_id', 'left')
+        ->join(
+            'visitors',
+            'visitors.request_header_id = visitor_request_header.id',
+            'left'
+        )
+        ->join(
+            'users',
+            'users.id = visitors.created_by',
+            'left'
+        )
+        ->join(
+            'users u2',
+            'u2.id = visitor_request_header.referred_by',
+            'left'
+        )
+        ->join(
+            'departments',
+            'departments.id = users.department_id',
+            'left'
+        )
         ->where('visitor_request_header.id', $headerId)
         ->findAll();
 }
+
+
+
 
 public function getHeaderWithVisitorsMailDataByVCode($vCode)
 {

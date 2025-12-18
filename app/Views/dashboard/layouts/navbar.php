@@ -9,7 +9,7 @@
     <button class="btn btn-outline-secondary" id="fullScreenBtn" title="Fullscreen"><i class="bi bi-arrows-fullscreen"></i></button>
     <div class="dropdown">
     <a class="btn btn-light dropdown-toggle profile-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"></i> <?= session()->get('name'); ?>
+        <i class="bi bi-person-circle"></i><span id="navebarUserName"> <?= session()->get('name'); ?></span>
     </a>
 
     <ul class="dropdown-menu dropdown-menu-end profile-dropdown">
