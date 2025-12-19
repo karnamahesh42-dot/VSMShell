@@ -179,7 +179,6 @@
                                             <a href="#" class="btn btn-sm btn-outline-primary"><i class="fa fa-eye"></i></a>
                                             <!-- <span class="badge-pending"> Pending </span> -->
                                         </div>
-
                                     </li>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -198,7 +197,7 @@
                     <div class="card visitor-list-card">
                             <div class="card-header text-white d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">
-                                    <i class="fas fa-users"></i> Recent Authorized Visitor List
+                                    <i class="fas fa-users"></i>Recent Authorized Visitor List
                                 </h5>
                              <div><a href="<?= base_url('authorized_visitors_list') ?>" class="btn btn-sm btn-light"><i class="bi bi-list"></i></a></div>
                             </div>
@@ -241,9 +240,9 @@
                         <a href="<?= base_url('group_visito_request') ?>"><i class="bi bi-people me-2"></i> Create Group Request</a>
                         <a href="<?= base_url('visitorequestlist') ?>"><i class="bi bi-people me-2"></i> Visitor Request List</a>
                       
-                        <a href="<?= base_url('authorized_visitors_list') ?>"><i class="bi bi-card-checklist me-2"></i> Authorized Visitors</a>
+                        <a href="<?= base_url('authorized_visitors_list') ?>"><i class="bi bi-card-checklist me-2"></i>Authorized Visitors</a>
                         <!-- <a href="<?= base_url('security_authorization') ?>"><i class="bi bi-shield-lock-fill me-2"></i> Security Authorization</a> -->
-                        <a href="<?= base_url('userlist') ?>"><i class="bi bi-gear me-2"></i> User Management</a>
+                        <a href="<?= base_url('userlist') ?>"><i class="bi bi-gear me-2"></i>User Management</a>
                     </div>
                     </div>
                 </div>
@@ -375,8 +374,8 @@
                         </button>`;
                 }
 
-                   cardsHtml += `<div class="row px-4 py-2 justify-content-start">
-                        <div class="card visitor-card p-4 col-md-4 col-12 col-sm-12">
+                   cardsHtml += `
+                  <div class="card visitor-card p-3 p-md-4 col-12 col-sm-6 col-md-4 m-2">
 
                             <div class="row visitor-card-body">
                                 <!-- Visitor Details -->
@@ -395,8 +394,7 @@
                                 </div>
                               <!-- QR & Resend -->
                             </div>
-                        </div>
-                    </div>`;
+                        </div>`;
             });
 
             $("#visitorCardsContainer").html(cardsHtml);
@@ -429,31 +427,83 @@ function rejectComment(head_id, status, header_code, comment) {
 
 
 
+// function approvalProcess(head_id, status, header_code, comment) {
+
+//     $.ajax({
+//         url: "<?= base_url('/approvalprocess') ?>",
+//         type: "POST",
+//         data: { head_id: head_id, status: status, header_code: header_code, comment : comment},
+//         dataType: "json",
+
+//         success: function (res) {
+//             if (res.status === "success") {
+//                         sendMail(res.head_id); 
+                       
+//                         Swal.fire({
+//                             icon: 'success',
+//                             title: 'Action Completed Successfully!',
+//                             showConfirmButton: true,
+//                             confirmButtonText: 'OK'
+//                         }).then((result) => {
+//                             if (result.isConfirmed) {
+//                                 loadAuthorizedVisitors()
+//                                 // $("#visitorModal").modal("hide");
+//                                location.reload();
+//                             }
+//                         });
+                        
+//             } else {
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Update Failed!',
+//                     text: res.message ?? "Please try again",
+//                     confirmButtonColor: '#d33'
+//                 });
+//             }
+//         },
+//     });
+// }
+
+
+/////////////////////////////////Approvel Process Start ////////////////////////////////////////////////////
+
+let approvalInProgress = false;  // Prevent double click / double call
+
 function approvalProcess(head_id, status, header_code, comment) {
+
+    if (approvalInProgress) {
+        return;
+    }
+
+    approvalInProgress = true; // lock
 
     $.ajax({
         url: "<?= base_url('/approvalprocess') ?>",
         type: "POST",
-        data: { head_id: head_id, status: status, header_code: header_code, comment : comment},
+        data: { 
+            head_id: head_id, 
+            status: status, 
+            header_code: header_code, 
+            comment: comment 
+        },
         dataType: "json",
 
         success: function (res) {
             if (res.status === "success") {
-                        sendMail(res.head_id); 
-                       
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Action Completed Successfully!',
-                            showConfirmButton: true,
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                loadAuthorizedVisitors()
-                                // $("#visitorModal").modal("hide");
-                               location.reload();
-                            }
-                        });
-                        
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Action Completed Successfully!',
+                    showConfirmButton: true,
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                         sendMail(res.head_id);
+                         // loadAuthorizedVisitors();
+                         location.reload();
+                    }
+                });
+
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -463,6 +513,18 @@ function approvalProcess(head_id, status, header_code, comment) {
                 });
             }
         },
+
+        error: function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error!',
+                text: 'Please try again later'
+            });
+        },
+
+        complete: function () {
+            approvalInProgress = false; // 🔓 unlock after request completes
+        }
     });
 }
 
@@ -477,7 +539,7 @@ function sendMail(head_id) {
         }
         });
 }
-
+///////////////////////////////////////Approvel Process End //////////////////////////////////////////////////////
 
 $(document).ready(function () {
     updateVisitorValidity();

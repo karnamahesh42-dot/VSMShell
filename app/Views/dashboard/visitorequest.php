@@ -212,9 +212,72 @@ $("#vehicleNo").on("input", function () {
 });
 
 
-// FORM SUBMIT
+// // FORM SUBMIT
+// $("#visitorForm").submit(function(e){
+//     e.preventDefault();
+
+//     // Phone check
+//     let phone = $("#phone").val();
+//     if(phone.length !== 10){
+//         Swal.fire({
+//             icon: "error",
+//             title: "Phone number must be 10 digits",
+//             timer: 1500,
+//             showConfirmButton: false
+//         });
+//         return;
+//     }
+
+//     let formData = new FormData(this);
+
+//     $.ajax({
+//         url: "<?= base_url('/visitorequest/create')?>",
+//         type: "POST",
+//         data: formData,
+//         dataType: "json",
+//         contentType: false,
+//         processData: false,
+//         cache: false,
+
+//         success: function(res){
+//             if(res.status === "success"){
+//                 $("#visitorForm")[0].reset();
+
+//                 Swal.fire({
+//                     icon: "success",
+//                     title: "Visitor Saved Successfully",
+//                     timer: 1200,
+//                     showConfirmButton: false
+//                 });
+
+//                 // setTimeout(() => location.reload(), 800);
+
+//                 if(res.submit_type === 'admin'){
+//                     sendMail(res.head_id); 
+//                 }
+//             }
+//         },
+
+//         error: function(){
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'Something went wrong!',
+//                 timer: 1200,
+//                 showConfirmButton: false
+//             });
+//         }
+//     });
+// });
+
+
+let isSubmitting = false;
+
 $("#visitorForm").submit(function(e){
     e.preventDefault();
+
+    if (isSubmitting) {
+        return false; // ❌ block second submit
+    }
 
     // Phone check
     let phone = $("#phone").val();
@@ -227,6 +290,11 @@ $("#visitorForm").submit(function(e){
         });
         return;
     }
+
+    isSubmitting = true; // 🔒 lock submit
+
+    let $btn = $("#visitorForm button[type=submit]");
+    $btn.prop("disabled", true).text("Submitting...");
 
     let formData = new FormData(this);
 
@@ -250,10 +318,8 @@ $("#visitorForm").submit(function(e){
                     showConfirmButton: false
                 });
 
-                // setTimeout(() => location.reload(), 800);
-
                 if(res.submit_type === 'admin'){
-                    sendMail(res.head_id); 
+                    sendMail(res.head_id);
                 }
             }
         },
@@ -265,9 +331,15 @@ $("#visitorForm").submit(function(e){
                 timer: 1200,
                 showConfirmButton: false
             });
+        },
+
+        complete: function(){
+            isSubmitting = false;     // 🔓 unlock
+            $btn.prop("disabled", false).text("Submit");
         }
     });
 });
+
 
 // // Send Mail
 // function sendMail(postData) {

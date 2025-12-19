@@ -34,49 +34,49 @@
     
                         <div class="row g-2">
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Request ID:</label>
                                 <div id="h_code" class="text-primary  cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Requested By:</label>
                                 <div id="h_requested_by" class="cardData"></div>
                             </div>
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Referred By:</label>
                                 <div id="referred_by" class="cardData"></div>
                             </div>
 
                             
                               
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Company:</label>
                                 <div id="h_company" class="cardData"></div>
                             </div>
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Department</label>
                                 <div id="h_department" class="cardData"></div>
                             </div>
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Visitors Count </label>
                                 <div id="h_count" class="cardData"></div>
                             </div>
 
-                             <div class="col-md-3">
+                             <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Email</label>
                                 <div id="h_email" class="cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Purpose </label>
                                 <div id="h_purpose" class="cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Visit Date & Time </label>
                                 <div id="h_date" class="cardData"></div>
                             </div>
@@ -86,7 +86,7 @@
                                 <div id="h_description" class="cardData"></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-6">
                                 <label class="fw-semibold">Actions</label>
                                 <?php if(session()->get('role_id') <= 2){ ?>
                                
@@ -391,41 +391,6 @@ function rejectComment(head_id, status, header_code, comment) {
     });
 }
 
-
-
-function approvalProcess(head_id, status, header_code, comment) {
-
-    $.ajax({
-        url: "<?= base_url('/approvalprocess') ?>",
-        type: "POST",
-        data: { head_id: head_id, status: status, header_code: header_code, comment : comment},
-        dataType: "json",
-
-        success: function (res) {
-            if (res.status === "success") {
-             Swal.fire({
-                    icon: 'success',
-                    title: 'Action Completed Successfully!',
-                    showConfirmButton: false,
-                    timer: 900
-                });
-                // sendMail(res.mail_data);
-                // console.log(res.mail_data);
-                sendMail(res.head_id); 
-                loadVisitorList();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Update Failed!',
-                    text: res.message ?? "Please try again",
-                    confirmButtonColor: '#d33'
-                });
-            }
-        },
-    });
-}
-
-
 function sendMail(head_id) {
     // alert(head_id);
     $.ajax({
@@ -438,6 +403,63 @@ function sendMail(head_id) {
         },
         error: function () {
             console.log("Email sending failed");
+        }
+    });
+}
+
+
+
+let approvalInProgress = false; // prevent Duble Click On approvel
+
+function approvalProcess(head_id, status, header_code, comment) {
+
+    if (approvalInProgress) {
+        return; // ❌ prevent double call
+    }
+
+    approvalInProgress = true;
+
+    $.ajax({
+        url: "<?= base_url('/approvalprocess') ?>",
+        type: "POST",
+        data: { 
+            head_id: head_id, 
+            status: status, 
+            header_code: header_code, 
+            comment: comment 
+        },
+        dataType: "json",
+
+        success: function (res) {
+            if (res.status === "success") {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Action Completed Successfully!',
+                    showConfirmButton: false,
+                    timer: 900
+                });
+                
+                $("#visitorModal").modal("hide");
+                sendMail(res.head_id);
+                loadVisitorList();
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed!',
+                    text: res.message ?? "Please try again",
+                    confirmButtonColor: '#d33'
+                });
+            }
+        },
+
+        complete: function () {
+            approvalInProgress = false; // 🔓 unlock after request finishes
+        },
+
+        error: function () {
+            approvalInProgress = false;
         }
     });
 }
@@ -465,7 +487,6 @@ function resendqr(v_code) {
         timer: 2000
     });
 }
-
 
 
 function markMeetingCompleted(v_code) {

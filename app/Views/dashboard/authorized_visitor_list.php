@@ -14,7 +14,7 @@
 
    <main class="main-content" id="mainContent">
         <div class="container-fluid">
-    
+ 
     <!-- view Pop-up Form start  -->
     <div class="modal fade" id="visitorModal">
         <div class="modal-dialog modal-lg">
@@ -34,47 +34,47 @@
                         <div class="card-body visitor-card">
                             <div class="row g-2">
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Request Code:</label>
                                     <div id="h_code" class="cardData text-primary"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Requested By:</label>
                                     <div id="h_requested_by" class="cardData"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Referred By:</label>
                                     <div id="referred_by" class="cardData"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Company:</label>
                                     <div id="h_company" class="cardData"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Department:</label>
                                     <div id="h_department" class="cardData"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Visitors Count:</label>
                                     <div id="h_count" class="cardData"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Email:</label>
                                     <div id="h_email" class="cardData"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Purpose:</label>
                                     <div id="h_purpose" class="cardData"></div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Visit Date & Time:</label>
                                     <div id="h_date" class="cardData"></div>
                                 </div>
@@ -85,7 +85,7 @@
                                 </div>
 
                                 
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6">
                                     <label class="fw-semibold">Actions:</label>
                                    
                                     <div id="actionBtns"></div>
@@ -98,32 +98,32 @@
                                 <h5 class="fw-bold text-primary">Visitor Details</h5>
                                 <div class="row mt-2">
                                                             
-                                <div class="col-md-4">
+                                <div class="col-md-4 col-6">
                                         <label class="fw-semibold">Visitor Code:</label>
                                         <div id="v_code" class="cardData text-primary"></div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <label class="fw-semibold">Visitor Name:</label>
                                         <div id="v_name" class="cardData"></div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <label class="fw-semibold">Visitor Phone:</label>
                                         <div id="v_phone" class="cardData"></div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <label class="fw-semibold">Visitor Email:</label>
                                         <div id="v_email" class="cardData"></div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <label class="fw-semibold">Vehicle No:</label>
                                         <div id="v_vehicle_no" class="cardData"></div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <label class="fw-semibold">Vehicle Type:</label>
                                         <div id="v_vehicle_type" class="cardData"></div>
                                     </div>

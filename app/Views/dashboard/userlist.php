@@ -11,11 +11,11 @@
         <div class="modal-content shadow-lg border-0">
 
             <!-- Header -->
-            <div class="modal-header text-white py-3">
-                <h5 class="modal-title fw-semibold">
+            <div class="card-header text-white py-3">
+                <h5 class="fw-semibold">
                     <i class="fas fa-user-edit me-2"></i>Edit User Details
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            
             </div>
 
             <form id="editUserForm">

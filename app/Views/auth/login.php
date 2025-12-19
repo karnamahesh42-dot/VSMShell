@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
 
     <!-- Bootstrap CDN -->
@@ -9,7 +10,7 @@
 
     <style>
         body {
-            background: linear-gradient(to right, #c2e6ffff, #f7ccccff);
+            background: linear-gradient(48deg, #9dd7ff, #f5b2b2);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,7 +22,7 @@
             width: 400px;
             padding: 30px;
             border-radius: 18px;
-            background: #ffffff;
+            background: #faf3f3ff;
             /* box-shadow: 0 10px 25px rgba(0,0,0,0.15); */
             box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.6);
             position: relative;
@@ -44,7 +45,7 @@
             font-weight: 800;
             font-size: 25px;
             text-align: center;
-            color: #2c3e50;
+            color: #3baab9;
             margin-bottom: 8px;
         }
 
@@ -75,6 +76,50 @@
         width: 150px;     /* Adjust size */
         height: auto;
         }
+
+        /* Mobile Responsive */
+@media (max-width: 768px) {
+
+    body {
+        padding: 15px; /* prevent edge touching */
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 360px;
+        padding: 22px;
+        border-radius: 16px;
+        box-shadow: 10px 10px 22px rgba(0, 0, 0, 0.45);
+    }
+
+    .login-logo img {
+        width: 120px;
+    }
+
+    .project-title {
+        font-size: 22px;
+    }
+
+    .login-title {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .form-label {
+        font-size: 14px;
+    }
+
+    .form-control {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .btn-custom {
+        font-size: 15px;
+        padding: 10px;
+    }
+}
+
     </style>
 </head>
 <body>

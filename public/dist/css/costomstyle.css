@@ -9,7 +9,7 @@
       --footer-bg: #f5f7fb;
       --rfc-blue: #0056b3;
       --rfc-red: #d60000;
-      --rfc-light-bg: #f1f4fc;
+      --rfc-light-bg: #edf5ff;
     }
 
 .brand-area {
@@ -1051,19 +1051,29 @@ input[type="file"] {
 /////////////////////////// Mobile View Responsive //////////////////////////////////////////// */
 @media (max-width: 768px) {
 
-/* FULLSCREEN QR SCANNER */
+    /* FULLSCREEN QR SCANNER */
 .qr-fullscreen {
     position: fixed;
     inset: 0;
     background: #000;
     z-index: 9999;
     display: none;
+
+    /* center camera */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Camera view */
+/* Camera view - SQUARE */
 #reader {
-    width: 100%;
-    height: 100vh;
+    width: 85vw;              /* responsive */
+    max-width: 380px;         /* limit size */
+    aspect-ratio: 1 / 1;      /* 🔥 square */
+    height: auto;             /* override 100vh */
+    border-radius: 14px;
+    overflow: hidden;
+    background: #000;
 }
 
 /* Cancel button */
@@ -1077,7 +1087,6 @@ input[type="file"] {
     max-width: 300px;
     font-size: 16px;
 }
-
 
 
     .brand {
@@ -1163,7 +1172,18 @@ body.sidebar-open .brand-subtitle {
     .container-fluid {
           padding: 2px 5px;
     }     
+
+
+    .card-header-actions .btn-warning {
+    background: #f7b733;
+    border: 1px solid #e0a106;
+    color: #000000;
+    font-size: 11px;
+
 }
+}
+
+
 
 /* 
 /////////////////////////// Mobile View Responsive End //////////////////////////////////////////// */

@@ -268,8 +268,69 @@ $(document).on('click', '.removeRow', function () {
 
 <!-- AJAX Submit -->
 <script>
+
+// $("#visitorForm").submit(function(e){
+//     e.preventDefault();
+
+//     let formData = new FormData(this);
+
+//     $.ajax({
+//         url: "<?= base_url('/visitorequest/create_group')?>",
+//         type: "POST",
+//         data: formData,
+//         dataType: "json",
+//         contentType: false,
+//         processData: false,
+//         cache: false,
+
+//         success: function(res){
+//             if(res.status === "success"){
+//                 $("#visitorForm")[0].reset();
+              
+//                 Swal.fire({
+//                 icon: "success",
+//                 title: "Visitor Saved Successfully",
+//                 timer: 1000,
+//                 showConfirmButton: false
+//                 });
+//                 setTimeout(() => location.reload(), 800);
+//                     // Send mails only for approved ones
+//                   if(res.submit_type === 'admin'){
+//                     sendMail(res.head_id); 
+//                   }
+//             }
+//         },
+
+//         error: function(){
+//             Swal.fire({
+//                 position: 'top-end',
+//                 toast: true,
+//                 icon: 'error',
+//                 title: 'Something went wrong!',
+//                 showConfirmButton: false,
+//                 timer: 3000,
+//                 timerProgressBar: true
+//             });
+//         }
+//     });
+// });
+
+
+//////////////////////////////////////Form Submission start/////////////////////////////////////////////////
+let isGroupSubmitting = false;
+
 $("#visitorForm").submit(function(e){
     e.preventDefault();
+
+    // ❌ prevent double submit
+    if (isGroupSubmitting) {
+        return false;
+    }
+
+    isGroupSubmitting = true; // 🔒 lock
+
+    let $btn = $("#visitorForm button[type=submit]");
+    $btn.prop("disabled", true).text("Submitting...");
 
     let formData = new FormData(this);
 
@@ -285,18 +346,19 @@ $("#visitorForm").submit(function(e){
         success: function(res){
             if(res.status === "success"){
                 $("#visitorForm")[0].reset();
-              
+
                 Swal.fire({
-                icon: "success",
-                title: "Visitor Saved Successfully",
-                timer: 1000,
-                showConfirmButton: false
+                    icon: "success",
+                    title: "Visitor Saved Successfully",
+                    timer: 1000,
+                    showConfirmButton: false
                 });
+
+                if(res.submit_type === 'admin'){
+                    sendMail(res.head_id);
+                }
+
                 setTimeout(() => location.reload(), 800);
-                    // Send mails only for approved ones
-                  if(res.submit_type === 'admin'){
-                    sendMail(res.head_id); 
-                  }
             }
         },
 
@@ -310,10 +372,16 @@ $("#visitorForm").submit(function(e){
                 timer: 3000,
                 timerProgressBar: true
             });
+        },
+
+        complete: function(){
+            isGroupSubmitting = false;   // 🔓 unlock
+            $btn.prop("disabled", false).text("Submit");
         }
     });
 });
 
+//////////////////////////////////////Form Submission End/////////////////////////////////////////////////
 
 
 function sendMail(head_id) {
