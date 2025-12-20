@@ -741,17 +741,19 @@ input[type="file"] {
 }
 /* /////////////////////// */
 .meetingCmpleteBtn {
-    font-size: 13px;
-    background: #f7b733;
-    border: 1px solid #e0a106;
-    color: #000000;
+    font-size: 10px !important;
+    font-weight: bold;
+    line-height: 12px;   /* 🔹 Decreases line space */
+    background: #197be4;
+    border: 1px solid #0a79f0;
+    color: #ffffff;
     transition: all 0.2s ease; /* smooth zoom */
 }
 
 .meetingCmpleteBtn:hover {
-    background-color: #f7b733;
-    border: 1px solid #e0a106;
-    color: #00528f;
+  background: #197be4;
+    border: 1px solid #0a79f0;
+    color: #ffffff;
     transform: scale(1.09); /* zoom effect */
 }
 
@@ -1051,16 +1053,15 @@ input[type="file"] {
 /////////////////////////// Mobile View Responsive //////////////////////////////////////////// */
 @media (max-width: 768px) {
 
-    /* FULLSCREEN QR SCANNER */
+
+/* FULLSCREEN QR SCANNER */
 .qr-fullscreen {
     position: fixed;
     inset: 0;
     background: #000;
     z-index: 9999;
-    display: none;
 
-    /* center camera */
-    display: flex;
+    display: none;                 /* hidden by default */
     align-items: center;
     justify-content: center;
 }

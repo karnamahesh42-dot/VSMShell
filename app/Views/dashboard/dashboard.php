@@ -263,6 +263,15 @@
                             </div>
                          
                             <div class="card-body p-0">
+
+                            <!-- NOTE SECTION -->
+                            <div class="d-flex justify-content-end mb-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle-fill text-primary"></i>
+                                <strong>Note:</strong> Please click the <span class="text-primary fw-bold">blue button</span> to complete the meeting.
+                                </small>
+                            </div>
+
                                 <div class="table-responsive">                            
                                     <table class="table table-hover mb-0 table-bordered">
                                         <thead class="table-light" id="authorizedVisitorTablehead">
@@ -280,9 +289,7 @@
                                                 <th>Purpose</th>
                                                 <th>QR Validity</th>
                                                 <th>Status</th>
-                                                <?php if($_SESSION['role_id'] == '2'){?>
-                                                <th>Meeting Status</th>
-                                                 <?php } ?>
+                                               
                                             </tr>
                                         </thead>
                                         <tbody id="authorizedVisitorTable" ></tbody>
@@ -323,8 +330,8 @@
             let actionButtons = "";
             let h = res.data[0];
 
-            console.log(h)
-            console.log(h.status);
+            // console.log(h)
+            // console.log(h.status);
             
             if (h.status === "pending" ) {
 
@@ -423,46 +430,6 @@ function rejectComment(head_id, status, header_code, comment) {
         }
     });
 }
-
-
-
-
-// function approvalProcess(head_id, status, header_code, comment) {
-
-//     $.ajax({
-//         url: "<?= base_url('/approvalprocess') ?>",
-//         type: "POST",
-//         data: { head_id: head_id, status: status, header_code: header_code, comment : comment},
-//         dataType: "json",
-
-//         success: function (res) {
-//             if (res.status === "success") {
-//                         sendMail(res.head_id); 
-                       
-//                         Swal.fire({
-//                             icon: 'success',
-//                             title: 'Action Completed Successfully!',
-//                             showConfirmButton: true,
-//                             confirmButtonText: 'OK'
-//                         }).then((result) => {
-//                             if (result.isConfirmed) {
-//                                 loadAuthorizedVisitors()
-//                                 // $("#visitorModal").modal("hide");
-//                                location.reload();
-//                             }
-//                         });
-                        
-//             } else {
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Update Failed!',
-//                     text: res.message ?? "Please try again",
-//                     confirmButtonColor: '#d33'
-//                 });
-//             }
-//         },
-//     });
-// }
 
 
 /////////////////////////////////Approvel Process Start ////////////////////////////////////////////////////
@@ -603,19 +570,28 @@ function loadAuthorizedVisitors() {
                         </span>
                     `;
                 } else if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
-                    statusBadge = `
-                        <span class="badge bg-primary warning text-lite">
-                             Inside <br>
-                             Meeting Not Yet Completed <br>
-                            In: ${v.check_in_time ?? '-'} <br>
-                            Out: ${v.check_out_time ?? '-'} <br>
-                          
-                        </span>
-                    `;
+
+
+                           <?php if($_SESSION['role_id'] == '2'){?>
+                            statusBadge = ` <span class="btn meetingCmpleteBtn cursor-pointer" onclick="markMeetingCompleted('${v.v_code}')">
+                                        Inside <br>
+                                        Meeting Not Yet Completed <br>
+                                    In: ${v.check_in_time ?? '-'} <br>
+                                    Out: ${v.check_out_time ?? '-'} <br>
+                                </span> `;
+                             
+                          <?php }else{ ?>
+                                statusBadge = `<span class="badge bg-primary text-lite" >
+                                        Inside <br>
+                                        Meeting Not Yet Completed <br>
+                                        In: ${v.check_in_time ?? '-'} <br>
+                                        Out: ${v.check_out_time ?? '-'} <br>
+                                      </span>`;
+                          <?php } ?>
                 } 
                 else if (v.securityCheckStatus == 1 && v.meeting_status == 1){
                       statusBadge = `
-                        <span class="badge bg-warning text-dark">
+                        <span class="badge bg-warning text-dark" >
                              Inside <br>
                              Meeting Completed <br>
                             In: ${v.check_in_time ?? '-'} <br>
@@ -634,31 +610,12 @@ function loadAuthorizedVisitors() {
                     `;
                 }
                 let validityBadge = "";
-                let meetingActionBtn = "--";
+           
                 if (v.validity == 1) {
                      validityBadge = `<i class="bi bi-check-circle text-success" style="font-size: large; font-weight: bold;"></i>`;
                 } 
                 else {
                    validityBadge = `<i class="bi bi-x-circle text-danger" style="font-size: large; font-weight: bold;"></i>`;
-                }
-
-                if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
-                    
-                    // Visitor inside → Meeting pending (click to complete)
-                    meetingActionBtn = `
-                        <span class="btn cursor-pointer meetingCmpleteBtn"
-                            style="cursor:pointer "
-                            onclick="markMeetingCompleted('${v.v_code}')">
-                            <i class="fas fa-check-circle"></i> In Meeting
-                        </span>
-                    `;
-                }
-                else if (v.meeting_status == 1) {
-                    meetingActionBtn = `
-                        <span class="badge bg-success">
-                            <i class="fas fa-check-double"></i> Completed
-                        </span>
-                    `;
                 }
 
 
@@ -674,9 +631,6 @@ function loadAuthorizedVisitors() {
                         <td>${v.purpose}</td>
                         <td>${validityBadge}</td>
                         <td>${statusBadge}</td>
-                        <?php if($_SESSION['role_id'] == '2'){?>
-                            <td>${meetingActionBtn}</td>
-                        <?php } ?>
                     </tr>
                 `);
             });

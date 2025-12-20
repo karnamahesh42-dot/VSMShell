@@ -78,6 +78,7 @@ $routes->post('/security/securityAction', 'SecurityController::securityAction');
 
 ///////////////////////////////////// Reports  Start /////////////////////////////////////////////////////////////
 $routes->get('/daily_visitor_report', 'ReportController::dailyVisitorReport');
+$routes->get('/request_to_checkout', 'ReportController::requestToCheckoutReport');
 
 ///////////////////////////////////// Reports  End /////////////////////////////////////////////////////////////
 

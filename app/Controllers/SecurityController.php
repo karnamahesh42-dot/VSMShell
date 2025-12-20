@@ -165,41 +165,8 @@ public function verifyVisitor()
             ->where('check_out_time IS NULL', null, false)
             ->first();
 
-        /* =====================================================
-        CHECK-OUT (if log exists)
-        ===================================================== */
-        if ($activeLog) {
 
-            if ($visitor['meeting_status'] != 1) {
-                return $this->response->setJSON([
-                    'status' => 'meeting_not_completed'
-                ]);
-            }
 
-            $entryTime = strtotime($activeLog['check_in_time']);
-            $exitTime  = time();
-            $spendTime = gmdate("H:i:s", $exitTime - $entryTime);
-
-            $logModel->update($activeLog['id'], [
-                'check_out_time' => date('Y-m-d H:i:s'),
-                'updated_at'      => date('Y-m-d H:i:s'),
-                'updated_by'        => session()->get('user_id')
-            ]);
-
-            $visitorModel->update($visitorId, [
-                'securityCheckStatus' => 2,
-                'spendTime'           => $spendTime
-            ]);
-
-            return $this->response->setJSON([
-                'status' => 'checkout_success',
-                'spendTime' => $spendTime
-            ]);
-        }
-
-        /* =====================================================
-        CHECK-IN (if no log exists)
-        ===================================================== */
         if ($visitor['validity'] != 1) {
             return $this->response->setJSON([
                 'status' => 'invalid',
@@ -207,20 +174,70 @@ public function verifyVisitor()
             ]);
         }
 
-        $logModel->insert([
-            'visitor_request_id' => $visitorId,
-            'v_code'             => $v_code,
-            'check_in_time'      => date('Y-m-d H:i:s'),
-            'verified_by'        => session()->get('user_id')
-        ]);
+        /* =====================================================
+        CHECK-IN (if no log exists)
+        ===================================================== */
+        
+        if($visitor['meeting_status'] == 0 && $visitor['securityCheckStatus'] == 0){
 
-        $visitorModel->update($visitorId, [
-            'securityCheckStatus' => 1
-        ]);
+            $logModel->insert([
+                'visitor_request_id' => $visitorId,
+                'v_code'             => $v_code,
+                'check_in_time'      => date('Y-m-d H:i:s'),
+                'verified_by'        => session()->get('user_id')
+            ]);
 
+            $visitorModel->update($visitorId, [
+                'securityCheckStatus' => 1
+            ]);
+
+            return $this->response->setJSON([
+                'status' => 'checkin_success'
+            ]);
+
+        }
+        
+        
+        /* =====================================================
+        CHECK-OUT (if log exists)
+        ===================================================== */
+        if($visitor['meeting_status'] == 1 && $visitor['securityCheckStatus'] == 1){
+
+                if ($activeLog) {
+
+                    $entryTime = strtotime($activeLog['check_in_time']);
+                    $exitTime  = time();
+                    $spendTime = gmdate("H:i:s", $exitTime - $entryTime);
+
+                    $logModel->update($activeLog['id'], [
+                        'check_out_time' => date('Y-m-d H:i:s'),
+                        'updated_at'      => date('Y-m-d H:i:s'),
+                        'updated_by'        => session()->get('user_id')
+                    ]);
+
+                    $visitorModel->update($visitorId, [
+                        'securityCheckStatus' => 2,
+                        'spendTime'           => $spendTime
+                    ]);
+
+                    return $this->response->setJSON([
+                        'status' => 'checkout_success',
+                        'spendTime' => $spendTime
+                    ]);
+                }
+        }
+
+         if($visitor['meeting_status'] == 0 && $visitor['securityCheckStatus'] == 1){
+                return $this->response->setJSON([
+                    'status' => 'meeting_not_completed'
+                ]);
+         }
+
+       
         return $this->response->setJSON([
-            'status' => 'checkin_success'
+            'status' => 'already_used'
         ]);
+       
     }
 
 

@@ -3,7 +3,7 @@
      
   
         <!-- FULLSCREEN QR SCANNER -->
-<div id="qrScanner" class="qr-fullscreen">
+<div id="qrScanner" class="qr-fullscreen" style="display:none">
     <div id="reader"></div>
 
     <button class="btn btn-danger qr-cancel" onclick="stopScan()">
@@ -343,6 +343,9 @@ function processSecurity(vCode) {
             else if (res.status === 'invalid') {
                 Swal.fire("Denied", res.message, "error");
             }
+            else if (res.status === 'already_used') {
+                Swal.fire("Warning", "This visitor code has already been used", "warning");
+            }
             else {
                 Swal.fire("Error", res.message || "Something went wrong", "error");
             }
@@ -361,14 +364,13 @@ let html5QrCode;
 
 document.getElementById('scanBtnMbl').addEventListener('click', () => {
 
-    // Mobile only
     if (window.innerWidth > 768) {
         Swal.fire("Info", "QR scanning is available on mobile only", "info");
         return;
     }
 
     const scanner = document.getElementById('qrScanner');
-    scanner.style.display = 'block';
+    scanner.style.display = 'flex'; // ✅ not block
 
     html5QrCode = new Html5Qrcode("reader");
 
@@ -382,28 +384,36 @@ document.getElementById('scanBtnMbl').addEventListener('click', () => {
             stopScan();
 
             const vCode = decodedText.trim();
-
             if (vCode.length !== 7) {
                 Swal.fire("Invalid QR", "Invalid V-Code scanned", "warning");
                 return;
             }
 
-            // 🔥 Your existing security flow
             processSecurity(vCode);
-        },
-        () => {} // ignore errors
+        }
     );
 });
 
+
+
 function stopScan() {
-    if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-            document.getElementById('qrScanner').style.display = 'none';
-            html5QrCode.clear();
-        }).catch(() => {
-            document.getElementById('qrScanner').style.display = 'none';
-        });
+    const scanner = document.getElementById('qrScanner');
+
+    if (!html5QrCode) {
+        scanner.style.display = 'none';
+        return;
     }
+
+    html5QrCode.stop()
+        .then(() => {
+            html5QrCode.clear();
+            html5QrCode = null;
+            scanner.style.display = 'none';
+        })
+        .catch(() => {
+            html5QrCode = null;
+            scanner.style.display = 'none';
+        });
 }
 
 /////////////////////////////////////////End Mobile Scane/////////////////////////////////////////////////////////

@@ -159,9 +159,9 @@ h1, h2, h3, h4, .card-title {
         </li>
 
         <li>
-            <a class="nav-link <?= (uri_string()=='report/current') ? 'active' : '' ?>"
-               href="#">
-               <i class="bi bi-person-check-fill"></i> Currently Inside
+            <a class="nav-link <?= (uri_string()=='request_to_checkout') ? 'active' : '' ?>"
+               href="<?= base_url('request_to_checkout') ?>">
+               <i class="bi bi-person-check-fill"></i> Request to Checkout Report
             </a>
         </li>
 
