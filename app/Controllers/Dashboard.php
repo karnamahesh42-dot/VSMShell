@@ -58,6 +58,7 @@ class Dashboard extends BaseController
         }
         $pendingVisitors = $pendingQuery->countAllResults();
 
+       
 ///////////////////////////////////////////////////////////////////////////////
 
         $approvedQuery = $this->visitorModel
@@ -131,7 +132,7 @@ class Dashboard extends BaseController
     
         // Prepare card data
         $data['smallCards'] = [
-            ['title'=>'Toatal Visitors Today','value'=>$visitsToday,'icon'=>'fa-calendar-day','color'=>'c6','subtitle'=>'Visits Count Today'],
+            ['title'=>'Total Visitors Today','value'=>$visitsToday,'icon'=>'fa-calendar-day','color'=>'c6','subtitle'=>'Visits Count Today'],
             ['title'=>'Gate Entries','value'=>$gateEntries,'icon'=>'fa-door-open','color'=>'c5','subtitle'=>'Gate Entries Today'],
             ['title'=>'Waiting for approvals ','value'=>$pendingVisitors,'icon'=>'fa-file-alt','color'=>'c2','subtitle'=>'Pending Visitors Today'],
             ['title'=>'Approved','value'=>$approved,'icon'=>'fa-check-circle','color'=>'c3','subtitle'=>'Approved Today'],
@@ -139,37 +140,68 @@ class Dashboard extends BaseController
         ];
 
 
-//////////////////////////// Visitor Autharised List /////////////////////////////////////////////////////
+//////////////////////////// Pending Request List Data /////////////////////////////////////////////////////
+        // $builder = $this->VisitorRequestHeaderModel
+        //     ->select("
+        //         id,
+        //         header_code,
+        //         purpose,
+        //         requested_date,
+        //         requested_time,
+        //         total_visitors,
+        //         description,
+        //         status
+        //     ")
+        //     ->where('status', 'pending');
+
+        // // Condition: Role wise filtering
+        // if ($roleId == 2) {
+        //     // Department Admin → show requests referred to him
+        //     $builder->where('referred_by', $userId);
+
+        // } elseif ($roleId == 3) {
+        //     // Normal user → show only requests he created
+        //     $builder->where('requested_by', $userId);
+        // }
+        // // roleId == 1 → no filter → show all
+
+        // $pendingList = $builder
+        //     ->orderBy('id', 'DESC')
+        //     ->limit(5)
+        //     ->findAll();
+
+        // $data['pendingList'] = $pendingList;
+
+
         $builder = $this->VisitorRequestHeaderModel
-            ->select("
-                id,
-                header_code,
-                purpose,
-                requested_date,
-                requested_time,
-                total_visitors,
-                description,
-                status
-            ")
-            ->where('status', 'pending');
+    ->select("
+        visitor_request_header.id,
+        visitor_request_header.header_code,
+        visitor_request_header.purpose,
+        visitor_request_header.requested_date,
+        visitor_request_header.requested_time,
+        visitor_request_header.total_visitors,
+        visitor_request_header.description,
+        visitor_request_header.status,
+        GROUP_CONCAT(visitors.visitor_name SEPARATOR ', ') AS visitor_names
+    ")
 
-        // Condition: Role wise filtering
-        if ($roleId == 2) {
-            // Department Admin → show requests referred to him
-            $builder->where('referred_by', $userId);
+        ->join('visitors', 'visitors.request_header_id = visitor_request_header.id', 'left')
+        ->where('visitor_request_header.status', 'pending');
+        
+    if ($roleId == 2) {
+        $builder->where('visitor_request_header.referred_by', $userId);
+    } elseif ($roleId == 3) {
+        $builder->where('visitor_request_header.requested_by', $userId);
+    }
 
-        } elseif ($roleId == 3) {
-            // Normal user → show only requests he created
-            $builder->where('requested_by', $userId);
-        }
-        // roleId == 1 → no filter → show all
+    $pendingList = $builder
+    ->groupBy('visitor_request_header.id')
+    ->orderBy('visitor_request_header.id', 'DESC')
+    ->limit(5)
+    ->findAll();
 
-        $pendingList = $builder
-            ->orderBy('id', 'DESC')
-            ->limit(5)
-            ->findAll();
-
-        $data['pendingList'] = $pendingList;
+$data['pendingList'] = $pendingList;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -263,7 +295,7 @@ $thisYearVisitors = $thisYearQuery->countAllResults();
             // ->join('visitors', 'visitors.request_header_id = security_gate_logs.visitor_request_id')
             // ->where('check_in_time >=', $monthStart)
             // ->where('check_in_time <=', $monthEnd);
-              ->join(
+        ->join(
         'visitors',
         'visitors.id = security_gate_logs.visitor_request_id',
         'inner'

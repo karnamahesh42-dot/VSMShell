@@ -75,7 +75,7 @@ $routes->post('/security/verify', 'SecurityController::verifyVisitor');
 // $routes->post('/security/checkin', 'SecurityController::checkIn');
 // $routes->post('/security/checkout', 'SecurityController::checkOut');
 $routes->post('/security/securityAction', 'SecurityController::securityAction');
-
+$routes->post('/visitor/uploadPhoto', 'SecurityController::uploadPhoto');
 ///////////////////////////////////// Reports  Start /////////////////////////////////////////////////////////////
 $routes->get('/daily_visitor_report', 'ReportController::dailyVisitorReport');
 $routes->get('/request_to_checkout', 'ReportController::requestToCheckoutReport');

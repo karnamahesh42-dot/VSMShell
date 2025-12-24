@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 use App\Models\DepartmentModel;
+use App\Models\VisitorRequestModel;
 
 class SecurityController extends BaseController
 {
@@ -18,6 +19,71 @@ class SecurityController extends BaseController
           $data['departments'] = $deptModel->findAll();
           return view('dashboard/authorized_visitor_list',$data);
     }
+
+
+
+/// ..........Visitor Photo Upload  Start.............. ///
+
+      public function uploadPhoto()
+{
+    $file   = $this->request->getFile('photo');
+    $v_code = $this->request->getPost('v_code');
+
+    if (!$file || !$file->isValid()) {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Invalid image'
+        ]);
+    }
+
+    // 🔐 Check security status
+    $visitorModel = new \App\Models\VisitorRequestModel();
+    $visitor = $visitorModel->where('v_code', $v_code)->first();
+
+    if (!$visitor || $visitor['securityCheckStatus'] == 0) {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Photo upload not allowed at this stage'
+        ]);
+    }
+
+    // Validate image type
+    $allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+    if (!in_array($file->getMimeType(), $allowedTypes)) {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Only JPG/PNG allowed'
+        ]);
+    }
+
+    // Create upload directory
+    $uploadPath = FCPATH . 'public/uploads/visitor_photos/';
+    if (!is_dir($uploadPath)) {
+        mkdir($uploadPath, 0777, true);
+    }
+
+    // Generate file name
+    $newName = 'v_pic_' . $v_code . '_' . time() . '.jpg';
+    $fullPath = $uploadPath . $newName;
+
+    // Compress & resize image
+    $image = \Config\Services::image()
+        ->withFile($file)
+        ->resize(800, 800, true, 'auto') // max 800px
+        ->save($fullPath, 75); // 🔥 75% quality (compression)
+
+    // Save file path in DB
+    $visitorModel->where('v_code', $v_code)
+                 ->set(['v_phopto_path' => $newName])
+                 ->update();
+
+    return $this->response->setJSON([
+        'status' => 'success',
+        'path'   => base_url('public/uploads/visitor_photos/' . $newName)
+    ]);
+}
+
+/// ..........Visitor Photo Upload  Start.............. ///
 
 
 public function authorized_visitors_list_data()
@@ -139,6 +205,24 @@ public function verifyVisitor()
 
 }
 
+
+    private function deleteGatePassFiles(string $v_code): void
+    {
+        // 🔹 Gate Pass PDF
+        $pdfPath = FCPATH . 'public/uploads/gate_pass_pdf/GatePass_' . $v_code . '.pdf';
+
+        if (is_file($pdfPath)) {
+            unlink($pdfPath);
+        }
+
+        // 🔹 QR Code Image
+        $qrPath = FCPATH . 'public/uploads/qr_codes/visitor_' . $v_code . '_qr.png';
+
+        if (is_file($qrPath)) {
+            unlink($qrPath);
+        }
+    }
+
    
     public function securityAction()
     {
@@ -179,7 +263,6 @@ public function verifyVisitor()
         ===================================================== */
         
         if($visitor['meeting_status'] == 0 && $visitor['securityCheckStatus'] == 0){
-
             $logModel->insert([
                 'visitor_request_id' => $visitorId,
                 'v_code'             => $v_code,
@@ -192,50 +275,85 @@ public function verifyVisitor()
             ]);
 
             return $this->response->setJSON([
-                'status' => 'checkin_success'
+                'status' => 'checkin_success',
+                'v_code' =>  $v_code
             ]);
-
         }
         
+
+        /////////////////////// Check out  //////////////////
         
-        /* =====================================================
-        CHECK-OUT (if log exists)
-        ===================================================== */
-        if($visitor['meeting_status'] == 1 && $visitor['securityCheckStatus'] == 1){
+        if ($visitor['meeting_status'] == 1 && $visitor['securityCheckStatus'] == 1) {
 
-                if ($activeLog) {
+            if ($activeLog) {
 
-                    $entryTime = strtotime($activeLog['check_in_time']);
-                    $exitTime  = time();
-                    $spendTime = gmdate("H:i:s", $exitTime - $entryTime);
 
-                    $logModel->update($activeLog['id'], [
-                        'check_out_time' => date('Y-m-d H:i:s'),
-                        'updated_at'      => date('Y-m-d H:i:s'),
-                        'updated_by'        => session()->get('user_id')
-                    ]);
+                $entryTime = strtotime($activeLog['check_in_time']);
+                $exitTime  = time();
+                $diffSeconds = $exitTime - $entryTime;
+                $hours   = floor($diffSeconds / 3600);
+                $minutes = floor(($diffSeconds % 3600) / 60);
+                $seconds = $diffSeconds % 60;
 
-                    $visitorModel->update($visitorId, [
-                        'securityCheckStatus' => 2,
-                        'spendTime'           => $spendTime
-                    ]);
+                $spendTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 
-                    return $this->response->setJSON([
-                        'status' => 'checkout_success',
-                        'spendTime' => $spendTime
-                    ]);
-                }
+
+                // 🔹 Update log table
+                $logModel->update($activeLog['id'], [
+                    'check_out_time' => date('Y-m-d H:i:s'),
+                    'updated_at'     => date('Y-m-d H:i:s'),
+                    'updated_by'     => session()->get('user_id')
+                ]);
+
+                // 🔹 Update visitor table
+                $visitorModel->update($visitorId, [
+                    'securityCheckStatus' => 2,
+                    'spendTime'           => $spendTime
+                ]);
+
+               
+                 // Dalete Gate Passfiles Code Image
+                $this->deleteGatePassFiles($v_code);
+
+                return $this->response->setJSON([
+                    'status'     => 'checkout_success',
+                    'spendTime'  => $spendTime,
+                    'v_code'     => $v_code
+                ]);
+            }
         }
+
+        /////////////////////// Checking Meeting Status //////////////////
 
          if($visitor['meeting_status'] == 0 && $visitor['securityCheckStatus'] == 1){
+               
+              
+            // return $this->response->setJSON([
+                //     'status' => 'meeting_not_completed'
+                // ]);
+
+                            // 🔹 Fetch host details
+                $requestHeaderModel = new \App\Models\VisitorRequestHeaderModel();
+                
+                $requestId = $visitor['request_header_id'];
+                $host = $requestHeaderModel
+                    ->select('u.company_name, u.name,u.email')
+                    ->join('users u', 'u.id = visitor_request_header.referred_by', 'left')
+                    ->where('visitor_request_header.id', $requestId)
+                    ->first();
+
                 return $this->response->setJSON([
-                    'status' => 'meeting_not_completed'
+                    'status'            => 'meeting_not_completed',
+                    'name'         => $host['name'] ?? '--',
+                    'company_name'  => $host['company_name'] ?? '--',
+                    'email'        => $host['email'] ?? '--'
                 ]);
          }
 
        
         return $this->response->setJSON([
-            'status' => 'already_used'
+            'status' => 'already_used',
+            'v_code' =>  $v_code
         ]);
        
     }

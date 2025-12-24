@@ -28,24 +28,15 @@
 
                                 <div class="col-md-2 mb-2">
                                     <label>Purpose</label>
-                                    <select name="purpose" class="form-control" required>
-                                        <option value="">-- Select Purpose --</option>
-                                        <option>General Visit</option>
-                                        <option>Location Recci</option>
-                                        <option>Wedding</option>
-                                        <option>Vendor Visit</option>
-                                        <option>Delivery</option>
-                                        <option>Meeting</option>
-                                        <option>Interview</option>
-                                        <option>Document Submission</option>
-                                        <option>Verification / Approval</option>
-                                        <option>Event Visit</option>
-                                        <option>Tourism Visit</option>
-                                        <option>Personal Visit</option>
-                                        <option>Site Inspection</option>
-                                        <option>Maintenance / Service</option>
-                                        <option>Other</option>
-                                    </select>
+                                   <select name="purpose" class="form-control" required>
+                                            <option value="">-- Select Purpose --</option>
+                                            <?php foreach ($purposes as $p): ?>
+                                                <option value="<?= esc($p['purpose_name']) ?>"
+                                                    <?= (old('purpose') == $p['purpose_name']) ? 'selected' : '' ?>>
+                                                    <?= esc($p['purpose_name']) ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
                                 </div>
                                 
                                 <div class="col-md-2 mb-2">

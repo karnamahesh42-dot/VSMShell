@@ -33,7 +33,8 @@ class VisitorRequestModel extends Model
         'visitor_id_proof',
         'visit_time',
         'securityCheckStatus',
-        'spendTime'
+        'spendTime',
+        'v_phopto_path'
     ];
 
 

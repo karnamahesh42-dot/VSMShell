@@ -121,32 +121,32 @@
               <?php endforeach; ?>
             </section>
           <!-- ROW 2: Medium Cards -->
-<?php if (!in_array($_SESSION['role_id'], [3, 4])) { ?>
- <section class="dash-row row-medium mb-3">
-    <?php foreach($meds as $m): ?>
-    <div class="card-dash card-medium">
-        <!-- Icon + Title side-by-side -->
-        <div class="title-row">
-            <i class="fa <?= esc($m['icon']) ?> icon"></i>
-            <span class="title"><?= esc($m['title']) ?></span>
+    <?php if (!in_array($_SESSION['role_id'], [3, 4])) { ?>
+    <section class="dash-row row-medium mb-3">
+        <?php foreach($meds as $m): ?>
+        <div class="card-dash card-medium">
+            <!-- Icon + Title side-by-side -->
+            <div class="title-row">
+                <i class="fa <?= esc($m['icon']) ?> icon"></i>
+                <span class="title"><?= esc($m['title']) ?></span>
+            </div>
+
+            <!-- Big Count -->
+            <div class="count-number"><?= esc($m['count']) ?></div>
+
+            <!-- Small Description -->
+            <div class="muted"><?= esc($m['desc']) ?></div>
+
         </div>
-
-        <!-- Big Count -->
-        <div class="count-number"><?= esc($m['count']) ?></div>
-
-        <!-- Small Description -->
-        <div class="muted"><?= esc($m['desc']) ?></div>
-
-    </div>
-    <?php endforeach; ?>
-</section>
-<?php } ?>
+        <?php endforeach; ?>
+    </section>
+    <?php } ?>
 
         
         <section class="row row-large mb-3">
             <!-- ROW 3: Pending  List -->
             <?php if($_SESSION['role_id'] != 4){?>
-                <div class="col-md-8"> 
+                <div class="col-md-9"> 
                     <div class="card-dash card-large">
                     <div class="d-flex justify-content-between align-items-center mb-1 pending-header">
                         <div>
@@ -156,23 +156,29 @@
                         <div><a href="<?= base_url('visitorequestlist') ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-list"></i></a></div>
                     </div>
                         <ul class="pending-list mt-2">
-                            <?php if (!empty($pendingList)): ?>
+                            <?php 
+                            //   print_r($pendingList);
+                              if (!empty($pendingList)): ?>
                                 <?php foreach ($pendingList as $item): ?>
                                     <li onclick="view_visitor(<?= $item['id'] ?>)" style="cursor:pointer;">
                                         <!-- <li onclick="testamile(<?= $item['id'] ?>)" style="cursor:pointer;"> -->
                                         
                                         <div>
-                                            <!-- GV Code -->
-                                            <div class="fw-600">
-                                                <?= $item['purpose'] ?> - <?= $item['description'] ?>
-                                                
-                                            </div>
+                                        
                                             <!-- Purpose + date + persons -->
-                                            <small class="muted">
+                                             <span class="muted">
+                                                 <!-- GV Code -->
+                            
+                                               <span style="font-weight: 600; font-size:16px;"><?= $item['purpose'] ?> - <?= $item['description'] ?> </span> • 
                                                 <?= $item['header_code'] ?>  • 
                                                 <?= $item['requested_date'] ?> <?= $item['requested_time'] ?> •
-                                                <?= $item['total_visitors'] ?> Persons
-                                            </small>
+                                                <?= $item['total_visitors'] ?> Persons • <?= $item['visitor_names'] ?>  
+                                             </span>
+                                            <!-- <small class="muted">
+                                                   
+
+                                                
+                                            </small> -->
                                         </div>
 
                                         <div class="text-end">
@@ -193,7 +199,7 @@
                 <!--  Pending List End  -->
                 <!-- Recent Entries Example Table -->
                 <?php if($_SESSION['role_id'] == 4){?>
-                  <div class="col-md-8"> 
+                  <div class="col-md-9 mt-2"> 
                     <div class="card visitor-list-card">
                             <div class="card-header text-white d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">
@@ -229,7 +235,7 @@
                 <?php } ?>
                 <!-- Recent Entries Example Table end -->
                 <!-- Quick Links -->
-                <div class="col-md-4"> 
+                <div class="col-md-3"> 
                     <div class="card-dash card-large">
                     <h5 class="mb-1">Quick Links</h5>
                         <div class="title-underline">
@@ -268,7 +274,7 @@
                             <div class="d-flex justify-content-end mb-2">
                                 <small class="text-muted">
                                     <i class="bi bi-info-circle-fill text-primary"></i>
-                                <strong>Note:</strong> Please click the <span class="text-primary fw-bold">blue button</span> to complete the meeting.
+                                <strong>Note:</strong> Please click the <span class="text-primary fw-bold">blue button</span> to complete the Session.
                                 </small>
                             </div>
 
@@ -381,27 +387,25 @@
                         </button>`;
                 }
 
-                   cardsHtml += `
-                  <div class="card visitor-card p-3 p-md-4 col-12 col-sm-6 col-md-4 m-2">
-
-                            <div class="row visitor-card-body">
-                                <!-- Visitor Details -->
-                                <div class="col-12 visitor-details">
-                                    <h5 class="visitor-name">
-                                        <i class="fas fa-user text-primary me-2"></i> ${v.visitor_name}
-                                    </h5>
-                                    <p class="visitor-email">${v.visitor_email}</p>
-                                    <p class="visitor-code">Code: ${v.v_code}</p>
-                                    <p class="visitor-info"><b>Phone :</b> ${v.visitor_phone}</p>
-                                    <p class="visitor-info"><b>Vehicle Type :</b> ${v.vehicle_type}</p>
-                                    <p class="visitor-info"><b>ID Type :</b> ${v.proof_id_type}</p>
-                                    <p class="visitor-info"><b>ID Number :</b> ${v.proof_id_number}</p>
-                                    <p class="visitor-info"><b>Vehicle No :</b> ${v.vehicle_no}</p>
-                                   
-                                </div>
-                              <!-- QR & Resend -->
+                cardsHtml += `
+                <div class="card visitor-card p-3 p-md-4 col-12 col-sm-6 col-md-4 m-2">
+                        <div class="row visitor-card-body">
+                            <!-- Visitor Details -->
+                            <div class="col-12 visitor-details">
+                                <h5 class="visitor-name">
+                                    <i class="fas fa-user text-primary me-2"></i> ${v.visitor_name}
+                                </h5>
+                                <p class="visitor-email">${v.visitor_email}</p>
+                                <p class="visitor-code">Code: ${v.v_code}</p>
+                                <p class="visitor-info"><b>Phone :</b> ${v.visitor_phone}</p>
+                                <p class="visitor-info"><b>Vehicle Type :</b> ${v.vehicle_type}</p>
+                                <p class="visitor-info"><b>ID Type :</b> ${v.proof_id_type}</p>
+                                <p class="visitor-info"><b>ID Number :</b> ${v.proof_id_number}</p>
+                                <p class="visitor-info"><b>Vehicle No :</b> ${v.vehicle_no}</p>
                             </div>
-                        </div>`;
+                            <!-- QR & Resend -->
+                        </div>
+                    </div>`;
             });
 
             $("#visitorCardsContainer").html(cardsHtml);
@@ -571,11 +575,10 @@ function loadAuthorizedVisitors() {
                     `;
                 } else if (v.securityCheckStatus == 1 && v.meeting_status == 0) {
 
-
-                           <?php if($_SESSION['role_id'] == '2'){?>
+                           <?php if($_SESSION['role_id'] == '2' || $_SESSION['role_id'] == '1'){?>
                             statusBadge = ` <span class="btn meetingCmpleteBtn cursor-pointer" onclick="markMeetingCompleted('${v.v_code}')">
                                         Inside <br>
-                                        Meeting Not Yet Completed <br>
+                                        Session Not Yet Completed <br>
                                     In: ${v.check_in_time ?? '-'} <br>
                                     Out: ${v.check_out_time ?? '-'} <br>
                                 </span> `;
@@ -583,7 +586,7 @@ function loadAuthorizedVisitors() {
                           <?php }else{ ?>
                                 statusBadge = `<span class="badge bg-primary text-lite" >
                                         Inside <br>
-                                        Meeting Not Yet Completed <br>
+                                        Session Not Yet Completed <br>
                                         In: ${v.check_in_time ?? '-'} <br>
                                         Out: ${v.check_out_time ?? '-'} <br>
                                       </span>`;
@@ -593,7 +596,7 @@ function loadAuthorizedVisitors() {
                       statusBadge = `
                         <span class="badge bg-warning text-dark" >
                              Inside <br>
-                             Meeting Completed <br>
+                             Session Completed <br>
                             In: ${v.check_in_time ?? '-'} <br>
                             Out: ${v.check_out_time ?? '-'} <br>
                           
@@ -641,8 +644,8 @@ function loadAuthorizedVisitors() {
 
 function markMeetingCompleted(v_code) {
     Swal.fire({
-        title: "Complete Meeting?",
-        text: "Confirm that the visitor meeting is completed.",
+        title: "Complete Session?",
+        text: "Confirm that the visitor Session is completed.",
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "Yes, Complete",
@@ -658,11 +661,12 @@ function markMeetingCompleted(v_code) {
                     if (res.status === "success") {
                         Swal.fire({
                             icon: "success",
-                            title: "Meeting Completed",
+                            title: "Session Completed",
                             timer: 1500,
                             showConfirmButton: false
                         });
-
+                        location.reload();
+                    
                     } else {
                         Swal.fire("Error", res.message, "error");
                     }

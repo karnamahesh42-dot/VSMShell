@@ -1,15 +1,6 @@
 <?= $this->include('/dashboard/layouts/sidebar') ?>
   <?= $this->include('/dashboard/layouts/navbar') ?>
      
-  
-        <!-- FULLSCREEN QR SCANNER -->
-<div id="qrScanner" class="qr-fullscreen" style="display:none">
-    <div id="reader"></div>
-
-    <button class="btn btn-danger qr-cancel" onclick="stopScan()">
-        ✕ Cancel
-    </button>
-</div>
 
 
    <main class="main-content" id="mainContent">
@@ -22,7 +13,7 @@
 
                 <!-- HEADER -->
                 <div class="modal-header bg-primary text-white rounded-top-4">
-                    <h5 class="modal-title">Visitor Request Details</h5>
+                    <h5 class="modal-title">Visitor Details</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -91,48 +82,100 @@
                                     <div id="actionBtns"></div>
                                    
                                 </div>
-   
+
    
                                 <!-- SINGLE VISITOR DETAILS CARD -->
-                                                                <hr>
+                            
+                            <!-- Status Tracker start -->
+                            <div class="status-tracker" id="statusTraker">
+                               
+                            </div>
+                            <!-- Status Tracker End -->
+                                <hr>
                                 <h5 class="fw-bold text-primary">Visitor Details</h5>
-                                <div class="row mt-2">
-                                                            
-                                <div class="col-md-4 col-6">
-                                        <label class="fw-semibold">Visitor Code:</label>
-                                        <div id="v_code" class="cardData text-primary"></div>
-                                    </div>
+                                    <div class="card shadow-sm p-3">
+                                        <div class="row align-items-center">
 
-                                    <div class="col-md-4 col-6">
-                                        <label class="fw-semibold">Visitor Name:</label>
-                                        <div id="v_name" class="cardData"></div>
-                                    </div>
+                                            <!-- VISITOR PHOTO (3 columns) -->
+                                            <div class="col-md-3 text-center mb-3 mb-md-0">
+                                                <div class="photo-wrapper">
+                                                    <img id="visitorPhotoPreview"
+                                                        src="<?= base_url('public/dist/User_Profile.png') ?>"
+                                                        alt="Visitor Photo">
 
-                                    <div class="col-md-4 col-6">
-                                        <label class="fw-semibold">Visitor Phone:</label>
-                                        <div id="v_phone" class="cardData"></div>
-                                    </div>
+                                                    <div class="camera-upload heartbeat" id="camIcon"
+                                                        onclick="document.getElementById('visitorPhoto').click()">
+                                                        <i class="fa fa-camera"></i>
+                                                    </div>
+                                                </div>
 
-                                    <div class="col-md-4 col-6">
-                                        <label class="fw-semibold">Visitor Email:</label>
-                                        <div id="v_email" class="cardData"></div>
-                                    </div>
+                                                <input type="file"
+                                                    id="visitorPhoto"
+                                                    accept="image/*"
+                                                    capture="environment"
+                                                    style="display:none"
+                                                    onchange="uploadVisitorPhoto(this)">
+                                            </div>
 
-                                    <div class="col-md-4 col-6">
-                                        <label class="fw-semibold">Vehicle No:</label>
-                                        <div id="v_vehicle_no" class="cardData"></div>
-                                    </div>
+                                            <!-- VISITOR DETAILS (9 columns) -->
+                                            <div class="col-md-9">
+                                                <div class="row mt-2">
 
-                                    <div class="col-md-4 col-6">
-                                        <label class="fw-semibold">Vehicle Type:</label>
-                                        <div id="v_vehicle_type" class="cardData"></div>
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Visitor Code:</label>
+                                                        <div id="v_code" class="cardData text-primary"></div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Visitor Name:</label>
+                                                        <div id="v_name" class="cardData"></div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Visitor Phone:</label>
+                                                        <div id="v_phone" class="cardData"></div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Visitor Email:</label>
+                                                        <div id="v_email" class="cardData"></div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Vehicle No:</label>
+                                                        <div id="v_vehicle_no" class="cardData"></div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Vehicle Type:</label>
+                                                        <div id="v_vehicle_type" class="cardData"></div>
+                                                    </div>
+
+                                                    <!-- ADD 3 MORE IF REQUIRED -->
+                                                    <!-- <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Purpose:</label>
+                                                        <div id="v_purpose" class="cardData"></div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Host Name:</label>
+                                                        <div id="v_host" class="cardData"></div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-6">
+                                                        <label class="fw-semibold">Check-In Time:</label>
+                                                        <div id="v_checkin" class="cardData"></div>
+                                                    </div> -->
+
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                </div>
     
                             </div>
                         </div>
                     </div>
-
                     <!-- VISITOR CARDS -->
                     <div class="row g-4" id="visitorCardsContainer">
                      
@@ -151,8 +194,6 @@
 
     <!-- view Pop-up Form End   -->
  
-
-
              <div class="row d-flex justify-content-center">
                 <div class="col-md-12">
 
@@ -168,82 +209,94 @@
                         <div class="card-body px-2">
                             <div class="card mb-3">
                               
-                                    <div class="card-body" >
-                                        <div class="row g-2">
-                                            <div class="col-md-2">
-                                                <label class="form-label">Request Code</label>
-                                            <input type ='text' id="requestcode" placeholder="Enter GV-Code" class="form-control">
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label class="form-label">V-Code</label>
-                                                <input type ='text' id="f_v_code" placeholder="Enter V-Code" class="form-control">
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <label class="form-label">Company</label>
-                                                <select id="filterCompany" class="form-select">
-                                                    <option value="">All</option>
-                                                    <option value="UKMPL">UKMPL</option>
-                                                    <option value="DHPL">DHPL</option>
-                                                    <option value="ETPL">ETPL</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <label class="form-label">Department</label>
-                                                <select id="filterDepartment" class="form-select">
-                                                    <option value="">All</option>
-                                                    <?php foreach ($departments as $dept): ?>
-                                                        <option value="<?= $dept['department_name'] ?>">
-                                                            <?= $dept['department_name'] ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <label class="form-label">Security Status</label>
-                                                <select id="filterSecurity" class="form-select">
-                                                    <option value="">All</option>
-                                                    <option value="0">Not Entered</option>
-                                                    <option value="1">Inside</option>
-                                                    <option value="2">Completed</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-2 d-flex align-items-end gap-1">
-
-                                                <!-- Search Button -->
-                                                <button class="btn btn-primary" onclick="loadAuthorizedVisitors()" title="Search">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-
-                                                <!-- Reset Button -->
-                                                <button class="btn btn-secondary" onclick="resetFilters()" title="Reset Filters">
-                                                    <i class="fas fa-sync-alt"></i>
-                                                </button>
-
-                                                <!-- Scan Button -->
-                                                <!-- <button class="btn btn-success active" id="scanBtn" onclick="toggleScan()" title="Scan">
-                                                      <i class="fas fa-qrcode"></i>
-                                                </button> -->
-
-                                                 <!-- Mobile Scan Button -->
-                                                <button class="btn btn-success" id="scanBtnMbl">
-                                                    <i class="fas fa-qrcode"></i> Scan QR
-                                                </button>
-                                              
-
-
-                                              <?php if($_SESSION['role_id'] == '1'){?>
-                                                <!-- Export Button -->
-                                                <button class="btn btn-success" onclick="exportTable()" title="Export Data">
-                                                    <i class="fas fa-file-export"></i>
-                                                </button>
-                                             <?php }?>
-                                            </div>
-                                        </div>
+                            <div class="card-body" >
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label class="form-label">Request Code</label>
+                                    <input type ='text' id="requestcode" placeholder="Enter GV-Code" class="form-control">
                                     </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">V-Code</label>
+                                        <input type ='text' id="f_v_code" placeholder="Enter V-Code" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label">Company</label>
+                                        <select id="filterCompany" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="UKMPL">UKMPL</option>
+                                            <option value="DHPL">DHPL</option>
+                                            <option value="ETPL">ETPL</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label">Department</label>
+                                        <select id="filterDepartment" class="form-select">
+                                            <option value="">All</option>
+                                            <?php foreach ($departments as $dept): ?>
+                                                <option value="<?= $dept['department_name'] ?>">
+                                                    <?= $dept['department_name'] ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label">Security Status</label>
+                                        <select id="filterSecurity" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="0">Not Entered</option>
+                                            <option value="1">Inside</option>
+                                            <option value="2">Completed</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2 d-flex align-items-end gap-1">
+
+                                        <!-- Search Button -->
+                                        <button class="btn btn-primary" onclick="loadAuthorizedVisitors()" title="Search">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+
+                                        <!-- Reset Button -->
+                                        <button class="btn btn-secondary" onclick="resetFilters()" title="Reset Filters">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+
+                                        
+
+                                        <!-- Scan Button -->
+                                        <!-- <button class="btn btn-success active" id="scanBtn" onclick="toggleScan()" title="Scan">
+                                                <i class="fas fa-qrcode"></i>
+                                        </button> -->
+
+                                            <!-- Mobile Scan Button
+                                        <button class="btn btn-success" id="scanBtnMbl">
+                                            <i class="fas fa-qrcode"></i>
+                                        </button> -->
+
+                                        <!--///////////// Mobile Scan Button ////////////-->
+                                        <button class="btn btn-success" id="scanBtnMblPic">
+                                            <i class="fas fa-qrcode"></i>
+                                        </button>
+                                        <input type="file"
+                                            id="qrImageInput"
+                                            accept="image/*"
+                                            capture="environment" hidden> 
+                                        <div id="temp-reader" hidden></div>
+                                        <!--////////// Hidden File Input /////////////-->
+
+
+                                        <?php if($_SESSION['role_id'] == '1'){?>
+                                            <!-- Export Button -->
+                                            <button class="btn btn-success" onclick="exportTable()" title="Export Data">
+                                                <i class="fas fa-file-export"></i>
+                                            </button>
+                                        <?php }?>
+                                    </div>
+                                </div>
+                            </div>
 
                          </div>
                          <div class="card-body p-0">
@@ -279,48 +332,29 @@
             </div>
         </div>
     </main>
-
 <?= $this->include('/dashboard/layouts/footer') ?>
 <script src="https://unpkg.com/html5-qrcode"></script>
-
 
 <!-- JS -->
  <script>
 $(document).ready(function () {
     loadAuthorizedVisitors();
-    $('#f_v_code').focus();
+    // $('#f_v_code').focus();
 })
-///////////////////////  Auto Scan Logic  ////////////////////////////////////
 
-// function toggleScan() {
-//     const scanBtn = document.getElementById('scanBtn');
-
-//     if (scanBtn.classList.contains('active')) {
-//         // Inactive state
-//         scanBtn.classList.remove('active', 'btn-success');
-//         scanBtn.classList.add('btn-secondary');
-//     } else {
-//         // Active state
-//         scanBtn.classList.add('active', 'btn-success');
-//         scanBtn.classList.remove('btn-secondary');
-//     }
-// }
-
-// Listen when user types / scanner fills
-document.getElementById('f_v_code').addEventListener('input', function () {
+// document.getElementById('f_v_code').addEventListener('input', function () {
   
-    const vCode = this.value.trim();
-    // const scanBtn = document.getElementById('scanBtn');
-    // // Conditions:
-    // if (scanBtn.classList.contains('active') && vCode.length === 7) {
-    // }
+//     const vCode = this.value.trim();
+//     // const scanBtn = document.getElementById('scanBtn');
+//     // // Conditions:
+//     // if (scanBtn.classList.contains('active') && vCode.length === 7) {
+//     // }
 
-      if (vCode.length === 7) {
-         processSecurity(vCode);
-         $('#f_v_code').val('');
-      }
-     
-});
+//       if (vCode.length === 7) {
+//          processSecurity(vCode);
+//          $('#f_v_code').val('');
+//       }
+// });
 
 
 
@@ -333,12 +367,42 @@ function processSecurity(vCode) {
 
             if (res.status === 'checkin_success') {
                 Swal.fire("Success", "Visitor Checked In", "success");
+                openVisitorPopup(res.v_code);
             }
             else if (res.status === 'checkout_success') {
                 Swal.fire("Success", "Visitor Checked Out", "success");
+                openVisitorPopup(res.v_code);
             }
             else if (res.status === 'meeting_not_completed') {
-                Swal.fire("Warning", "Meeting not completed", "warning");
+                let hostDetails = `
+                <div style="text-align:center; font-size:14px; line-height:1.6;">
+                    <div style="margin-bottom:8px;">
+                        <i class="fa fa-user" style="color:#0d6efd; margin-right:6px;"></i>
+                        ${res.name ?? '--'}
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <i class="fa fa-building" style="color:#0d6efd; margin-right:6px;"></i>
+                        ${res.company_name ?? '--'}
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <i class="fa fa-envelope" style="color:#0d6efd; margin-right:6px;"></i>
+                       ${res.email ?? '--'}
+                    </div>
+                </div>
+                `;
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Action Restricted',
+                    html: `
+                        <p>The session has not been completed by the host.</p>
+                        <p><b>Please contact the host to complete the session.</b></p>
+                        <hr>
+                        ${hostDetails}
+                    `,
+                    confirmButtonText: 'OK'
+                });
+
             }
             else if (res.status === 'invalid') {
                 Swal.fire("Denied", res.message, "error");
@@ -360,66 +424,118 @@ function processSecurity(vCode) {
 
 ////////////////////////////////Mobile Scane Start //////////////////////////////////////////////
 
-let html5QrCode;
+    // const scanBtn = document.getElementById("scanBtnMblPic");
+    // const fileInput = document.getElementById("qrImageInput");
 
-document.getElementById('scanBtnMbl').addEventListener('click', () => {
+    // // Trigger file upload on button click
+    // scanBtn.addEventListener("click", () => {
+    //     fileInput.click();
+    // });
 
-    if (window.innerWidth > 768) {
-        Swal.fire("Info", "QR scanning is available on mobile only", "info");
-        return;
-    }
+    // // Scan QR when image selected
+    // fileInput.addEventListener("change", () => {
+    //     const file = fileInput.files[0];
+    //     if (!file) return;
 
-    const scanner = document.getElementById('qrScanner');
-    scanner.style.display = 'flex'; // ✅ not block
+    //     const html5QrCode = new Html5Qrcode("temp-reader");
 
-    html5QrCode = new Html5Qrcode("reader");
+    //     html5QrCode.scanFile(file, true)
+    //         .then(decodedText => {
 
-    html5QrCode.start(
-        { facingMode: "environment" },
-        {
-            fps: 10,
-            qrbox: { width: 260, height: 260 }
-        },
-        (decodedText) => {
-            stopScan();
+    //             processSecurity(decodedText)
+    //             // alert("Scanned Value: " + decodedText);
+    //         })
+    //         .catch(err => {
+    //              Swal.fire(
+    //                 "Warning",
+    //                 "No QR code found in image, Capture Proper QR",
+    //                 "warning"
+    //             );
+    //               // console.error(err);
+    //         });
+    // });
+const scanBtn = document.getElementById("scanBtnMblPic");
+const fileInput = document.getElementById("qrImageInput");
 
-            const vCode = decodedText.trim();
-            if (vCode.length !== 7) {
-                Swal.fire("Invalid QR", "Invalid V-Code scanned", "warning");
-                return;
-            }
-
-            processSecurity(vCode);
-        }
-    );
+scanBtn.addEventListener("click", () => {
+    fileInput.value = "";
+    fileInput.click();
 });
 
+fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
 
+    try {
+        const processedFile = await preprocessImage(file);
 
-function stopScan() {
-    const scanner = document.getElementById('qrScanner');
+        const html5QrCode = new Html5Qrcode("temp-reader");
 
-    if (!html5QrCode) {
-        scanner.style.display = 'none';
-        return;
+        html5QrCode.scanFile(processedFile, true)
+            .then(decodedText => {
+                processSecurity(decodedText);
+            })
+            .catch(() => {
+                Swal.fire(
+                    "Warning",
+                    "No QR code found in image, Capture Proper QR",
+                    "warning"
+                );
+            });
+
+    } catch (err) {
+        Swal.fire("Error", "Image processing failed", "error");
     }
+});
 
-    html5QrCode.stop()
-        .then(() => {
-            html5QrCode.clear();
-            html5QrCode = null;
-            scanner.style.display = 'none';
-        })
-        .catch(() => {
-            html5QrCode = null;
-            scanner.style.display = 'none';
-        });
+/* 🔧 FIX IMAGE FOR MOBILE CAMERA */
+function preprocessImage(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+
+        reader.onload = e => {
+            img.src = e.target.result;
+        };
+
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // 🔽 Resize (very important)
+            const maxSize = 1200;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxSize || height > maxSize) {
+                if (width > height) {
+                    height = height * maxSize / width;
+                    width = maxSize;
+                } else {
+                    width = width * maxSize / height;
+                    height = maxSize;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(blob => {
+                if (!blob) return reject();
+
+                const fixedFile = new File([blob], "qr.jpg", { type: "image/jpeg" });
+                resolve(fixedFile);
+            }, "image/jpeg", 0.9);
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
 }
 
 /////////////////////////////////////////End Mobile Scane/////////////////////////////////////////////////////////
-
-
-
 
 
 
@@ -466,10 +582,8 @@ function loadAuthorizedVisitors() {
                     statusBadge = `
                         <span class="badge bg-primary warning text-lite p-2">
                              Inside <br>
-                             Meeting Not Yet Completed <br>
+                             Session Not Yet Completed <br>
                             In: ${v.check_in_time ?? '-'} <br>
-                         
-                          
                         </span>
                     `;
                 } 
@@ -477,7 +591,7 @@ function loadAuthorizedVisitors() {
                       statusBadge = `
                         <span class="badge bg-warning text-dark p-2">
                              Inside <br>
-                             Meeting Completed <br>
+                             Session Completed <br>
                             In: ${v.check_in_time ?? '-'} <br>
                           
                           
@@ -493,7 +607,6 @@ function loadAuthorizedVisitors() {
                         </span>
                     `;
                 }
-
 
                 let validityBadge = "";
                 if (v.validity == 1) {
@@ -513,8 +626,7 @@ function loadAuthorizedVisitors() {
                         <td>${v.visitor_name}</td>
                         <td>${v.visitor_phone}</td>
                         <td>${v.purpose}</td>
-                        <td>${v.check_in_by ? v.check_in_by : '--'}</td>
-                        
+                        <td>${v.check_in_by ? v.check_in_by : '--'}</td>   
                         <td>${validityBadge}</td>
                         <td>${statusBadge}</td>
                     </tr>
@@ -530,7 +642,7 @@ function resetFilters() {
     $("#filterDepartment").val('');
     $("#filterSecurity").val('');
     $("#requestcode").val('');
-     $("#f_v_code").val('');
+    $("#f_v_code").val('');
     loadAuthorizedVisitors();
 }
 
@@ -553,11 +665,9 @@ function exportTable() {
         if(cols.length > 0) rows.push(cols.join(","));
     });
 
- 
     let csvContent = "data:text/csv;charset=utf-8, " 
                      + rows.join("\n");
     // console.log(csvContent);
-
     let a = document.createElement("a");
     a.href = encodeURI(csvContent);
     a.download = "authorized_visitors.csv";
@@ -573,13 +683,12 @@ $('#f_v_code').on('keypress', function (e) {
             alert('Please enter V-Code');
             return;
         }
-
         openVisitorPopup(v_code);
     }
 });
 
 
-function openVisitorPopup(v_code) {
+function openVisitorPopup(v_code){
 
     $.ajax({
         url: "<?= base_url('/get-visitor-details') ?>",
@@ -587,7 +696,8 @@ function openVisitorPopup(v_code) {
         data: { v_code: v_code },
         dataType: "json",
         success: function (d) {
-            // console.log(d)
+            console.log(d)
+
             // HEADER FIELDS
             $("#h_code").text(d.header_code);
             $("#h_requested_by").text(d.created_by_name);
@@ -608,35 +718,141 @@ function openVisitorPopup(v_code) {
             $("#v_visit_time").text(d.visit_time);
             $("#v_code").text(d.v_code);
 
- let actionHTML = "";
+            // console.log(d.v_phopto_path);
+            window.BASE_URL = "<?= base_url() ?>";
+            if (d.v_phopto_path && d.v_phopto_path !== '') {
+                const imgPath =
+                window.BASE_URL +
+                'public/uploads/visitor_photos/' +
+                d.v_phopto_path;
+            $('#visitorPhotoPreview').attr('src', imgPath);
+            $('.camera-upload').hide();
 
-if (d.securityCheckStatus == 0) {
-    // NOT ENTERED → Allow Entry
-    actionHTML = `
-        <button class="btn btn-success btn-sm" onclick="processSecurity('${d.v_code}')">
-            <i class="bi bi-door-open"></i> Allow Entry
-        </button>
-    `;
-}
-else if (d.securityCheckStatus == 1) {
-    // INSIDE → Mark Exit
-    actionHTML = `
-        <button class="btn btn-warning btn-sm" onclick="processSecurity('${d.v_code}')" >
-            <i class="bi bi-box-arrow-right"></i> Mark Exit
-        </button>
-    `;
-}
-else {
-    // COMPLETED → No buttons
-    actionHTML = `<span class="badge bg-success"><i class="bi bi-check-circle"></i> Completed</span>`;
+} else {
+
+    $('#visitorPhotoPreview').attr(
+        'src',
+        window.BASE_URL + 'public/dist/User_Profile.png'
+    );
+
+    $('.camera-upload').show();
 }
 
+            let statusTrackerData ="";
+                statusTrackerData = `
+                <div class="status-tracker-horizontal"
+                    style="--progress: ${
+                        d.securityCheckStatus >= 2 ? '100%' :
+                        d.meeting_status >= 1 ? '75%' :
+                        d.securityCheckStatus >= 1 ? '50%' :
+                        d.status >= 'approved' ? '25%' : '0%'
+                    };">
 
-$("#actionBtns").html(actionHTML);
-            // Open Modal
-            $("#visitorModal").modal("show");
+                    <div class="step ${d.status >= 'approved' ? 'active' : ''}">
+                        <span class="circle">
+                            <i class="fa-solid fa-file-circle-check"></i>
+                        </span>
+                        <span class="label">Request Approved</span>
+                    </div>
+
+                    <div class="step ${d.securityCheckStatus >= 1 ? 'active' : ''}">
+                        <span class="circle">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </span>
+                        <span class="label">Check In</span>
+                    </div>
+
+                    <div class="step ${d.meeting_status >= 1 ? 'active' : ''}">
+                        <span class="circle">
+                            <i class="fa-solid fa-people-arrows"></i>
+                        </span>
+                        <span class="label">Session Complete</span>
+                    </div>
+
+                    <div class="step ${d.securityCheckStatus >= 2 ? 'active' : ''}">
+                        <span class="circle">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </span>
+                        <span class="label">Check Out</span>
+                    </div>
+
+                </div>`;
+
+             $("#statusTraker").html(statusTrackerData);
+
+        let actionHTML = "";
+
+        if (d.securityCheckStatus == 0) {
+            // NOT ENTERED → Allow Entry
+            actionHTML = `
+                <button class="btn btn-success btn-sm" onclick="processSecurity('${d.v_code}')">
+                    <i class="bi bi-door-open"></i> Allow Entry
+                </button>
+            `;
         }
+        else if (d.securityCheckStatus == 1) {
+            // INSIDE → Mark Exit
+            actionHTML = `
+                <button class="btn btn-warning btn-sm" onclick="processSecurity('${d.v_code}')" >
+                    <i class="bi bi-box-arrow-right"></i> Mark Exit
+                </button>
+            `;
+        }
+        else {
+            // COMPLETED → No buttons
+            actionHTML = `<span class="badge bg-success"><i class="bi bi-check-circle"></i> Completed</span>`;
+        }
+
+        $("#actionBtns").html(actionHTML);
+                    // Open Modal
+                    $("#visitorModal").modal("show");
+                }
+        });
+}
+
+
+
+function uploadVisitorPhoto(input) {
+
+    if (!input.files || !input.files[0]) return;
+
+    const file = input.files[0];
+
+    if (!file.type.startsWith('image/')) {
+        Swal.fire("Invalid File", "Please select an image", "warning");
+        return;
+    }
+
+    // Preview instantly
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('visitorPhotoPreview').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // Prepare upload
+    const formData = new FormData();
+    formData.append('photo', file);
+    formData.append('v_code', document.getElementById('v_code').innerText);
+
+    fetch("<?= base_url('visitor/uploadPhoto') ?>", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.status === 'success') {
+          
+            $('#visitorPhotoPreview').attr('src', res.path);
+            $('.camera-upload').fadeOut(300);
+
+            // console.log("Saved Path:", res.path);
+        } else {
+            Swal.fire("Error", res.message, "error");
+        }
+    })
+    .catch(() => {
+        Swal.fire("Error", "Upload failed", "error");
     });
 }
-
 </script>

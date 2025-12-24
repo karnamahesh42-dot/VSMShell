@@ -6,7 +6,7 @@ use App\Models\VisitorRequestModel;
 use App\Models\VisitorLogModel;
 use App\Models\VisitorRequestHeaderModel;
 use App\Models\ExpiredVisitorPassModel;
-
+use App\Models\PurposeModel;
   
 
 class VisitorRequest extends BaseController
@@ -23,8 +23,6 @@ class VisitorRequest extends BaseController
         $this->logModel     = new VisitorLogModel();
         $this->VisitorRequestHeaderModel     = new VisitorRequestHeaderModel();
         $this->ExpiredVisitorPassModel     = new ExpiredVisitorPassModel();
-
-
     }
 
     // public function index(): string
@@ -63,6 +61,12 @@ class VisitorRequest extends BaseController
             'logged_user_id' => $user_id,
         ];
 
+        $purposeModel = new PurposeModel();
+        $data['purposes'] = $purposeModel
+            ->where('status', 1)
+            ->orderBy('purpose_name', 'ASC')
+            ->findAll();
+
         return view('dashboard/visitorequest', $data);
     }
 
@@ -95,6 +99,12 @@ class VisitorRequest extends BaseController
             'admins' => $admins,
             'logged_user_id' => $user_id,
         ];
+
+        $purposeModel = new PurposeModel();
+        $data['purposes'] = $purposeModel
+            ->where('status', 1)
+            ->orderBy('purpose_name', 'ASC')
+            ->findAll();
 
         return view('dashboard/group_visitor_request',$data);
     }
